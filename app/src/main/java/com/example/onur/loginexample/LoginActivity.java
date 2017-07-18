@@ -2,6 +2,7 @@ package com.example.onur.loginexample;
 
 import android.annotation.TargetApi;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -16,7 +17,12 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.TextPaint;
 import android.text.TextUtils;
+import android.text.method.LinkMovementMethod;
+import android.text.style.ClickableSpan;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -26,11 +32,13 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.facebook.FacebookSdk;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import static android.Manifest.permission.READ_CONTACTS;
 
@@ -91,7 +99,56 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             }
         });
 
+
+
+// Sign Up clickable
+        if(Locale.getDefault().getLanguage().equals("tr"))
+        {
+            SpannableString ss2 = new SpannableString("Hesabın yok mu? Kaydol.");
+            ClickableSpan clickableSpan2 = new ClickableSpan() {
+                @Override
+                public void onClick(View textView) {
+                    // startActivity(new Intent(MyActivity.this, NextActivity.class));
+                    Toast.makeText(getApplicationContext(), "tıklandı", Toast.LENGTH_SHORT).show();
+                }
+
+                @Override
+                public void updateDrawState(TextPaint ds) {
+                    super.updateDrawState(ds);
+                    ds.setUnderlineText(false);
+                }
+            };
+            ss2.setSpan(clickableSpan2, 16, 23, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+            TextView textView = (TextView) findViewById(R.id.dont_have_account_textview);
+            textView.setText(ss2);
+            textView.setMovementMethod(LinkMovementMethod.getInstance());
+            textView.setHighlightColor(Color.TRANSPARENT);
+        }
+        else{
+            SpannableString ss = new SpannableString("Don't have an account? Sign Up.");
+            ClickableSpan clickableSpan = new ClickableSpan() {
+                @Override
+                public void onClick(View textView) {
+                    // startActivity(new Intent(MyActivity.this, NextActivity.class));
+                    Toast.makeText(getApplicationContext(),"tıklandı",Toast.LENGTH_SHORT).show();
+                }
+                @Override
+                public void updateDrawState(TextPaint ds) {
+                    super.updateDrawState(ds);
+                    ds.setUnderlineText(false);
+                }
+            };
+
+            ss.setSpan(clickableSpan, 23, 31, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            TextView textView = (TextView) findViewById(R.id.dont_have_account_textview);
+            textView.setText(ss);
+            textView.setMovementMethod(LinkMovementMethod.getInstance());
+            textView.setHighlightColor(Color.TRANSPARENT);
+        }
     }
+
+
 
     private void populateAutoComplete() {
         if (!mayRequestContacts()) {
@@ -310,5 +367,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             mAuthTask = null;
         }
     }
+
+
+
 }
 
