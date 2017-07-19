@@ -1,6 +1,8 @@
 package com.example.onur.loginexample;
 
 import android.annotation.TargetApi;
+import android.app.Activity;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
@@ -51,7 +53,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
      * Id to identity READ_CONTACTS permission request.
      */
     private static final int REQUEST_READ_CONTACTS = 0;
-
+    private static final String KEY_USER = "KEY_USER";
     /**
      * A dummy authentication store containing known user names and passwords.
      * TODO: remove after connecting to a real authentication system.
@@ -59,6 +61,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private static final String[] DUMMY_CREDENTIALS = new String[]{
             "foo@example.com:hello", "bar@example.com:world"
     };
+
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
      */
@@ -108,8 +111,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             ClickableSpan clickableSpan2 = new ClickableSpan() {
                 @Override
                 public void onClick(View textView) {
-                    // startActivity(new Intent(MyActivity.this, NextActivity.class));
-                    Toast.makeText(getApplicationContext(), "tıklandı", Toast.LENGTH_SHORT).show();
+                    Intent intent = SignUp.newIntent(LoginActivity.this, 1);
+                    startActivity(intent);
                 }
 
                 @Override
@@ -130,8 +133,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             ClickableSpan clickableSpan = new ClickableSpan() {
                 @Override
                 public void onClick(View textView) {
-                    // startActivity(new Intent(MyActivity.this, NextActivity.class));
-                    Toast.makeText(getApplicationContext(),"tıklandı",Toast.LENGTH_SHORT).show();
+                    Intent intent = SignUp.newIntent(LoginActivity.this, 1);
+                    startActivity(intent);
                 }
                 @Override
                 public void updateDrawState(TextPaint ds) {
@@ -368,7 +371,11 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         }
     }
 
-
+    public static Intent newIntent(Activity callerActivity, int parameter){
+        Intent intent=new Intent(callerActivity, LoginActivity.class);
+        intent.putExtra(KEY_USER,parameter);
+        return intent;
+    }
 
 }
 

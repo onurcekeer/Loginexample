@@ -17,5 +17,7 @@
     <string name="connect_with_facebook">Sign in with Facebook</string>
     <string name="connect_with_google">Sign in with Google</string>
     <string name="dont_have_an_account">Don\'t have an account? Sign Up.</string>
+    <string name="fullname">Fullname</string>
+    <string name="register">Register</string>
 
 </resources>

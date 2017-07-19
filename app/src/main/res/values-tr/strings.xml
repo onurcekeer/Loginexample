@@ -17,4 +17,6 @@
     <string name="connect_with_facebook">Facebook ile giriş yap</string>
     <string name="connect_with_google">Google ile giriş yap</string>
     <string name="dont_have_an_account">Hesabın yok mu? Kaydol.</string>
+    <string name="fullname">İsim</string>
+    <string name="register">Kayıt Ol</string>
 </resources>
