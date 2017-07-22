@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">LoginExample</string>
+    <string name="app_name">PlayerX</string>
 
     <!-- Strings related to login -->
     <string name="prompt_email">E-Posta</string>
@@ -20,4 +20,8 @@
     <string name="fullname">İsim</string>
     <string name="register">Kayıt Ol</string>
     <string name="action_settings">Ayarlar</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="title_dashboard">Panel</string>
+    <string name="title_home">Anasayfa</string>
+    <string name="title_notifications">Bildirimler</string>
 </resources>
