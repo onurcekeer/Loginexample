@@ -1,4 +1,4 @@
-package com.example.onur.loginexample.activity;
+package com.project.onur.playerx.activity;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -10,11 +10,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
 
-import com.example.onur.loginexample.fragment.OneFragment;
-import com.example.onur.loginexample.R;
-import com.example.onur.loginexample.fragment.ThreeFragment;
-import com.example.onur.loginexample.fragment.TwoFragment;
-import com.example.onur.loginexample.ViewPagerAdapter;
+import com.project.onur.playerx.fragment.OneFragment;
+import com.project.onur.playerx.R;
+import com.project.onur.playerx.fragment.ThreeFragment;
+import com.project.onur.playerx.fragment.TwoFragment;
+import com.project.onur.playerx.ViewPagerAdapter;
 
 public class MainActivity extends AppCompatActivity {
 

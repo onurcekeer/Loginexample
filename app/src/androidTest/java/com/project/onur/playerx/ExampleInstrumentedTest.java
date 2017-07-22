@@ -1,4 +1,4 @@
-package com.example.onur.loginexample;
+package com.project.onur.playerx;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
@@ -21,6 +21,6 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        assertEquals("com.example.onur.loginexample", appContext.getPackageName());
+        assertEquals("com.project.onur.playerx", appContext.getPackageName());
     }
 }

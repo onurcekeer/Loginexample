@@ -1,4 +1,4 @@
-package com.example.onur.loginexample;
+package com.project.onur.playerx;
 
 import org.junit.Test;
 

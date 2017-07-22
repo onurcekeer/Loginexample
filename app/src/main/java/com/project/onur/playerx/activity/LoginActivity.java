@@ -1,4 +1,4 @@
-package com.example.onur.loginexample.activity;
+package com.project.onur.playerx.activity;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
@@ -35,7 +35,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.example.onur.loginexample.R;
+import com.project.onur.playerx.R;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,7 +58,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
      * TODO: remove after connecting to a real authentication system.
      */
     private static final String[] DUMMY_CREDENTIALS = new String[]{
-            "foo@example.com:hello", "bar@example.com:world"
+            "foo@project.com:hello", "bar@project.com:world"
     };
 
     /**
