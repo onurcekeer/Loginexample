@@ -20,6 +20,9 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.project.onur.playerx.R;
 import java.util.Locale;
 
@@ -28,6 +31,7 @@ import java.util.Locale;
 public class LoginActivity extends AppCompatActivity{
 
     private static final String KEY_USER = "KEY_USER";
+    private FirebaseAuth mAuth;
 
     private UserLoginTask mAuthTask = null;
 
@@ -41,6 +45,9 @@ public class LoginActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
 //        FacebookSdk.sdkInitialize(getApplicationContext());
         setContentView(R.layout.activity_login);
+
+        mAuth = FirebaseAuth.getInstance();
+
         // Set up the login form.
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
 
@@ -225,5 +232,15 @@ public class LoginActivity extends AppCompatActivity{
         return intent;
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        // Check if user is signed in (non-null) and update UI accordingly.
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if(currentUser!=null){
+            Intent intent = MainActivity.newIntent(LoginActivity.this, 1);
+            startActivity(intent);
+        }
+    }
 }
 
