@@ -1,4 +1,4 @@
-package com.example.onur.loginexample;
+package com.example.onur.loginexample.activity;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
@@ -34,9 +34,8 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.facebook.FacebookSdk;
+import com.example.onur.loginexample.R;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -111,7 +110,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             ClickableSpan clickableSpan2 = new ClickableSpan() {
                 @Override
                 public void onClick(View textView) {
-                    Intent intent = SignUp.newIntent(LoginActivity.this, 1);
+                    Intent intent = SignUpActivity.newIntent(LoginActivity.this, 1);
                     startActivity(intent);
                 }
 
@@ -133,7 +132,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             ClickableSpan clickableSpan = new ClickableSpan() {
                 @Override
                 public void onClick(View textView) {
-                    Intent intent = SignUp.newIntent(LoginActivity.this, 1);
+                    Intent intent = SignUpActivity.newIntent(LoginActivity.this, 1);
                     startActivity(intent);
                 }
                 @Override

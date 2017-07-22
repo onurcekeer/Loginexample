@@ -1,4 +1,4 @@
-package com.example.onur.loginexample;
+package com.example.onur.loginexample.activity;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -13,9 +13,11 @@ import android.text.style.ClickableSpan;
 import android.view.View;
 import android.widget.TextView;
 
+import com.example.onur.loginexample.R;
+
 import java.util.Locale;
 
-public class SignUp extends AppCompatActivity {
+public class SignUpActivity extends AppCompatActivity {
 
 
     private static final String KEY_USER = "KEY_USER";
@@ -34,7 +36,7 @@ public class SignUp extends AppCompatActivity {
             ClickableSpan clickableSpan2 = new ClickableSpan() {
                 @Override
                 public void onClick(View textView) {
-                    Intent intent = LoginActivity.newIntent(SignUp.this, 1);
+                    Intent intent = LoginActivity.newIntent(SignUpActivity.this, 1);
                     startActivity(intent);
                 }
 
@@ -56,7 +58,7 @@ public class SignUp extends AppCompatActivity {
             ClickableSpan clickableSpan = new ClickableSpan() {
                 @Override
                 public void onClick(View textView) {
-                    Intent intent = LoginActivity.newIntent(SignUp.this, 1);
+                    Intent intent = LoginActivity.newIntent(SignUpActivity.this, 1);
                     startActivity(intent);
                 }
                 @Override
@@ -76,7 +78,7 @@ public class SignUp extends AppCompatActivity {
     }
 
     public static Intent newIntent(Activity callerActivity, int parameter){
-        Intent intent=new Intent(callerActivity, SignUp.class);
+        Intent intent=new Intent(callerActivity, SignUpActivity.class);
         intent.putExtra(KEY_USER,parameter);
         return intent;
     }

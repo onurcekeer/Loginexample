@@ -5,7 +5,7 @@
     android:gravity="center_horizontal"
     android:orientation="vertical"
     android:background="#eeeeee"
-    tools:context="com.example.onur.loginexample.SignUp">
+    tools:context="com.example.onur.loginexample.activity.SignUpActivity">
 
 
     <LinearLayout

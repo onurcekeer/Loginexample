@@ -1,23 +1,21 @@
-package com.example.onur.loginexample;
+package com.example.onur.loginexample.activity;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.TextView;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.example.onur.loginexample.fragment.OneFragment;
+import com.example.onur.loginexample.R;
+import com.example.onur.loginexample.fragment.ThreeFragment;
+import com.example.onur.loginexample.fragment.TwoFragment;
+import com.example.onur.loginexample.ViewPagerAdapter;
+
 public class MainActivity extends AppCompatActivity {
 
     private static final String KEY_USER = "KEY_USER";
