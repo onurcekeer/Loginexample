@@ -11,10 +11,6 @@ import com.project.onur.playerx.R;
 
 public class OneFragment extends Fragment {
 
-    private static final String ARG_PARAM1 = "ARG_PARAM1";
-    private static final String ARG_PARAM2 = "ARG_PARAM2";
-    private String mParam1;
-    private String mParam2;
 
     public OneFragment() {
         // Required empty public constructor
