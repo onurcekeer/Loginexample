@@ -7,7 +7,6 @@
     <string name="action_sign_in">Sign in or register</string>
     <string name="action_sign_in_short">Giriş Yap</string>
     <string name="error_invalid_email">This email address is invalid</string>
-    <string name="error_invalid_password">This password is too short</string>
     <string name="error_incorrect_password">This password is incorrect</string>
     <string name="error_field_required">This field is required</string>
     <string name="permission_rationale">"Contacts permissions are needed for providing email
@@ -24,4 +23,7 @@
     <string name="title_dashboard">Panel</string>
     <string name="title_home">Anasayfa</string>
     <string name="title_notifications">Bildirimler</string>
+    <string name="error_invalid_fullname">İsim en az 6 karakterden oluşmalıdır</string>
+    <string name="user_is_being_created">Kullanıcı oluşturuluyor...</string>
+    <string name="error_invalid_password">Şifre en az 6 karakterden oluşmalıdır</string>
 </resources>

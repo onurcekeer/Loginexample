@@ -181,7 +181,7 @@ public class LoginActivity extends AppCompatActivity{
 
 
 
-    public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
+    private class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
 
         private final String mEmail;
         private final String mPassword;

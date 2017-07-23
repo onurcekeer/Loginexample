@@ -1,14 +1,20 @@
 package com.project.onur.playerx.activity;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.TextPaint;
+import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.util.Log;
@@ -36,6 +42,7 @@ public class SignUpActivity extends AppCompatActivity {
     EditText edit_email, edit_password, edit_fullname;
     Button button_register;
     String email,password, fullname;
+    ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,12 +60,7 @@ public class SignUpActivity extends AppCompatActivity {
         button_register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                email = edit_email.getText().toString();
-                password = edit_password.getText().toString();
-                fullname = edit_fullname.getText().toString();
-
-                createUser(email,password);
+                attemptLogin();
             }
         });
 
@@ -128,7 +130,67 @@ public class SignUpActivity extends AppCompatActivity {
         }
     }
 
-    public void createUser(String email, String password){
+
+    private void attemptLogin() {
+
+
+        // Reset errors.
+        edit_email.setError(null);
+        edit_password.setError(null);
+        edit_fullname.setError(null);
+
+        email = edit_email.getText().toString();
+        password = edit_password.getText().toString();
+        fullname = edit_fullname.getText().toString();
+
+
+        boolean cancel = false;
+        View focusView = null;
+
+        if (!TextUtils.isEmpty(fullname) && !isFullnameValid(fullname)) {
+            edit_fullname.setError(getString(R.string.error_invalid_fullname));
+            focusView = edit_fullname;
+            cancel = true;
+        }
+
+        // Check for a valid password, if the user entered one.
+        if (!TextUtils.isEmpty(password) && !isPasswordValid(password)) {
+            edit_password.setError(getString(R.string.error_invalid_password));
+            focusView = edit_password;
+            cancel = true;
+        }
+
+        // Check for a valid email address.
+        if (TextUtils.isEmpty(email)) {
+            edit_email.setError(getString(R.string.error_field_required));
+            focusView = edit_email;
+            cancel = true;
+        } else if (!isEmailValid(email)) {
+            edit_email.setError(getString(R.string.error_invalid_email));
+            focusView = edit_email;
+            cancel = true;
+        }
+
+        if(!isOnline()){
+            //Snackbar snackbar = Snackbar.make(focusView.getRootView(), "Lütfen internet bağlantınızı kontrol ediniz", Snackbar.LENGTH_LONG);
+            //snackbar.show();
+            cancel=true;
+        }
+
+        if (cancel) {
+            // There was an error; don't attempt login and focus the first
+            // form field with an error.
+            focusView.requestFocus();
+        } else {
+            // Show a progress spinner, and kick off a background task to
+            // perform the user login attempt.
+            showProgressDialog();
+            createUser(email,password,fullname);
+        }
+    }
+
+
+    public void createUser(final String email, String password, final String fullname){
 
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -138,11 +200,20 @@ public class SignUpActivity extends AppCompatActivity {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "createUserWithEmail:success");
                             FirebaseUser user = mAuth.getCurrentUser();
+                            progressDialog.dismiss();
                             Intent intent = MainActivity.newIntent(SignUpActivity.this, 1);
                             startActivity(intent);
+                            new Thread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    addUserDatabase(email,fullname);
+                                }
+                            }).start();
+
                             //updateUI(user);
                         } else {
                             // If sign in fails, display a message to the user.
+                            progressDialog.dismiss();
                             Log.w(TAG, "createUserWithEmail:failure", task.getException());
                             Toast.makeText(SignUpActivity.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
@@ -155,4 +226,41 @@ public class SignUpActivity extends AppCompatActivity {
 
     }
 
+    public void addUserDatabase(String email, String fullname){
+
+    ///kullanıcı ekleme olayları
+
+    }
+
+
+    public void showProgressDialog(){
+
+        Log.e("progress","progress oluştu");
+        progressDialog = new ProgressDialog(SignUpActivity.this);
+        progressDialog.setMessage(getString(R.string.user_is_being_created));
+        progressDialog.setCancelable(false); // disable dismiss by tapping outside of the dialog
+        progressDialog.show();
+
+    }
+
+    public boolean isOnline() {
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+        return netInfo != null && netInfo.isConnectedOrConnecting();
+    }
+
+    private boolean isEmailValid(String email) {
+        //TODO: Replace this with your own logic
+        return email.contains("@");
+    }
+
+    private boolean isPasswordValid(String password) {
+        //TODO: Replace this with your own logic
+        return password.length() > 5;
+    }
+
+    private boolean isFullnameValid(String fullname) {
+        //TODO: Replace this with your own logic
+        return fullname.length() > 5;
+    }
 }
