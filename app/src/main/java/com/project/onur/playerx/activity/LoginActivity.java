@@ -3,6 +3,7 @@ package com.project.onur.playerx.activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Parcelable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -38,6 +39,7 @@ public class LoginActivity extends AppCompatActivity{
     // UI references.
     private AutoCompleteTextView mEmailView;
     private EditText mPasswordView;
+    //View view;
 
 
     @Override
@@ -49,6 +51,7 @@ public class LoginActivity extends AppCompatActivity{
         mAuth = FirebaseAuth.getInstance();
 
         // Set up the login form.
+        //view = findViewById(R.id.login_lineer_layout);
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
 
 
@@ -213,7 +216,7 @@ public class LoginActivity extends AppCompatActivity{
             if (success) {
                // finish();
                 Intent intent = MainActivity.newIntent(LoginActivity.this, 1);
-                startActivity(intent);
+               // startActivity(intent);
             } else {
                 mPasswordView.setError(getString(R.string.error_incorrect_password));
                 mPasswordView.requestFocus();

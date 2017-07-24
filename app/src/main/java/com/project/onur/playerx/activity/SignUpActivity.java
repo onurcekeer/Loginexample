@@ -39,10 +39,12 @@ public class SignUpActivity extends AppCompatActivity {
     private static final String KEY_USER = "KEY_USER";
     private static final String TAG = "CREATE_USER";
     private FirebaseAuth mAuth;
+    private FirebaseUser mUser;
     EditText edit_email, edit_password, edit_fullname;
     Button button_register;
     String email,password, fullname;
     ProgressDialog progressDialog;
+    View view;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +52,8 @@ public class SignUpActivity extends AppCompatActivity {
         setContentView(R.layout.activity_sign_up);
 
         mAuth = FirebaseAuth.getInstance();
+
+        view = findViewById(R.id.sign_up_lineer_layout);
 
         edit_email = (EditText)findViewById(R.id.email);
         edit_password = (EditText)findViewById(R.id.password);
@@ -111,28 +115,11 @@ public class SignUpActivity extends AppCompatActivity {
             textView.setMovementMethod(LinkMovementMethod.getInstance());
             textView.setHighlightColor(Color.TRANSPARENT);
         }
-
     }
 
-    public static Intent newIntent(Activity callerActivity, int parameter){
-        Intent intent=new Intent(callerActivity, SignUpActivity.class);
-        intent.putExtra(KEY_USER,parameter);
-        return intent;
-    }
-    @Override
-    public void onStart() {
-        super.onStart();
-        // Check if user is signed in (non-null) and update UI accordingly.
-        FirebaseUser currentUser = mAuth.getCurrentUser();
-        if(currentUser!=null){
-            Intent intent = MainActivity.newIntent(SignUpActivity.this, 1);
-            startActivity(intent);
-        }
-    }
 
 
     private void attemptLogin() {
-
 
         // Reset errors.
         edit_email.setError(null);
@@ -143,44 +130,43 @@ public class SignUpActivity extends AppCompatActivity {
         password = edit_password.getText().toString();
         fullname = edit_fullname.getText().toString();
 
-
         boolean cancel = false;
-        View focusView = null;
+        //View focusView = null;
 
-        if (!TextUtils.isEmpty(fullname) && !isFullnameValid(fullname)) {
+        if (TextUtils.isEmpty(fullname) || !isFullnameValid(fullname)) {
             edit_fullname.setError(getString(R.string.error_invalid_fullname));
-            focusView = edit_fullname;
+            //focusView = edit_fullname;
             cancel = true;
         }
 
         // Check for a valid password, if the user entered one.
-        if (!TextUtils.isEmpty(password) && !isPasswordValid(password)) {
+        if (TextUtils.isEmpty(password) || !isPasswordValid(password)) {
             edit_password.setError(getString(R.string.error_invalid_password));
-            focusView = edit_password;
+            //focusView = edit_password;
             cancel = true;
         }
 
         // Check for a valid email address.
         if (TextUtils.isEmpty(email)) {
             edit_email.setError(getString(R.string.error_field_required));
-            focusView = edit_email;
+            //focusView = edit_email;
             cancel = true;
         } else if (!isEmailValid(email)) {
             edit_email.setError(getString(R.string.error_invalid_email));
-            focusView = edit_email;
+            //focusView = edit_email;
             cancel = true;
         }
 
         if(!isOnline()){
-            //Snackbar snackbar = Snackbar.make(focusView.getRootView(), "Lütfen internet bağlantınızı kontrol ediniz", Snackbar.LENGTH_LONG);
-            //snackbar.show();
+            Snackbar snackbar = Snackbar.make(view, getString(R.string.check_internet_conn), Snackbar.LENGTH_LONG);
+            snackbar.show();
             cancel=true;
         }
 
         if (cancel) {
             // There was an error; don't attempt login and focus the first
             // form field with an error.
-            focusView.requestFocus();
+            //focusView.requestFocus();
         } else {
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
@@ -199,7 +185,7 @@ public class SignUpActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "createUserWithEmail:success");
-                            FirebaseUser user = mAuth.getCurrentUser();
+                            mUser = mAuth.getCurrentUser();
                             progressDialog.dismiss();
                             Intent intent = MainActivity.newIntent(SignUpActivity.this, 1);
                             startActivity(intent);
@@ -215,8 +201,7 @@ public class SignUpActivity extends AppCompatActivity {
                             // If sign in fails, display a message to the user.
                             progressDialog.dismiss();
                             Log.w(TAG, "createUserWithEmail:failure", task.getException());
-                            Toast.makeText(SignUpActivity.this, "Authentication failed.",
-                                    Toast.LENGTH_SHORT).show();
+                            Toast.makeText(SignUpActivity.this, "Authentication failed.",Toast.LENGTH_SHORT).show();
                             //updateUI(null);
                         }
 
@@ -235,7 +220,6 @@ public class SignUpActivity extends AppCompatActivity {
 
     public void showProgressDialog(){
 
-        Log.e("progress","progress oluştu");
         progressDialog = new ProgressDialog(SignUpActivity.this);
         progressDialog.setMessage(getString(R.string.user_is_being_created));
         progressDialog.setCancelable(false); // disable dismiss by tapping outside of the dialog
@@ -249,6 +233,11 @@ public class SignUpActivity extends AppCompatActivity {
         return netInfo != null && netInfo.isConnectedOrConnecting();
     }
 
+    private boolean isFullnameValid(String fullname) {
+        //TODO: Replace this with your own logic
+        return fullname.length() > 5;
+    }
+
     private boolean isEmailValid(String email) {
         //TODO: Replace this with your own logic
         return email.contains("@");
@@ -259,8 +248,22 @@ public class SignUpActivity extends AppCompatActivity {
         return password.length() > 5;
     }
 
-    private boolean isFullnameValid(String fullname) {
-        //TODO: Replace this with your own logic
-        return fullname.length() > 5;
+    public static Intent newIntent(Activity callerActivity, int parameter){
+        Intent intent=new Intent(callerActivity, SignUpActivity.class);
+        intent.putExtra(KEY_USER,parameter);
+        return intent;
     }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        // Check if user is signed in (non-null) and update UI accordingly.
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if(currentUser!=null){
+            Intent intent = MainActivity.newIntent(SignUpActivity.this, 1);
+            startActivity(intent);
+        }
+    }
+
+
 }
