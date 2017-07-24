@@ -5,8 +5,10 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.location.Location;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -29,7 +31,10 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.project.onur.playerx.R;
+import com.project.onur.playerx.User;
 
 import java.util.Locale;
 
@@ -38,6 +43,7 @@ public class SignUpActivity extends AppCompatActivity {
 
     private static final String KEY_USER = "KEY_USER";
     private static final String TAG = "CREATE_USER";
+    private static final int DEFAULT_RANGE = 20;
     private FirebaseAuth mAuth;
     private FirebaseUser mUser;
     EditText edit_email, edit_password, edit_fullname;
@@ -45,6 +51,7 @@ public class SignUpActivity extends AppCompatActivity {
     String email,password, fullname;
     ProgressDialog progressDialog;
     View view;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -144,12 +151,9 @@ public class SignUpActivity extends AppCompatActivity {
                             progressDialog.dismiss();
                             Intent intent = MainActivity.newIntent(SignUpActivity.this, 1);
                             startActivity(intent);
-                            new Thread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    addUserDatabase(email,fullname);
-                                }
-                            }).start();
+
+                            addUserDatabase(email,fullname);
+
 
                             //updateUI(user);
                         } else {
@@ -167,9 +171,25 @@ public class SignUpActivity extends AppCompatActivity {
 
     }
 
-    public void addUserDatabase(String email, String fullname){
+    public void addUserDatabase(final String email, final String fullname){
 
-    ///kullanıcı ekleme olayları
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                String _userId = mUser.getUid();
+                Location _lastlocation = null;              //getLocation eklenecek.
+                Uri _profilUrl = mUser.getPhotoUrl();
+                int _range = DEFAULT_RANGE;
+
+                FirebaseDatabase database = FirebaseDatabase.getInstance();
+                DatabaseReference reference = database.getReference("User");
+                User _user = new User(_userId,email,fullname,_lastlocation,_profilUrl,_range);
+                reference.child(_userId).setValue(_user);
+                Intent intent = MainActivity.newIntent(SignUpActivity.this, 1);
+                startActivity(intent);
+            }
+        }).start();
 
     }
 
