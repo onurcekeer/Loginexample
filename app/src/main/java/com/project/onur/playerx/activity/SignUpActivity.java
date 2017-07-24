@@ -60,7 +60,6 @@ public class SignUpActivity extends AppCompatActivity {
         edit_fullname = (EditText)findViewById(R.id.fullname);
         button_register = (Button)findViewById(R.id.register);
 
-
         button_register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -68,53 +67,7 @@ public class SignUpActivity extends AppCompatActivity {
             }
         });
 
-
-
-        // Login clickable
-        if(Locale.getDefault().getLanguage().equals("tr"))
-        {
-            SpannableString ss2 = new SpannableString("Zaten hesabın var mı? Giriş Yap.");
-            ClickableSpan clickableSpan2 = new ClickableSpan() {
-                @Override
-                public void onClick(View textView) {
-                    Intent intent = LoginActivity.newIntent(SignUpActivity.this, 1);
-                    startActivity(intent);
-                }
-
-                @Override
-                public void updateDrawState(TextPaint ds) {
-                    super.updateDrawState(ds);
-                    ds.setUnderlineText(false);
-                }
-            };
-            ss2.setSpan(clickableSpan2, 22, 32, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-
-            TextView textView = (TextView) findViewById(R.id.already_have_an_account);
-            textView.setText(ss2);
-            textView.setMovementMethod(LinkMovementMethod.getInstance());
-            textView.setHighlightColor(Color.TRANSPARENT);
-        }
-        else{
-            SpannableString ss = new SpannableString("Already have an account? Login.");
-            ClickableSpan clickableSpan = new ClickableSpan() {
-                @Override
-                public void onClick(View textView) {
-                    Intent intent = LoginActivity.newIntent(SignUpActivity.this, 1);
-                    startActivity(intent);
-                }
-                @Override
-                public void updateDrawState(TextPaint ds) {
-                    super.updateDrawState(ds);
-                    ds.setUnderlineText(false);
-                }
-            };
-
-            ss.setSpan(clickableSpan, 25, 31, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-            TextView textView = (TextView) findViewById(R.id.already_have_an_account);
-            textView.setText(ss);
-            textView.setMovementMethod(LinkMovementMethod.getInstance());
-            textView.setHighlightColor(Color.TRANSPARENT);
-        }
+        setBottomBar();
     }
 
 
@@ -178,7 +131,6 @@ public class SignUpActivity extends AppCompatActivity {
         }
     }
 
-
     public void createUser(final String email, String password, final String fullname){
 
         mAuth.createUserWithEmailAndPassword(email, password)
@@ -221,7 +173,6 @@ public class SignUpActivity extends AppCompatActivity {
 
     }
 
-
     public void showProgressDialog(){
 
         progressDialog = new ProgressDialog(SignUpActivity.this);
@@ -250,6 +201,56 @@ public class SignUpActivity extends AppCompatActivity {
     private boolean isPasswordValid(String password) {
         //TODO: Replace this with your own logic
         return password.length() > 5;
+    }
+
+    public void setBottomBar(){
+
+        // Login clickable
+        if(Locale.getDefault().getLanguage().equals("tr"))
+        {
+            SpannableString ss2 = new SpannableString("Zaten hesabın var mı? Giriş Yap.");
+            ClickableSpan clickableSpan2 = new ClickableSpan() {
+                @Override
+                public void onClick(View textView) {
+                    Intent intent = LoginActivity.newIntent(SignUpActivity.this, 1);
+                    startActivity(intent);
+                }
+
+                @Override
+                public void updateDrawState(TextPaint ds) {
+                    super.updateDrawState(ds);
+                    ds.setUnderlineText(false);
+                }
+            };
+            ss2.setSpan(clickableSpan2, 22, 32, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+            TextView textView = (TextView) findViewById(R.id.already_have_an_account);
+            textView.setText(ss2);
+            textView.setMovementMethod(LinkMovementMethod.getInstance());
+            textView.setHighlightColor(Color.TRANSPARENT);
+        }
+        else{
+            SpannableString ss = new SpannableString("Already have an account? Login.");
+            ClickableSpan clickableSpan = new ClickableSpan() {
+                @Override
+                public void onClick(View textView) {
+                    Intent intent = LoginActivity.newIntent(SignUpActivity.this, 1);
+                    startActivity(intent);
+                }
+                @Override
+                public void updateDrawState(TextPaint ds) {
+                    super.updateDrawState(ds);
+                    ds.setUnderlineText(false);
+                }
+            };
+
+            ss.setSpan(clickableSpan, 25, 31, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            TextView textView = (TextView) findViewById(R.id.already_have_an_account);
+            textView.setText(ss);
+            textView.setMovementMethod(LinkMovementMethod.getInstance());
+            textView.setHighlightColor(Color.TRANSPARENT);
+        }
+
     }
 
     public static Intent newIntent(Activity callerActivity, int parameter){
