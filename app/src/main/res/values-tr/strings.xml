@@ -28,4 +28,5 @@
     <string name="user_is_being_created">Kullanıcı oluşturuluyor...</string>
     <string name="error_invalid_password">Şifre en az 6 karakterden oluşmalıdır</string>
     <string name="check_internet_conn">Lütfen internet bağlantınızı kontrol edin!</string>
+    <string name="create_user_failed">E-posta adresi zaten kayıtlı!</string>
 </resources>

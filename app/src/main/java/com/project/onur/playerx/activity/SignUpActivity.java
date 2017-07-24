@@ -131,47 +131,50 @@ public class SignUpActivity extends AppCompatActivity {
         fullname = edit_fullname.getText().toString();
 
         boolean cancel = false;
-        //View focusView = null;
+        View focusView = null;
 
         if (TextUtils.isEmpty(fullname) || !isFullnameValid(fullname)) {
             edit_fullname.setError(getString(R.string.error_invalid_fullname));
-            //focusView = edit_fullname;
+            focusView = edit_fullname;
             cancel = true;
         }
 
         // Check for a valid password, if the user entered one.
         if (TextUtils.isEmpty(password) || !isPasswordValid(password)) {
             edit_password.setError(getString(R.string.error_invalid_password));
-            //focusView = edit_password;
+            focusView = edit_password;
             cancel = true;
         }
 
         // Check for a valid email address.
         if (TextUtils.isEmpty(email)) {
             edit_email.setError(getString(R.string.error_field_required));
-            //focusView = edit_email;
+            focusView = edit_email;
             cancel = true;
         } else if (!isEmailValid(email)) {
             edit_email.setError(getString(R.string.error_invalid_email));
-            //focusView = edit_email;
+            focusView = edit_email;
             cancel = true;
         }
 
-        if(!isOnline()){
-            Snackbar snackbar = Snackbar.make(view, getString(R.string.check_internet_conn), Snackbar.LENGTH_LONG);
-            snackbar.show();
-            cancel=true;
-        }
+
 
         if (cancel) {
             // There was an error; don't attempt login and focus the first
             // form field with an error.
-            //focusView.requestFocus();
-        } else {
-            // Show a progress spinner, and kick off a background task to
-            // perform the user login attempt.
-            showProgressDialog();
-            createUser(email,password,fullname);
+            focusView.requestFocus();
+        }
+        else {
+
+            if(!isOnline()){
+                Snackbar snackbar = Snackbar.make(view, getString(R.string.check_internet_conn), Snackbar.LENGTH_LONG);
+                snackbar.show();
+            }
+            else {
+                showProgressDialog();
+                createUser(email,password,fullname);
+            }
+
         }
     }
 
@@ -201,7 +204,8 @@ public class SignUpActivity extends AppCompatActivity {
                             // If sign in fails, display a message to the user.
                             progressDialog.dismiss();
                             Log.w(TAG, "createUserWithEmail:failure", task.getException());
-                            Toast.makeText(SignUpActivity.this, "Authentication failed.",Toast.LENGTH_SHORT).show();
+                            Snackbar snackbar = Snackbar.make(view, getString(R.string.create_user_failed), Snackbar.LENGTH_LONG);
+                            snackbar.show();
                             //updateUI(null);
                         }
 
