@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
 
+import com.project.onur.playerx.User;
 import com.project.onur.playerx.fragment.OneFragment;
 import com.project.onur.playerx.R;
 import com.project.onur.playerx.fragment.ThreeFragment;
@@ -31,11 +32,15 @@ public class MainActivity extends AppCompatActivity {
     TwoFragment twoFragment;
     ThreeFragment threeFragment;
     MenuItem prevMenuItem;
+    User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        Intent i = getIntent();
+        user = (User)i.getSerializableExtra("userObject");
 
         //Initializing viewPager
         viewPager = (ViewPager) findViewById(R.id.viewpager);
@@ -114,11 +119,5 @@ public class MainActivity extends AppCompatActivity {
         viewPager.setAdapter(adapter);
     }
 
-
-    public static Intent newIntent(Activity callerActivity, int parameter){
-        Intent intent=new Intent(callerActivity, MainActivity.class);
-        intent.putExtra(KEY_USER,parameter);
-        return intent;
-    }
 
 }

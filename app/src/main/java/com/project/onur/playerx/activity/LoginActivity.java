@@ -215,8 +215,7 @@ public class LoginActivity extends AppCompatActivity{
 
             if (success) {
                // finish();
-                Intent intent = MainActivity.newIntent(LoginActivity.this, 1);
-               // startActivity(intent);
+                startMainActivity();
             } else {
                 mPasswordView.setError(getString(R.string.error_incorrect_password));
                 mPasswordView.requestFocus();
@@ -241,9 +240,13 @@ public class LoginActivity extends AppCompatActivity{
         // Check if user is signed in (non-null) and update UI accordingly.
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if(currentUser!=null){
-            Intent intent = MainActivity.newIntent(LoginActivity.this, 1);
-            startActivity(intent);
+            startMainActivity();
         }
+    }
+
+    public void startMainActivity(){
+        Intent intent = new Intent(LoginActivity.this,MainActivity.class);
+        startActivity(intent);
     }
 }
 

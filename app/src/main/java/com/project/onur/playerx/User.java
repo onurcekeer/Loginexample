@@ -3,11 +3,13 @@ package com.project.onur.playerx;
 import android.location.Location;
 import android.net.Uri;
 
+import java.io.Serializable;
+
 /**
  * Created by onur on 24.7.2017 at 23:34.
  */
-
-public class User {
+@SuppressWarnings("serial") //With this annotation we are going to hide compiler warnings
+public class User implements Serializable {
 
     private String UserID;
     private String Email;

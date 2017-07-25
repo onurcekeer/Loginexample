@@ -9,6 +9,7 @@ import android.location.Location;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -36,6 +37,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.project.onur.playerx.R;
 import com.project.onur.playerx.User;
 
+import java.io.Serializable;
 import java.util.Locale;
 
 public class SignUpActivity extends AppCompatActivity {
@@ -51,6 +53,7 @@ public class SignUpActivity extends AppCompatActivity {
     String email,password, fullname;
     ProgressDialog progressDialog;
     View view;
+    User user;
 
 
     @Override
@@ -59,6 +62,7 @@ public class SignUpActivity extends AppCompatActivity {
         setContentView(R.layout.activity_sign_up);
 
         mAuth = FirebaseAuth.getInstance();
+
 
         view = findViewById(R.id.sign_up_lineer_layout);
 
@@ -148,12 +152,8 @@ public class SignUpActivity extends AppCompatActivity {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "createUserWithEmail:success");
                             mUser = mAuth.getCurrentUser();
-                            progressDialog.dismiss();
-                            Intent intent = MainActivity.newIntent(SignUpActivity.this, 1);
-                            startActivity(intent);
 
                             addUserDatabase(email,fullname);
-
 
                             //updateUI(user);
                         } else {
@@ -184,10 +184,11 @@ public class SignUpActivity extends AppCompatActivity {
 
                 FirebaseDatabase database = FirebaseDatabase.getInstance();
                 DatabaseReference reference = database.getReference("User");
-                User _user = new User(_userId,email,fullname,_lastlocation,_profilUrl,_range);
-                reference.child(_userId).setValue(_user);
-                Intent intent = MainActivity.newIntent(SignUpActivity.this, 1);
-                startActivity(intent);
+                user = new User(_userId,email,fullname,_lastlocation,_profilUrl,_range);
+                reference.child(_userId).setValue(user);
+                progressDialog.dismiss();
+                updateUI(user);
+
             }
         }).start();
 
@@ -279,14 +280,21 @@ public class SignUpActivity extends AppCompatActivity {
         return intent;
     }
 
+
+    public void updateUI(User user){
+
+        Intent i = new Intent(this, MainActivity.class);
+        i.putExtra("userObject",user);
+        startActivity(i);
+    }
+
     @Override
     public void onStart() {
         super.onStart();
         // Check if user is signed in (non-null) and update UI accordingly.
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if(currentUser!=null){
-            Intent intent = MainActivity.newIntent(SignUpActivity.this, 1);
-            startActivity(intent);
+            updateUI(user);
         }
     }
 
