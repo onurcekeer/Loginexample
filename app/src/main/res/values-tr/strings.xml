@@ -7,12 +7,9 @@
     <string name="action_sign_in">Sign in or register</string>
     <string name="action_sign_in_short">Giriş Yap</string>
     <string name="action_sign_up">Kayıt Ol</string>
-    <string name="error_invalid_email">This email address is invalid</string>
-    <string name="error_incorrect_password">This password is incorrect</string>
-    <string name="error_field_required">This field is required</string>
-    <string name="permission_rationale">"Contacts permissions are needed for providing email
-        completions."
-    </string>
+    <string name="error_invalid_email">Bu e-posta adresi geçersiz</string>
+    <string name="error_field_required">E-posta adresi gerekli</string>
+
     <string name="or">veya</string>
     <string name="connect_with_facebook">Facebook ile giriş yap</string>
     <string name="connect_with_google">Google ile giriş yap</string>
@@ -27,6 +24,8 @@
     <string name="error_invalid_fullname">İsim en az 6 karakterden oluşmalıdır</string>
     <string name="user_is_being_created">Kullanıcı oluşturuluyor...</string>
     <string name="error_invalid_password">Şifre en az 6 karakterden oluşmalıdır</string>
-    <string name="check_internet_conn">Lütfen internet bağlantınızı kontrol edin!</string>
-    <string name="create_user_failed">E-posta adresi zaten kayıtlı!</string>
+    <string name="check_internet_conn">Lütfen internet bağlantınızı kontrol edin</string>
+    <string name="create_user_failed">E-posta adresi zaten kayıtlı</string>
+    <string name="logging_in">Giriş yapılıyor...</string>
+    <string name="user_auth_failed">E-posta adresi veya şifre yanlış</string>
 </resources>

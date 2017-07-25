@@ -39,6 +39,8 @@
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
                 android:hint="@string/prompt_email"
+                android:imeOptions="actionNext"
+                android:nextFocusDown="@+id/password"
                 android:inputType="textEmailAddress"
                 android:maxLines="1" />
 
@@ -55,9 +57,9 @@
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
                 android:hint="@string/prompt_password"
-                android:imeActionId="@+id/login"
+                android:imeActionId="@+id/email_sign_in_button"
                 android:imeActionLabel="@string/action_sign_in_short"
-                android:imeOptions="actionUnspecified"
+                android:imeOptions="actionDone"
                 android:inputType="textPassword"
                 android:maxLines="1" />
 
