@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.project.onur.playerx.R;
 
 
@@ -40,7 +41,7 @@ public class ThreeFragment extends Fragment{
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ////
+                FirebaseAuth.getInstance().signOut();
             }
         });
 

@@ -26,7 +26,7 @@
             android:layout_height="match_parent"
             android:layout_gravity="center"
             android:layout_margin="5dp"
-            android:src="@drawable/poker" />
+            android:src="@drawable/ic_basketball" />
 
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
