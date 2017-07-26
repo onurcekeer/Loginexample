@@ -88,7 +88,6 @@ public class LoginActivity extends AppCompatActivity{
                 .build();
 
         mGoogleApiClient = new GoogleApiClient.Builder(this)
-                //.enableAutoManage(this /* FragmentActivity */, this /* OnConnectionFailedListener */)
                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
                 .build();
 
@@ -96,7 +95,13 @@ public class LoginActivity extends AppCompatActivity{
         googleButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                signIn();
+                if(isOnline()){
+                    signIn();
+                }
+                else{
+                    Snackbar snackbar = Snackbar.make(view, getString(R.string.check_internet_conn), Snackbar.LENGTH_LONG);
+                    snackbar.show();
+                }
             }
         });
 
@@ -233,11 +238,17 @@ public class LoginActivity extends AppCompatActivity{
     @Override
     public void onStart() {
         super.onStart();
-        // Check if user is signed in (non-null) and update UI accordingly.
+        mGoogleApiClient.connect();
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if(currentUser!=null){
             startMainActivity();
         }
+    }
+
+    @Override
+    public void onStop(){
+        super.onStop();
+        mGoogleApiClient.disconnect();
     }
 
     public void startMainActivity(){
