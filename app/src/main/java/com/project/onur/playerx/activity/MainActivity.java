@@ -5,9 +5,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 
 import com.project.onur.playerx.User;
@@ -15,23 +19,11 @@ import com.project.onur.playerx.fragment.OneFragment;
 import com.project.onur.playerx.R;
 import com.project.onur.playerx.fragment.ThreeFragment;
 import com.project.onur.playerx.fragment.TwoFragment;
-import com.project.onur.playerx.ViewPagerAdapter;
+
 
 public class MainActivity extends AppCompatActivity {
 
-    private static final String KEY_USER = "KEY_USER";
-    BottomNavigationView bottomNavigationView;
 
-    //This is our viewPager
-    private ViewPager viewPager;
-
-
-    //Fragments
-
-    OneFragment oneFragment;
-    TwoFragment twoFragment;
-    ThreeFragment threeFragment;
-    MenuItem prevMenuItem;
     User user;
 
     @Override
@@ -42,82 +34,66 @@ public class MainActivity extends AppCompatActivity {
         Intent i = getIntent();
         user = (User)i.getSerializableExtra("userObject");
 
-        //Initializing viewPager
-        viewPager = (ViewPager) findViewById(R.id.viewpager);
 
-        //Initializing the bottomNavigationView
-        bottomNavigationView = (BottomNavigationView)findViewById(R.id.bottom_navigation);
 
-        bottomNavigationView.setOnNavigationItemSelectedListener(
-                new BottomNavigationView.OnNavigationItemSelectedListener() {
-                    @Override
-                    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                        switch (item.getItemId()) {
-                            case R.id.navigation_home:
-                                viewPager.setCurrentItem(0);
-                                return true;
-                            case R.id.navigation_dashboard:
-                                viewPager.setCurrentItem(1);
-                                return true;
-                            case R.id.navigation_notifications:
-                                viewPager.setCurrentItem(2);
-                                return true;
+        setupNavigationView();
+    }
+
+
+
+
+    private void setupNavigationView() {
+        BottomNavigationView bottomNavigation = (BottomNavigationView)findViewById(R.id.bottom_navigation);
+        bottomNavigation.inflateMenu(R.menu.navigation);
+        if (bottomNavigation != null) {
+
+            // Select first menu item by default and show Fragment accordingly.
+            Menu menu = bottomNavigation.getMenu();
+            selectFragment(menu.getItem(0));
+
+            // Set action to perform when any menu-item is selected.
+            bottomNavigation.setOnNavigationItemSelectedListener(
+                    new BottomNavigationView.OnNavigationItemSelectedListener() {
+                        @Override
+                        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                            selectFragment(item);
+                            return false;
                         }
-                        return false;
-                    }
-                });
-
-        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-                if (prevMenuItem != null) {
-                    prevMenuItem.setChecked(false);
-                }
-                else
-                {
-                    bottomNavigationView.getMenu().getItem(0).setChecked(false);
-                }
-                Log.d("page", "onPageSelected: "+position);
-                bottomNavigationView.getMenu().getItem(position).setChecked(true);
-                prevMenuItem = bottomNavigationView.getMenu().getItem(position);
-
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-
-            }
-        });
-
-       /*  //Disable ViewPager Swipe
-       viewPager.setOnTouchListener(new View.OnTouchListener()
-        {
-            @Override
-            public boolean onTouch(View v, MotionEvent event)
-            {
-                return true;
-            }
-        });
-        */
-
-        setupViewPager(viewPager);
+                    });
+        }
     }
 
-    private void setupViewPager(ViewPager viewPager) {
-        ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        oneFragment =new OneFragment();
-        twoFragment=new TwoFragment();
-        threeFragment=new ThreeFragment();
-        adapter.addFragment(oneFragment);
-        adapter.addFragment(twoFragment);
-        adapter.addFragment(threeFragment);
-        viewPager.setAdapter(adapter);
+
+    protected void selectFragment(MenuItem item) {
+
+        item.setChecked(true);
+
+        switch (item.getItemId()) {
+            case R.id.navigation_home:
+                pushFragment(new OneFragment());
+                break;
+            case R.id.navigation_dashboard:
+                pushFragment(new TwoFragment());
+                break;
+            case R.id.navigation_notifications:
+                pushFragment(new ThreeFragment());
+                break;
+            }
     }
 
+
+    protected void pushFragment(Fragment fragment) {
+        if (fragment == null)
+            return;
+
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        if (fragmentManager != null) {
+            FragmentTransaction ft = fragmentManager.beginTransaction();
+            if (ft != null) {
+                ft.replace(R.id.main_container, fragment);
+                ft.commit();
+            }
+        }
+    }
 
 }
