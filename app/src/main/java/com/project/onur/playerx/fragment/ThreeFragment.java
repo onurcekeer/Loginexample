@@ -1,5 +1,7 @@
 package com.project.onur.playerx.fragment;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -9,10 +11,14 @@ import android.view.ViewGroup;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.project.onur.playerx.R;
+import com.project.onur.playerx.activity.LoginActivity;
+import com.project.onur.playerx.activity.MainActivity;
+import com.project.onur.playerx.activity.SignUpActivity;
 
 
 public class ThreeFragment extends Fragment{
 
+    View view;
 
     public ThreeFragment() {
         // Required empty public constructor
@@ -29,7 +35,7 @@ public class ThreeFragment extends Fragment{
 
 
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_three, container, false);
+        view = inflater.inflate(R.layout.fragment_three, container, false);
         perform(view);
         return view;
     }
@@ -42,11 +48,21 @@ public class ThreeFragment extends Fragment{
             @Override
             public void onClick(View view) {
                 FirebaseAuth.getInstance().signOut();
+                startLoginActivity();
             }
         });
 
 
     }
+
+
+    public void startLoginActivity(){
+        Intent intent = new Intent(getContext(), LoginActivity.class);
+        startActivity(intent);
+
+    }
+
+
 
 
 }
