@@ -28,6 +28,7 @@ public class ThreeFragment extends Fragment{
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+
     }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -35,31 +36,7 @@ public class ThreeFragment extends Fragment{
 
 
         // Inflate the layout for this fragment
-        view = inflater.inflate(R.layout.fragment_three, container, false);
-        perform(view);
-        return view;
-    }
-
-    public void perform(View v) {
-
-
-        FloatingActionButton fab = (FloatingActionButton) v.findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                FirebaseAuth.getInstance().signOut();
-                startLoginActivity();
-            }
-        });
-
-
-    }
-
-
-    public void startLoginActivity(){
-        Intent intent = new Intent(getContext(), LoginActivity.class);
-        startActivity(intent);
-
+        return inflater.inflate(R.layout.fragment_three, container, false);
     }
 
 
