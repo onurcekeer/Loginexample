@@ -27,5 +27,7 @@
     <string name="create_user_failed">E-mail address already registered</string>
     <string name="logging_in">Logging in...</string>
     <string name="user_auth_failed">Email address or password is incorrect</string>
+    <string name="facebook_app_id">1628314297242547</string>
+    <string name="fb_login_protocol_scheme">fb1628314297242547</string>
 
 </resources>

@@ -28,4 +28,5 @@
     <string name="create_user_failed">E-posta adresi zaten kayıtlı</string>
     <string name="logging_in">Giriş yapılıyor...</string>
     <string name="user_auth_failed">E-posta adresi veya şifre yanlış</string>
+
 </resources>
