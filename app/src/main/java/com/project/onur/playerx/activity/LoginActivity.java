@@ -59,6 +59,7 @@ public class LoginActivity extends AppCompatActivity{
     private static final int RC_SIGN_IN = 9001;
     private FirebaseAuth mAuth;
     private FirebaseUser mUser;
+    private GoogleApiClient mGoogleApiClient;
     CallbackManager mCallbackManager;
 
 
@@ -70,7 +71,7 @@ public class LoginActivity extends AppCompatActivity{
     View googleButton;
     View facebookButton;
     ProgressDialog progressDialog;
-    private GoogleApiClient mGoogleApiClient;
+
 
 
     @Override
@@ -154,12 +155,10 @@ public class LoginActivity extends AppCompatActivity{
             @Override
             public void onError(FacebookException error) {
                 Log.d(TAG, "facebook:onError", error);
-                Snackbar snackbar = Snackbar.make(view, getString(R.string.user_auth_failed), Snackbar.LENGTH_LONG);
+                Snackbar snackbar = Snackbar.make(view, getString(R.string.something_went_wrong), Snackbar.LENGTH_LONG);
                 snackbar.show();
             }
         });
-
-
 
         setBottomBar();
 
@@ -183,7 +182,7 @@ public class LoginActivity extends AppCompatActivity{
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithCredential:failure", task.getException());
-                            Snackbar snackbar = Snackbar.make(view, getString(R.string.user_auth_failed), Snackbar.LENGTH_LONG);
+                            Snackbar snackbar = Snackbar.make(view, getString(R.string.something_went_wrong), Snackbar.LENGTH_LONG);
                             snackbar.show();
                         }
 
@@ -209,6 +208,7 @@ public class LoginActivity extends AppCompatActivity{
                 // Google Sign In was successful, authenticate with Firebase
                 GoogleSignInAccount account = result.getSignInAccount();
                 firebaseAuthWithGoogle(account);
+                showProgressDialog();
             }
             else {
                 //hata.show();
@@ -238,7 +238,7 @@ public class LoginActivity extends AppCompatActivity{
                             // If sign in fails, display a message to the user.
                             progressDialog.dismiss();
                             Log.w(TAG, "signInWithCredential:failure", task.getException());
-                            Snackbar snackbar = Snackbar.make(view, getString(R.string.user_auth_failed), Snackbar.LENGTH_LONG);
+                            Snackbar snackbar = Snackbar.make(view, getString(R.string.something_went_wrong), Snackbar.LENGTH_LONG);
                             snackbar.show();
                         }
 
@@ -325,6 +325,12 @@ public class LoginActivity extends AppCompatActivity{
     @Override
     public void onStop(){
         super.onStop();
+
+    }
+
+    @Override
+    public void onDestroy(){
+        super.onDestroy();
         mGoogleApiClient.disconnect();
     }
 

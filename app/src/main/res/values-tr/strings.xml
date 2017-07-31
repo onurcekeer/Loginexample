@@ -28,5 +28,6 @@
     <string name="create_user_failed">E-posta adresi zaten kayıtlı</string>
     <string name="logging_in">Giriş yapılıyor...</string>
     <string name="user_auth_failed">E-posta adresi veya şifre yanlış</string>
+    <string name="something_went_wrong">Bir şeyler ters gitti. Lütfen tekrar deneyin</string>
 
 </resources>
