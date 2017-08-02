@@ -30,11 +30,11 @@ tools:context="com.project.onur.playerx.activity.MainActivity">
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:src="@mipmap/ic_launcher" />
+                        android:src="@drawable/ic_football" />
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Learn" />
+                        android:text="Spor" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -46,11 +46,11 @@ tools:context="com.project.onur.playerx.activity.MainActivity">
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:src="@mipmap/ic_launcher" />
+                        android:src="@drawable/ic_table_games" />
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Android" />
+                        android:text="Masa Oyunları" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -62,11 +62,11 @@ tools:context="com.project.onur.playerx.activity.MainActivity">
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:src="@mipmap/ic_launcher" />
+                        android:src="@drawable/ic_concert" />
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Step" />
+                        android:text="konser" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -78,11 +78,11 @@ tools:context="com.project.onur.playerx.activity.MainActivity">
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:src="@mipmap/ic_launcher" />
+                        android:src="@drawable/ic_pc_games" />
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="By" />
+                        android:text="Pc Oyunları" />
                 </LinearLayout>
 
                 <LinearLayout
