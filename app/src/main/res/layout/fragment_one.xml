@@ -22,7 +22,7 @@ tools:context="com.project.onur.playerx.activity.MainActivity">
                 android:orientation="horizontal" >
 
                 <LinearLayout
-                    android:padding="16dp"
+                    android:padding="@dimen/horizontal_scroll_padding"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center"
@@ -38,7 +38,7 @@ tools:context="com.project.onur.playerx.activity.MainActivity">
                 </LinearLayout>
 
                 <LinearLayout
-                    android:padding="16dp"
+                    android:padding="@dimen/horizontal_scroll_padding"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center"
@@ -54,7 +54,7 @@ tools:context="com.project.onur.playerx.activity.MainActivity">
                 </LinearLayout>
 
                 <LinearLayout
-                    android:padding="16dp"
+                    android:padding="@dimen/horizontal_scroll_padding"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center"
@@ -70,7 +70,7 @@ tools:context="com.project.onur.playerx.activity.MainActivity">
                 </LinearLayout>
 
                 <LinearLayout
-                    android:padding="16dp"
+                    android:padding="@dimen/horizontal_scroll_padding"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center"
@@ -86,7 +86,7 @@ tools:context="com.project.onur.playerx.activity.MainActivity">
                 </LinearLayout>
 
                 <LinearLayout
-                    android:padding="16dp"
+                    android:padding="@dimen/horizontal_scroll_padding"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center"
@@ -102,7 +102,7 @@ tools:context="com.project.onur.playerx.activity.MainActivity">
                 </LinearLayout>
 
                 <LinearLayout
-                    android:padding="16dp"
+                    android:padding="@dimen/horizontal_scroll_padding"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center"
@@ -117,141 +117,7 @@ tools:context="com.project.onur.playerx.activity.MainActivity">
                         android:text="Android" />
                 </LinearLayout>
 
-                <LinearLayout
-                    android:padding="16dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:orientation="vertical">
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@mipmap/ic_launcher" />
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Hello" />
-                </LinearLayout>
 
-
-
-                <LinearLayout
-                    android:padding="16dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:orientation="vertical">
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@mipmap/ic_launcher" />
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="nkDroid" />
-                </LinearLayout>
-
-
-                <LinearLayout
-                    android:padding="16dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:orientation="vertical">
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@mipmap/ic_launcher" />
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Dummy Text" />
-                </LinearLayout>
-
-
-                <LinearLayout
-                    android:padding="16dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:orientation="vertical">
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@mipmap/ic_launcher" />
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Horizontal" />
-                </LinearLayout>
-
-
-                <LinearLayout
-                    android:padding="16dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:orientation="vertical">
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@mipmap/ic_launcher" />
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Scrolling" />
-                </LinearLayout>
-
-
-                <LinearLayout
-                    android:padding="16dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:orientation="vertical">
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@mipmap/ic_launcher" />
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Example" />
-                </LinearLayout>
-
-
-                <LinearLayout
-                    android:padding="16dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:orientation="vertical">
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@mipmap/ic_launcher" />
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Support" />
-                </LinearLayout>
-
-
-                <LinearLayout
-                    android:padding="16dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:orientation="vertical">
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@mipmap/ic_launcher" />
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Library" />
-                </LinearLayout>
             </LinearLayout>
 
         </HorizontalScrollView>
