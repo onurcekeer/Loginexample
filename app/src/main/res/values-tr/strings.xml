@@ -29,5 +29,10 @@
     <string name="logging_in">Giriş yapılıyor...</string>
     <string name="user_auth_failed">E-posta adresi veya şifre yanlış</string>
     <string name="something_went_wrong">Bir şeyler ters gitti. Lütfen tekrar deneyin</string>
+    <string name="other_text">Diğer</string>
+    <string name="pc_games_text">PC Oyunları</string>
+    <string name="sport_text">Spor</string>
+    <string name="table_games_text">Masa Oyunları</string>
+    <string name="concert_text">Konser</string>
 
 </resources>

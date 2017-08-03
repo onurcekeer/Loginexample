@@ -27,8 +27,13 @@
     <string name="create_user_failed">E-mail address already registered</string>
     <string name="logging_in">Logging in...</string>
     <string name="user_auth_failed">Email address or password is incorrect</string>
-    <string name="facebook_app_id">1628314297242547</string>
-    <string name="fb_login_protocol_scheme">fb1628314297242547</string>
+    <string name="facebook_app_id" translatable="false">1628314297242547</string>
+    <string name="fb_login_protocol_scheme" translatable="false">fb1628314297242547</string>
     <string name="something_went_wrong">Something went wrong. Please try again</string>
+    <string name="sport_text">Sport</string>
+    <string name="table_games_text">Table Games</string>
+    <string name="pc_games_text">PC Games</string>
+    <string name="concert_text">Concert</string>
+    <string name="other_text">Other</string>
 
 </resources>

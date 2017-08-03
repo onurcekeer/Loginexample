@@ -23,6 +23,8 @@ tools:context="com.project.onur.playerx.activity.MainActivity">
 
                 <LinearLayout
                     android:padding="@dimen/horizontal_scroll_padding"
+                    android:clickable="true"
+                    android:id="@+id/lineer_sport"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center"
@@ -34,11 +36,13 @@ tools:context="com.project.onur.playerx.activity.MainActivity">
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Spor" />
+                        android:text="@string/sport_text" />
                 </LinearLayout>
 
                 <LinearLayout
                     android:padding="@dimen/horizontal_scroll_padding"
+                    android:clickable="true"
+                    android:id="@+id/lineer_table_game"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center"
@@ -50,11 +54,13 @@ tools:context="com.project.onur.playerx.activity.MainActivity">
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Masa Oyunları" />
+                        android:text="@string/table_games_text" />
                 </LinearLayout>
 
                 <LinearLayout
                     android:padding="@dimen/horizontal_scroll_padding"
+                    android:clickable="true"
+                    android:id="@+id/lineer_concert"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center"
@@ -66,11 +72,13 @@ tools:context="com.project.onur.playerx.activity.MainActivity">
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="konser" />
+                        android:text="@string/concert_text" />
                 </LinearLayout>
 
                 <LinearLayout
                     android:padding="@dimen/horizontal_scroll_padding"
+                    android:clickable="true"
+                    android:id="@+id/lineer_pc_game"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center"
@@ -82,11 +90,13 @@ tools:context="com.project.onur.playerx.activity.MainActivity">
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Pc Oyunları" />
+                        android:text="@string/pc_games_text" />
                 </LinearLayout>
 
                 <LinearLayout
                     android:padding="@dimen/horizontal_scroll_padding"
+                    android:clickable="true"
+                    android:id="@+id/lineer_other"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center"
@@ -98,24 +108,9 @@ tools:context="com.project.onur.playerx.activity.MainActivity">
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Step" />
+                        android:text="@string/other_text" />
                 </LinearLayout>
 
-                <LinearLayout
-                    android:padding="@dimen/horizontal_scroll_padding"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:orientation="vertical">
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@mipmap/ic_launcher" />
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Android" />
-                </LinearLayout>
 
 
             </LinearLayout>

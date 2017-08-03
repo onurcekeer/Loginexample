@@ -5,11 +5,12 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.project.onur.playerx.R;
 
 
-public class OneFragment extends Fragment {
+public class OneFragment extends Fragment implements View.OnClickListener {
 
 
     public OneFragment() {
@@ -28,7 +29,53 @@ public class OneFragment extends Fragment {
 
 
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_one, container, false);
+        View view = inflater.inflate(R.layout.fragment_one, container, false);
+        perform(view);
+        return view;
+    }
+
+    private void perform(View v) {
+
+        View sport = v.findViewById(R.id.lineer_sport);
+        sport.setOnClickListener(this);
+        View table_games = v.findViewById(R.id.lineer_table_game);
+        table_games.setOnClickListener(this);
+        View concert = v.findViewById(R.id.lineer_concert);
+        concert.setOnClickListener(this);
+        View pc_games = v.findViewById(R.id.lineer_pc_game);
+        pc_games.setOnClickListener(this);
+        View other = v.findViewById(R.id.lineer_other);
+        other.setOnClickListener(this);
+
+
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+
+            case R.id.lineer_sport:
+                Toast.makeText(v.getContext(),"spor",Toast.LENGTH_SHORT).show();
+                break;
+
+            case R.id.lineer_table_game:
+                Toast.makeText(v.getContext(),"Masa Oyunları",Toast.LENGTH_SHORT).show();
+                break;
+
+            case R.id.lineer_concert:
+                Toast.makeText(v.getContext(),"Konser",Toast.LENGTH_SHORT).show();
+                break;
+
+            case R.id.lineer_pc_game:
+                Toast.makeText(v.getContext(),"PC Oyunları",Toast.LENGTH_SHORT).show();
+                break;
+
+            case R.id.lineer_other:
+                Toast.makeText(v.getContext(),"Diğer",Toast.LENGTH_SHORT).show();
+                break;
+            default:
+                break;
+        }
     }
 
 }
