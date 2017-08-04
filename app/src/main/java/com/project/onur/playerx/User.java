@@ -14,11 +14,11 @@ public class User implements Serializable {
     private String UserID;
     private String Email;
     private String Username;
-    private Location LastLocation;
+    private String LastLocation;
     private Uri ProfilURL;
     private int Range;
 
-    public User(String userID, String email, String username, Location lastLocation, Uri profilURL, int range) {
+    public User(String userID, String email, String username, String lastLocation, Uri profilURL, int range) {
         UserID = userID;
         Email = email;
         Username = username;
@@ -51,11 +51,11 @@ public class User implements Serializable {
         Username = username;
     }
 
-    public Location getLastLocation() {
+    public String getLastLocation() {
         return LastLocation;
     }
 
-    public void setLastLocation(Location lastLocation) {
+    public void setLastLocation(String lastLocation) {
         LastLocation = lastLocation;
     }
 

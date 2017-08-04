@@ -40,6 +40,8 @@ import com.project.onur.playerx.User;
 import java.io.Serializable;
 import java.util.Locale;
 
+import im.delight.android.location.SimpleLocation;
+
 public class SignUpActivity extends AppCompatActivity {
 
 
@@ -54,6 +56,8 @@ public class SignUpActivity extends AppCompatActivity {
     ProgressDialog progressDialog;
     View view;
     User user;
+    private SimpleLocation location;
+    double latitude,longitude;
 
 
     @Override
@@ -62,6 +66,10 @@ public class SignUpActivity extends AppCompatActivity {
         setContentView(R.layout.activity_sign_up);
 
         mAuth = FirebaseAuth.getInstance();
+
+        location = new SimpleLocation(this);
+        latitude = location.getLatitude();
+        longitude = location.getLongitude();
 
 
         view = findViewById(R.id.sign_up_lineer_layout);
@@ -178,7 +186,7 @@ public class SignUpActivity extends AppCompatActivity {
             @Override
             public void run() {
                 String _userId = mUser.getUid();
-                Location _lastlocation = null;              //getLocation eklenecek.
+                String _lastlocation = (latitude+","+longitude);
                 Uri _profilUrl = mUser.getPhotoUrl();
                 int _range = DEFAULT_RANGE;
 
@@ -296,6 +304,25 @@ public class SignUpActivity extends AppCompatActivity {
         if(currentUser!=null){
             updateUI(user);
         }
+    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        // make the device update its location
+        location.beginUpdates();
+
+        // ...
+    }
+
+    @Override
+    protected void onPause() {
+        // stop location updates (saves battery)
+        location.endUpdates();
+
+        // ...
+
+        super.onPause();
     }
 
 
