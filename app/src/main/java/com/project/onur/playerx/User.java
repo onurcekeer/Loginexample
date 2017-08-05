@@ -15,10 +15,10 @@ public class User implements Serializable {
     private String Email;
     private String Username;
     private String LastLocation;
-    private Uri ProfilURL;
+    private String ProfilURL;
     private int Range;
 
-    public User(String userID, String email, String username, String lastLocation, Uri profilURL, int range) {
+    public User(String userID, String email, String username, String lastLocation, String profilURL, int range) {
         UserID = userID;
         Email = email;
         Username = username;
@@ -59,11 +59,11 @@ public class User implements Serializable {
         LastLocation = lastLocation;
     }
 
-    public Uri getProfilURL() {
+    public String getProfilURL() {
         return ProfilURL;
     }
 
-    public void setProfilURL(Uri profilURL) {
+    public void setProfilURL(String profilURL) {
         ProfilURL = profilURL;
     }
 

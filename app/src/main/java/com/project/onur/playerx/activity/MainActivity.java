@@ -2,6 +2,7 @@ package com.project.onur.playerx.activity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -14,15 +15,24 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.project.onur.playerx.SQLiteUser;
 import com.project.onur.playerx.User;
 import com.project.onur.playerx.fragment.OneFragment;
 import com.project.onur.playerx.R;
 import com.project.onur.playerx.fragment.ThreeFragment;
 import com.project.onur.playerx.fragment.TwoFragment;
 
+import im.delight.android.location.SimpleLocation;
+
 
 public class MainActivity extends AppCompatActivity {
 
+
+    SimpleLocation mLocation;
+    double latitude,longitude;
+    SQLiteUser sqLiteUser;
 
     User user;
 
@@ -30,10 +40,17 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        mLocation = new SimpleLocation(this);
+
+        sqLiteUser = new SQLiteUser(getApplicationContext());
 
         Intent i = getIntent();
         user = (User)i.getSerializableExtra("userObject");
 
+        if(user==null){
+            Cursor cursor = sqLiteUser.query();
+            user = sqLiteUser.getUserFromSQLite(cursor);
+        }
 
 
         setupNavigationView();
@@ -94,6 +111,14 @@ public class MainActivity extends AppCompatActivity {
                 ft.commit();
             }
         }
+    }
+
+    private String getCurrentLocation(){
+        String location;
+        latitude = mLocation.getLatitude();
+        longitude = mLocation.getLongitude();
+        location = latitude+","+longitude;
+        return location;
     }
 
 }

@@ -35,6 +35,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.project.onur.playerx.R;
+import com.project.onur.playerx.SQLiteUser;
 import com.project.onur.playerx.User;
 
 import java.io.Serializable;
@@ -48,6 +49,7 @@ public class SignUpActivity extends AppCompatActivity {
     private static final String KEY_USER = "KEY_USER";
     private static final String TAG = "CREATE_USER";
     private static final int DEFAULT_RANGE = 20;
+    private static final String DEFAULT_USER_PROFİLE = "https://firebasestorage.googleapis.com/v0/b/playerx-e6194.appspot.com/o/default_user.png?alt=media&token=ae78ed09-9dfb-4c6d-a261-2aec523d22a0";
     private FirebaseAuth mAuth;
     private FirebaseUser mUser;
     EditText edit_email, edit_password, edit_fullname;
@@ -185,15 +187,20 @@ public class SignUpActivity extends AppCompatActivity {
         new Thread(new Runnable() {
             @Override
             public void run() {
+
                 String _userId = mUser.getUid();
                 String _lastlocation = (latitude+","+longitude);
-                Uri _profilUrl = mUser.getPhotoUrl();
+                String _profilUrl = DEFAULT_USER_PROFİLE;
                 int _range = DEFAULT_RANGE;
 
                 FirebaseDatabase database = FirebaseDatabase.getInstance();
                 DatabaseReference reference = database.getReference("User");
                 user = new User(_userId,email,fullname,_lastlocation,_profilUrl,_range);
                 reference.child(_userId).setValue(user);
+
+                SQLiteUser sqLiteUser = new SQLiteUser(getApplicationContext());
+                sqLiteUser.addUserToSQLite(user);
+
                 progressDialog.dismiss();
                 updateUI(user);
 
@@ -319,6 +326,7 @@ public class SignUpActivity extends AppCompatActivity {
     protected void onPause() {
         // stop location updates (saves battery)
         location.endUpdates();
+        progressDialog.dismiss();
 
         // ...
 
