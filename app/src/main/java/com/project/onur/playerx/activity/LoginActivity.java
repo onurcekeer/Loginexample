@@ -45,7 +45,14 @@ import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.project.onur.playerx.R;
+import com.project.onur.playerx.User;
 
 import java.util.Arrays;
 import java.util.Locale;
@@ -413,6 +420,7 @@ public class LoginActivity extends AppCompatActivity{
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithEmail:success");
                             mUser = mAuth.getCurrentUser();
+                            getUserFromFirebase(mUser.getUid());
                             progressDialog.dismiss();
                             startMainActivity();
 
@@ -428,6 +436,31 @@ public class LoginActivity extends AppCompatActivity{
                     }
                 });
 
+
+    }
+
+    public void getUserFromFirebase(String _userId){
+
+        final User _user;
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("User");
+
+        Query query = reference.child(_userId).orderByChild("range").equalTo(_userId);
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+
+                    Log.e(TAG,dataSnapshot.getValue().toString());
+
+                }
+                Log.e(TAG,"asddad");
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
 
     }
 }
