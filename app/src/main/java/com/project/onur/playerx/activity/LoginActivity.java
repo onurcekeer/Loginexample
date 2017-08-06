@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -52,11 +53,13 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.project.onur.playerx.R;
+import com.project.onur.playerx.SQLiteUser;
 import com.project.onur.playerx.User;
 
 import java.util.Arrays;
 import java.util.Locale;
 
+import im.delight.android.location.SimpleLocation;
 
 
 public class LoginActivity extends AppCompatActivity{
@@ -64,10 +67,17 @@ public class LoginActivity extends AppCompatActivity{
     private static final String KEY_USER = "KEY_USER";
     private static final String TAG = "LOGİN";
     private static final int RC_SIGN_IN = 9001;
+    private static final int DEFAULT_RANGE = 20;
+    private static final String DEFAULT_USER_PROFİLE = "https://firebasestorage.googleapis.com/v0/b/playerx-e6194.appspot.com/o/default_user.png?alt=media&token=ae78ed09-9dfb-4c6d-a261-2aec523d22a0";
     private FirebaseAuth mAuth;
     private FirebaseUser mUser;
     private GoogleApiClient mGoogleApiClient;
     CallbackManager mCallbackManager;
+    User user;
+    User tempUser;
+    SQLiteUser sqliteUser;
+    private SimpleLocation location;
+    double latitude,longitude;
 
 
     // UI references.
@@ -91,6 +101,13 @@ public class LoginActivity extends AppCompatActivity{
         googleButton = findViewById(R.id.linearButton2);
         facebookButton = findViewById(R.id.linearButton);
         mAuth = FirebaseAuth.getInstance();
+
+        user = new User();
+        sqliteUser = new SQLiteUser(getApplicationContext());
+
+        location = new SimpleLocation(this);
+        latitude = location.getLatitude();
+        longitude = location.getLongitude();
 
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
         mPasswordView = (EditText) findViewById(R.id.password);
@@ -184,8 +201,8 @@ public class LoginActivity extends AppCompatActivity{
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithCredential:success");
                             mUser = mAuth.getCurrentUser();
-                            progressDialog.dismiss();
-                            startMainActivity();
+                            user = getUserFromFirebase(mUser);
+                            startMainActivity(user);
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithCredential:failure", task.getException());
@@ -193,7 +210,7 @@ public class LoginActivity extends AppCompatActivity{
                             snackbar.show();
                         }
 
-                        // ...
+                        progressDialog.dismiss();
                     }
                 });
     }
@@ -239,17 +256,16 @@ public class LoginActivity extends AppCompatActivity{
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithCredential:success");
                             mUser = mAuth.getCurrentUser();
-                            progressDialog.dismiss();
-                            startMainActivity();
+                            user = getUserFromFirebase(mUser);
+                            startMainActivity(user);
                         } else {
                             // If sign in fails, display a message to the user.
-                            progressDialog.dismiss();
                             Log.w(TAG, "signInWithCredential:failure", task.getException());
                             Snackbar snackbar = Snackbar.make(view, getString(R.string.something_went_wrong), Snackbar.LENGTH_LONG);
                             snackbar.show();
                         }
 
-                        // ...
+                        progressDialog.dismiss();
                     }
                 });
     }
@@ -325,7 +341,9 @@ public class LoginActivity extends AppCompatActivity{
         mGoogleApiClient.connect();
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if(currentUser!=null){
-            startMainActivity();
+            Cursor cursor = sqliteUser.query();
+            user = sqliteUser.getUserFromSQLite(cursor);
+            startMainActivity(user);
         }
     }
 
@@ -341,9 +359,10 @@ public class LoginActivity extends AppCompatActivity{
         mGoogleApiClient.disconnect();
     }
 
-    public void startMainActivity(){
-        Intent intent = new Intent(LoginActivity.this,MainActivity.class);
-        startActivity(intent);
+    public void startMainActivity(User user){
+        Intent i = new Intent(this, MainActivity.class);
+        i.putExtra("userObject",user);
+        startActivity(i);
     }
 
     public void setBottomBar(){
@@ -420,9 +439,9 @@ public class LoginActivity extends AppCompatActivity{
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithEmail:success");
                             mUser = mAuth.getCurrentUser();
-                            getUserFromFirebase(mUser.getUid());
+                            user = getUserFromFirebase(mUser);
                             progressDialog.dismiss();
-                            startMainActivity();
+                            startMainActivity(user);
 
                         } else {
                             // If sign in fails, display a message to the user.
@@ -439,28 +458,52 @@ public class LoginActivity extends AppCompatActivity{
 
     }
 
-    public void getUserFromFirebase(String _userId){
+    public User getUserFromFirebase(final FirebaseUser _mUser){
 
-        final User _user;
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference("User");
-
-        Query query = reference.child(_userId).orderByChild("range").equalTo(_userId);
+        final User[] user1 = {new User()};
+        Query query = reference.orderByChild("userID").equalTo(_mUser.getUid());
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
-
-                    Log.e(TAG,dataSnapshot.getValue().toString());
-
+                   User _user = dataSnapshot.child(_mUser.getUid()).getValue(User.class);
+                    user1[0] = _user;
                 }
-                Log.e(TAG,"asddad");
+                else {
+                    user1[0]= collectUserData(_mUser);
+                    tempUser = user1[0];
+                    addUserDataToFirebase(tempUser);
+                }
+                sqliteUser.addUserToSQLite(user1[0]);
             }
-
             @Override
             public void onCancelled(DatabaseError databaseError) {
-
+                //hata mesajı basılacak.
             }
         });
+
+        return user1[0];
+    }
+
+    public User collectUserData(FirebaseUser _mUser){
+
+        User _user = new User();
+
+        user.setUserID(_mUser.getUid());
+        user.setEmail(_mUser.getEmail());
+        user.setUsername(_mUser.getDisplayName());
+        user.setLastLocation(latitude+","+longitude);
+        user.setProfilURL(_mUser.getPhotoUrl().toString());
+        user.setRange(DEFAULT_RANGE);
+
+        return _user;
+    }
+
+    public void addUserDataToFirebase(User _user){
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference reference = database.getReference("User");
+        reference.child(_user.getUserID()).setValue(_user);
 
     }
 }

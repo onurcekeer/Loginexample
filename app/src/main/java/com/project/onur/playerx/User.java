@@ -27,6 +27,10 @@ public class User implements Serializable {
         Range = range;
     }
 
+    public User(){
+        //default cons.
+    }
+
     public String getUserID() {
         return UserID;
     }

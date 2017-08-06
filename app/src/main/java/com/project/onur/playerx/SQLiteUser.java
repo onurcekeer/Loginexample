@@ -76,7 +76,7 @@ public class SQLiteUser extends SQLiteOpenHelper {
     public User getUserFromSQLite(Cursor cursor){
 
         cursor.moveToFirst();
-        User user = new User("1","1","1","1","1",1);
+        User user = new User();
         user.setUserID(cursor.getString(cursor.getColumnIndex(USERID)));
         user.setEmail(cursor.getString(cursor.getColumnIndex(EMAIL)));
         user.setUsername(cursor.getString(cursor.getColumnIndex(USERNAME)));
