@@ -64,7 +64,6 @@ public class SQLiteUser extends SQLiteOpenHelper {
         values.put(USERID,user.getUserID());
         values.put(EMAIL,user.getEmail());
         values.put(USERNAME,user.getUsername());
-        values.put(LASTLOCATION,user.getLastLocation());
         values.put(PROFILURL,user.getProfilURL());
         values.put(RANGE,user.getRange());
 
@@ -80,7 +79,6 @@ public class SQLiteUser extends SQLiteOpenHelper {
         user.setUserID(cursor.getString(cursor.getColumnIndex(USERID)));
         user.setEmail(cursor.getString(cursor.getColumnIndex(EMAIL)));
         user.setUsername(cursor.getString(cursor.getColumnIndex(USERNAME)));
-        user.setLastLocation(cursor.getString(cursor.getColumnIndex(LASTLOCATION)));
         user.setProfilURL(cursor.getString(cursor.getColumnIndex(PROFILURL)));
         user.setRange(cursor.getInt(cursor.getColumnIndex(RANGE)));
 

@@ -68,15 +68,12 @@ public class LoginActivity extends AppCompatActivity{
     private static final String TAG = "LOGİN";
     private static final int RC_SIGN_IN = 9001;
     private static final int DEFAULT_RANGE = 20;
-    private static final String DEFAULT_USER_PROFİLE = "https://firebasestorage.googleapis.com/v0/b/playerx-e6194.appspot.com/o/default_user.png?alt=media&token=ae78ed09-9dfb-4c6d-a261-2aec523d22a0";
     private FirebaseAuth mAuth;
     private FirebaseUser mUser;
     private GoogleApiClient mGoogleApiClient;
     CallbackManager mCallbackManager;
     User user;
-    User tempUser;
     SQLiteUser sqliteUser;
-    private SimpleLocation location;
     double latitude,longitude;
 
 
@@ -104,10 +101,6 @@ public class LoginActivity extends AppCompatActivity{
 
         user = new User();
         sqliteUser = new SQLiteUser(getApplicationContext());
-
-        location = new SimpleLocation(this);
-        latitude = location.getLatitude();
-        longitude = location.getLongitude();
 
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
         mPasswordView = (EditText) findViewById(R.id.password);
@@ -492,7 +485,6 @@ public class LoginActivity extends AppCompatActivity{
         _user.setUserID(_mUser.getUid());
         _user.setEmail(_mUser.getEmail());
         _user.setUsername(_mUser.getDisplayName());
-        _user.setLastLocation(latitude+","+longitude);
         _user.setProfilURL(_mUser.getPhotoUrl().toString());
         _user.setRange(DEFAULT_RANGE);
 

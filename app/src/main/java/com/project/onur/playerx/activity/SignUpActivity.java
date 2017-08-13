@@ -58,8 +58,6 @@ public class SignUpActivity extends AppCompatActivity {
     ProgressDialog progressDialog;
     View view;
     User user;
-    private SimpleLocation location;
-    double latitude,longitude;
 
 
     @Override
@@ -68,10 +66,6 @@ public class SignUpActivity extends AppCompatActivity {
         setContentView(R.layout.activity_sign_up);
 
         mAuth = FirebaseAuth.getInstance();
-
-        location = new SimpleLocation(this);
-        latitude = location.getLatitude();
-        longitude = location.getLongitude();
 
 
         view = findViewById(R.id.sign_up_lineer_layout);
@@ -189,13 +183,12 @@ public class SignUpActivity extends AppCompatActivity {
             public void run() {
 
                 String _userId = mUser.getUid();
-                String _lastlocation = (latitude+","+longitude);
                 String _profilUrl = DEFAULT_USER_PROFİLE;
                 int _range = DEFAULT_RANGE;
 
                 FirebaseDatabase database = FirebaseDatabase.getInstance();
                 DatabaseReference reference = database.getReference("User");
-                user = new User(_userId,email,fullname,_lastlocation,_profilUrl,_range);
+                user = new User(_userId,email,fullname,_profilUrl,_range);
                 reference.child(_userId).setValue(user);
 
                 SQLiteUser sqLiteUser = new SQLiteUser(getApplicationContext());
@@ -317,7 +310,6 @@ public class SignUpActivity extends AppCompatActivity {
         super.onResume();
 
         // make the device update its location
-        location.beginUpdates();
 
         // ...
     }
@@ -325,7 +317,6 @@ public class SignUpActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         // stop location updates (saves battery)
-        location.endUpdates();
         progressDialog.dismiss();
 
         // ...

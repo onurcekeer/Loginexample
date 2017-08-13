@@ -14,15 +14,13 @@ public class User implements Serializable {
     private String UserID;
     private String Email;
     private String Username;
-    private String LastLocation;
     private String ProfilURL;
     private int Range;
 
-    public User(String userID, String email, String username, String lastLocation, String profilURL, int range) {
+    public User(String userID, String email, String username, String profilURL, int range) {
         UserID = userID;
         Email = email;
         Username = username;
-        LastLocation = lastLocation;
         ProfilURL = profilURL;
         Range = range;
     }
@@ -55,13 +53,6 @@ public class User implements Serializable {
         Username = username;
     }
 
-    public String getLastLocation() {
-        return LastLocation;
-    }
-
-    public void setLastLocation(String lastLocation) {
-        LastLocation = lastLocation;
-    }
 
     public String getProfilURL() {
         return ProfilURL;
