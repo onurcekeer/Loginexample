@@ -1,6 +1,6 @@
 package com.project.onur.playerx.activity;
 
-import android.app.Activity;
+
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -9,14 +9,11 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.project.onur.playerx.SQLiteUser;
 import com.project.onur.playerx.User;
 import com.project.onur.playerx.fragment.OneFragment;
@@ -32,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
 
     SimpleLocation mLocation;
     double latitude,longitude;
+    String userLocation;
     SQLiteUser sqLiteUser;
 
     User user;
@@ -41,6 +39,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mLocation = new SimpleLocation(this);
+        latitude = mLocation.getLatitude();
+        longitude = mLocation.getLongitude();
+        userLocation = latitude+","+longitude;
 
         sqLiteUser = new SQLiteUser(getApplicationContext());
 
@@ -82,6 +83,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+
+
     protected void selectFragment(MenuItem item) {
 
         item.setChecked(true);
@@ -121,5 +124,25 @@ public class MainActivity extends AppCompatActivity {
         location = latitude+","+longitude;
         return location;
     }
+
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        mLocation.beginUpdates();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        mLocation.endUpdates();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mLocation.endUpdates();
+    }
+
 
 }
