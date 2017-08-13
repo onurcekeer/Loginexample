@@ -142,5 +142,9 @@ public class MainActivity extends AppCompatActivity {
         mLocation.endUpdates();
     }
 
+    public User getUser(){
+        return user;
+    }
+
 
 }

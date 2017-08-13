@@ -7,5 +7,7 @@
     <dimen name="design_bottom_navigation_active_text_size" tools:override="true">12sp</dimen>
     <dimen name="design_bottom_navigation_height" tools:override="true">50dp</dimen>
     <dimen name="horizontal_scroll_padding">12dp</dimen>
+    <dimen name="app_bar_height">180dp</dimen>
+    <dimen name="text_margin">16dp</dimen>
 
 </resources>
