@@ -39,9 +39,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mLocation = new SimpleLocation(this);
-        latitude = mLocation.getLatitude();
-        longitude = mLocation.getLongitude();
-        userLocation = latitude+","+longitude;
+        userLocation = getCurrentLocation();
 
         sqLiteUser = new SQLiteUser(getApplicationContext());
 
