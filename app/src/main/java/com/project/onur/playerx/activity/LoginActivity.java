@@ -201,16 +201,16 @@ public class LoginActivity extends AppCompatActivity{
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithCredential:success");
                             mUser = mAuth.getCurrentUser();
-                            user = getUserFromFirebase(mUser);
-                            startMainActivity(user);
+                            getUserFromFirebase(mUser);
                         } else {
+                            progressDialog.dismiss();
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithCredential:failure", task.getException());
                             Snackbar snackbar = Snackbar.make(view, getString(R.string.something_went_wrong), Snackbar.LENGTH_LONG);
                             snackbar.show();
                         }
 
-                        progressDialog.dismiss();
+
                     }
                 });
     }
@@ -256,16 +256,16 @@ public class LoginActivity extends AppCompatActivity{
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithCredential:success");
                             mUser = mAuth.getCurrentUser();
-                            user = getUserFromFirebase(mUser);
-                            startMainActivity(user);
+                            getUserFromFirebase(mUser);
                         } else {
+                            progressDialog.dismiss();
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithCredential:failure", task.getException());
                             Snackbar snackbar = Snackbar.make(view, getString(R.string.something_went_wrong), Snackbar.LENGTH_LONG);
                             snackbar.show();
                         }
 
-                        progressDialog.dismiss();
+
                     }
                 });
     }
@@ -340,9 +340,10 @@ public class LoginActivity extends AppCompatActivity{
         super.onStart();
         mGoogleApiClient.connect();
         FirebaseUser currentUser = mAuth.getCurrentUser();
-        if(currentUser!=null){
-            Cursor cursor = sqliteUser.query();
-            user = sqliteUser.getUserFromSQLite(cursor);
+        Cursor cursor = sqliteUser.query();
+        user = sqliteUser.getUserFromSQLite(cursor);
+
+        if(currentUser!=null && user!=null){
             startMainActivity(user);
         }
     }
@@ -439,10 +440,7 @@ public class LoginActivity extends AppCompatActivity{
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithEmail:success");
                             mUser = mAuth.getCurrentUser();
-                            user = getUserFromFirebase(mUser);
-                            progressDialog.dismiss();
-                            startMainActivity(user);
-
+                            getUserFromFirebase(mUser);
                         } else {
                             // If sign in fails, display a message to the user.
                             progressDialog.dismiss();
@@ -458,7 +456,7 @@ public class LoginActivity extends AppCompatActivity{
 
     }
 
-    public User getUserFromFirebase(final FirebaseUser _mUser){
+    public void getUserFromFirebase(final FirebaseUser _mUser){
 
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference("User");
         final User[] user1 = {new User()};
@@ -472,10 +470,11 @@ public class LoginActivity extends AppCompatActivity{
                 }
                 else {
                     user1[0]= collectUserData(_mUser);
-                    tempUser = user1[0];
-                    addUserDataToFirebase(tempUser);
+                    addUserDataToFirebase(user1[0]);
                 }
                 sqliteUser.addUserToSQLite(user1[0]);
+                startMainActivity(user1[0]);
+
             }
             @Override
             public void onCancelled(DatabaseError databaseError) {
@@ -483,19 +482,19 @@ public class LoginActivity extends AppCompatActivity{
             }
         });
 
-        return user1[0];
+        progressDialog.dismiss();
     }
 
     public User collectUserData(FirebaseUser _mUser){
 
         User _user = new User();
 
-        user.setUserID(_mUser.getUid());
-        user.setEmail(_mUser.getEmail());
-        user.setUsername(_mUser.getDisplayName());
-        user.setLastLocation(latitude+","+longitude);
-        user.setProfilURL(_mUser.getPhotoUrl().toString());
-        user.setRange(DEFAULT_RANGE);
+        _user.setUserID(_mUser.getUid());
+        _user.setEmail(_mUser.getEmail());
+        _user.setUsername(_mUser.getDisplayName());
+        _user.setLastLocation(latitude+","+longitude);
+        _user.setProfilURL(_mUser.getPhotoUrl().toString());
+        _user.setRange(DEFAULT_RANGE);
 
         return _user;
     }

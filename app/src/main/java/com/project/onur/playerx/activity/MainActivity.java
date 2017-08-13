@@ -50,6 +50,7 @@ public class MainActivity extends AppCompatActivity {
         if(user==null){
             Cursor cursor = sqLiteUser.query();
             user = sqLiteUser.getUserFromSQLite(cursor);
+            Log.e("user",user.toString());
         }
 
 
