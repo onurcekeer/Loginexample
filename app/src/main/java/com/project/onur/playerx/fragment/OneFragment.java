@@ -2,6 +2,8 @@ package com.project.onur.playerx.fragment;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,6 +37,11 @@ public class OneFragment extends Fragment implements View.OnClickListener {
     }
 
     private void perform(View v) {
+
+
+        Toolbar toolbar = (Toolbar) v.findViewById(R.id.toolbar);
+        ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
+        toolbar.setTitle(getString(R.string.title_home));
 
         View sport = v.findViewById(R.id.lineer_sport);
         sport.setOnClickListener(this);

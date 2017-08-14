@@ -1,10 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#5c5e70</color>
-    <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#ff525d</color>
-    <color name="buttonGreen">#5bd3a2</color>
+
     <color name="facebook_color">#3b5998</color>
     <color name="google_blue_color">#4885ed</color>
     <color name="white">#ffffff</color>
+
+    <color name="colorPrimary">#00BCD4</color>
+    <color name="colorPrimaryDark">#0097A7</color>
+    <color name="buttonGreen">#B2EBF2</color>
+    <color name="colorAccent">#FFEB3B</color>
+    <color name="primary_text">#212121</color>
+    <color name="secondary_text">#757575</color>
+    <color name="icons">#FFFFFF</color>
+    <color name="divider">#BDBDBD</color>
+
 </resources>
