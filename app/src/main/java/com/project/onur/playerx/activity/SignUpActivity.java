@@ -256,6 +256,7 @@ public class SignUpActivity extends AppCompatActivity {
             TextView textView = (TextView) findViewById(R.id.already_have_an_account);
             textView.setText(ss2);
             textView.setMovementMethod(LinkMovementMethod.getInstance());
+            textView.setLinkTextColor(getResources().getColor(R.color.colorPrimaryDark));
             textView.setHighlightColor(Color.TRANSPARENT);
         }
         else{
@@ -277,6 +278,7 @@ public class SignUpActivity extends AppCompatActivity {
             TextView textView = (TextView) findViewById(R.id.already_have_an_account);
             textView.setText(ss);
             textView.setMovementMethod(LinkMovementMethod.getInstance());
+            textView.setLinkTextColor(getResources().getColor(R.color.colorPrimaryDark));
             textView.setHighlightColor(Color.TRANSPARENT);
         }
 
@@ -316,11 +318,6 @@ public class SignUpActivity extends AppCompatActivity {
 
     @Override
     protected void onPause() {
-        // stop location updates (saves battery)
-        progressDialog.dismiss();
-
-        // ...
-
         super.onPause();
     }
 

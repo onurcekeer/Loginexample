@@ -7,12 +7,58 @@ tools:context="com.project.onur.playerx.activity.MainActivity">
 
     <include layout="@layout/toolbar" />
 
+
+    <LinearLayout
+        android:id="@+id/selecteditem"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="?attr/actionBarSize"
+        android:layout_marginBottom="3dp"
+        android:layout_marginLeft="3dp"
+        android:layout_marginRight="3dp"
+        android:orientation="horizontal"
+        android:visibility="gone">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="5dp"
+            android:orientation="horizontal"
+            android:background="@drawable/selected_category_textview_style">
+            <TextView
+                android:id="@+id/categoryName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:text="categoryName"
+                android:textColor="@color/white"
+                android:layout_gravity="center_vertical"
+                android:textSize="16sp"/>
+            <ImageView
+                android:id="@+id/clear"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_clear"
+                android:layout_marginRight="5dp"
+                android:layout_gravity="center_vertical"/>
+
+
+
+        </LinearLayout>
+
+
+
+    </LinearLayout>
+
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/scrollView_layout"
         android:layout_marginTop="?attr/actionBarSize"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:visibility="visible">
+
 
         <HorizontalScrollView
             android:layout_width="wrap_content"

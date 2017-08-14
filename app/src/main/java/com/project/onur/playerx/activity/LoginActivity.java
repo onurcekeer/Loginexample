@@ -74,7 +74,6 @@ public class LoginActivity extends AppCompatActivity{
     CallbackManager mCallbackManager;
     User user;
     SQLiteUser sqliteUser;
-    double latitude,longitude;
 
 
     // UI references.
@@ -382,6 +381,7 @@ public class LoginActivity extends AppCompatActivity{
             TextView textView = (TextView) findViewById(R.id.dont_have_account_textview);
             textView.setText(ss2);
             textView.setMovementMethod(LinkMovementMethod.getInstance());
+            textView.setLinkTextColor(getResources().getColor(R.color.colorPrimaryDark));
             textView.setHighlightColor(Color.TRANSPARENT);
         }
         else{
@@ -403,6 +403,7 @@ public class LoginActivity extends AppCompatActivity{
             TextView textView = (TextView) findViewById(R.id.dont_have_account_textview);
             textView.setText(ss);
             textView.setMovementMethod(LinkMovementMethod.getInstance());
+            textView.setLinkTextColor(getResources().getColor(R.color.colorPrimaryDark));
             textView.setHighlightColor(Color.TRANSPARENT);
         }
 

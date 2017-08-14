@@ -7,13 +7,24 @@ import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.project.onur.playerx.R;
 
+import java.util.List;
+
 
 public class OneFragment extends Fragment implements View.OnClickListener {
 
+
+
+    LinearLayout scroolView_layout;
+    LinearLayout selectedItem_layout;
+    TextView text_category ;
+    ImageView clear_category;
 
     public OneFragment() {
         // Required empty public constructor
@@ -38,6 +49,19 @@ public class OneFragment extends Fragment implements View.OnClickListener {
 
     private void perform(View v) {
 
+        scroolView_layout = (LinearLayout)v.findViewById(R.id.scrollView_layout);
+        selectedItem_layout = (LinearLayout)v.findViewById(R.id.selecteditem);
+        text_category = (TextView)v.findViewById(R.id.categoryName);
+        clear_category = (ImageView)v.findViewById(R.id.clear);
+
+        clear_category.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                selectedItem_layout.setVisibility(View.INVISIBLE);
+                scroolView_layout.setVisibility(View.VISIBLE);
+            }
+        });
+
 
         Toolbar toolbar = (Toolbar) v.findViewById(R.id.toolbar);
         ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
@@ -59,26 +83,30 @@ public class OneFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
+
+        scroolView_layout.setVisibility(View.INVISIBLE);
+        selectedItem_layout.setVisibility(View.VISIBLE);
+
         switch (v.getId()) {
 
             case R.id.lineer_sport:
-                Toast.makeText(v.getContext(),"spor",Toast.LENGTH_SHORT).show();
+                text_category.setText(R.string.sport_text);
                 break;
 
             case R.id.lineer_table_game:
-                Toast.makeText(v.getContext(),"Masa Oyunları",Toast.LENGTH_SHORT).show();
+                text_category.setText(R.string.table_games_text);
                 break;
 
             case R.id.lineer_concert:
-                Toast.makeText(v.getContext(),"Konser",Toast.LENGTH_SHORT).show();
+                text_category.setText(R.string.concert_text);
                 break;
 
             case R.id.lineer_pc_game:
-                Toast.makeText(v.getContext(),"PC Oyunları",Toast.LENGTH_SHORT).show();
+                text_category.setText(R.string.pc_games_text);
                 break;
 
             case R.id.lineer_other:
-                Toast.makeText(v.getContext(),"Diğer",Toast.LENGTH_SHORT).show();
+                text_category.setText(R.string.other_text);
                 break;
             default:
                 break;
