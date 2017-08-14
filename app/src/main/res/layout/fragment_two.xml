@@ -4,9 +4,6 @@
     android:layout_height="match_parent"
     tools:context="com.project.onur.playerx.fragment.TwoFragment">
 
-
-
-
     <include layout="@layout/toolbar" />
 
 </RelativeLayout>
