@@ -91,10 +91,10 @@ public class MainActivity extends AppCompatActivity {
             case R.id.navigation_home:
                 pushFragment(new OneFragment());
                 break;
-            case R.id.navigation_dashboard:
+            case R.id.navigation_messages:
                 pushFragment(new TwoFragment());
                 break;
-            case R.id.navigation_notifications:
+            case R.id.navigation_profile:
                 pushFragment(new ThreeFragment());
                 break;
             }
