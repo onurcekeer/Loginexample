@@ -1,10 +1,16 @@
 package com.project.onur.playerx.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.speech.RecognizerIntent;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -12,9 +18,13 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.miguelcatalan.materialsearchview.MaterialSearchView;
 import com.project.onur.playerx.R;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import static android.app.Activity.RESULT_OK;
 
 
 public class OneFragment extends Fragment implements View.OnClickListener {
@@ -25,6 +35,7 @@ public class OneFragment extends Fragment implements View.OnClickListener {
     LinearLayout selectedItem_layout;
     TextView text_category ;
     ImageView clear_category;
+    MaterialSearchView searchView;
 
     public OneFragment() {
         // Required empty public constructor
@@ -33,6 +44,7 @@ public class OneFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
 
     }
 
@@ -67,6 +79,38 @@ public class OneFragment extends Fragment implements View.OnClickListener {
         ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
         toolbar.setTitle(getString(R.string.title_home));
 
+        searchView = (MaterialSearchView) v.findViewById(R.id.search_view);
+        searchView.setVoiceSearch(true); //or false
+        searchView.setOnQueryTextListener(new MaterialSearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                //Do some magic
+                scroolView_layout.setVisibility(View.INVISIBLE);
+                selectedItem_layout.setVisibility(View.VISIBLE);
+                text_category.setText(query);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                //Do some magic
+                return false;
+            }
+        });
+
+        searchView.setOnSearchViewListener(new MaterialSearchView.SearchViewListener() {
+            @Override
+            public void onSearchViewShown() {
+                //Do some magic
+            }
+
+            @Override
+            public void onSearchViewClosed() {
+                //Do some magic
+            }
+        });
+
+
         View sport = v.findViewById(R.id.lineer_sport);
         sport.setOnClickListener(this);
         View table_games = v.findViewById(R.id.lineer_table_game);
@@ -80,6 +124,25 @@ public class OneFragment extends Fragment implements View.OnClickListener {
 
 
     }
+
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == MaterialSearchView.REQUEST_VOICE && resultCode == RESULT_OK) {
+            ArrayList<String> matches = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+            if (matches != null && matches.size() > 0) {
+                String searchWrd = matches.get(0);
+                if (!TextUtils.isEmpty(searchWrd)) {
+                    searchView.setQuery(searchWrd, false);
+
+                }
+            }
+
+            return;
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
 
     @Override
     public void onClick(View v) {
@@ -111,6 +174,14 @@ public class OneFragment extends Fragment implements View.OnClickListener {
             default:
                 break;
         }
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.search_menu, menu);
+        super.onCreateOptionsMenu(menu,inflater);
+        MenuItem item = menu.findItem(R.id.action_search);
+        searchView.setMenuItem(item);
     }
 
 }
