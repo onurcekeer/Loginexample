@@ -7,6 +7,8 @@ import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -85,7 +87,8 @@ public class ThreeFragment extends Fragment{
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                logoutUser();
+                //logoutUser();
+                startSettingsFragment();
             }
         });
 
@@ -98,6 +101,14 @@ public class ThreeFragment extends Fragment{
         startActivity(intent);
     }
 
+    private void startSettingsFragment(){
+        Fragment fragment = new SettingsFragment();
+        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.main_container, fragment);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
+    }
 
 
 }
