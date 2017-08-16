@@ -4,8 +4,8 @@
     <color name="facebook_color">#3b5998</color>
     <color name="google_blue_color">#4885ed</color>
     <color name="white">#ffffff</color>
-
     <color name="colorPrimary">#00BCD4</color>
+    <color name="colorLogout">#FFDE6F6F</color>
     <color name="colorPrimaryDark">#0097A7</color>
     <color name="buttonGreen">#B2EBF2</color>
     <color name="colorAccent">#FFEB3B</color>

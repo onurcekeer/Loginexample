@@ -12,46 +12,183 @@
         android:layout_height="match_parent">
 
 
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <android.support.design.widget.CoordinatorLayout
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/profile_image"
-                android:layout_width="110dp"
-                android:layout_height="110dp"
-                android:layout_marginTop="20dp"
-                android:layout_gravity="center"
-                android:src="@drawable/ic_default_user"/>
-
-            <android.support.design.widget.FloatingActionButton
-                android:id="@+id/fab"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:clickable="true"
-                android:layout_margin="5dp"
-                app:srcCompat="@drawable/ic_camera"
-                app:layout_anchor="@id/profile_image"
-                app:layout_anchorGravity="bottom|end"
-                app:fabSize="mini" />
-
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
+                <android.support.design.widget.CoordinatorLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:id="@+id/profile_image"
+                        android:layout_width="110dp"
+                        android:layout_height="110dp"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="18dp"
+                        android:src="@drawable/ic_default_user" />
+
+                    <android.support.design.widget.FloatingActionButton
+                        android:id="@+id/fab"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:clickable="true"
+                        app:fabSize="mini"
+                        app:layout_anchor="@id/profile_image"
+                        app:layout_anchorGravity="bottom|end"
+                        app:srcCompat="@drawable/ic_camera" />
+
+
+                </android.support.design.widget.CoordinatorLayout>
+
             </LinearLayout>
 
-        </android.support.design.widget.CoordinatorLayout>
 
-    </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:orientation="vertical">
 
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginTop="10dp">
+
+                    <EditText
+                        android:id="@+id/fullname"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/fullname"
+                        android:inputType="text"
+                        android:maxLines="1"
+                        android:nextFocusDown="@+id/email" />
+
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <EditText
+                        android:id="@+id/email"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginRight="20dp"
+                        android:hint="@string/prompt_email"
+                        android:inputType="textEmailAddress"
+                        android:maxLines="1" />
+
+                </android.support.design.widget.TextInputLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="72dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginTop="35dp"
+                        android:text="@string/range" />
+
+
+                    <com.appyvet.rangebar.RangeBar xmlns:custom="http://schemas.android.com/apk/res-auto"
+                        android:id="@+id/rangebar"
+                        android:layout_width="wrap_content"
+                        android:layout_height="72dp"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginRight="16dp"
+                        custom:connectingLineColor="@color/colorPrimary"
+                        custom:pinColor="@color/colorPrimary"
+                        custom:rangeBar="false"
+                        custom:selectorColor="@color/colorPrimaryDark"
+                        custom:tickEnd="40"
+                        custom:tickInterval="5"
+                        custom:tickStart="5" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="36dp"
+                        android:text="@string/range" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="12dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:clickable="true"
+                        android:text="@string/change_password"
+                        android:textColor="@color/colorPrimaryDark" />
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <Button
+                        android:id="@+id/save_changes_button"
+                        style="?android:textAppearanceSmall"
+                        android:layout_width="match_parent"
+                        android:layout_height="35dp"
+                        android:layout_marginTop="18dp"
+                        android:layout_marginBottom="3dp"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginRight="20dp"
+                        android:background="@drawable/sign_button_style"
+                        android:text="@string/save_changes"
+                        android:textColor="@color/white"
+                        android:textStyle="bold" />
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <Button
+                        android:id="@+id/logout"
+                        style="?android:textAppearanceSmall"
+                        android:layout_width="match_parent"
+                        android:layout_height="35dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="3dp"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginRight="20dp"
+                        android:background="@drawable/logout_button_style"
+                        android:text="@string/string_logout"
+                        android:textColor="@color/white"
+                        android:textStyle="bold" />
+
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+
+        </LinearLayout>
 
 
     </ScrollView>
