@@ -9,6 +9,7 @@ import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -67,7 +68,7 @@ public class LoginActivity extends AppCompatActivity{
     private static final String KEY_USER = "KEY_USER";
     private static final String TAG = "LOGİN";
     private static final int RC_SIGN_IN = 9001;
-    private static final int DEFAULT_RANGE = 20;
+    private static final int DEFAULT_RANGE = 25;
     private FirebaseAuth mAuth;
     private FirebaseUser mUser;
     private GoogleApiClient mGoogleApiClient;
@@ -332,10 +333,8 @@ public class LoginActivity extends AppCompatActivity{
         super.onStart();
         mGoogleApiClient.connect();
         FirebaseUser currentUser = mAuth.getCurrentUser();
-        Cursor cursor = sqliteUser.query();
-        user = sqliteUser.getUserFromSQLite(cursor);
 
-        if(currentUser!=null && user!=null){
+        if(currentUser!=null){
             startMainActivity(user);
         }
     }

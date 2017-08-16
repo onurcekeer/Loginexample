@@ -38,5 +38,6 @@
     <string name="change_password">Şifreyi Değiştir</string>
     <string name="save_changes">Değişiklikleri Kaydet</string>
     <string name="string_logout">Çıkış Yap</string>
+    <string name="string_settings">Ayarlar</string>
 
 </resources>

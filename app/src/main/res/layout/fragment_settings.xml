@@ -71,26 +71,10 @@
                         android:layout_height="wrap_content"
                         android:hint="@string/fullname"
                         android:inputType="text"
-                        android:maxLines="1"
-                        android:nextFocusDown="@+id/email" />
+                        android:maxLines="1"/>
 
                 </android.support.design.widget.TextInputLayout>
 
-                <android.support.design.widget.TextInputLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <EditText
-                        android:id="@+id/email"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="20dp"
-                        android:layout_marginRight="20dp"
-                        android:hint="@string/prompt_email"
-                        android:inputType="textEmailAddress"
-                        android:maxLines="1" />
-
-                </android.support.design.widget.TextInputLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -134,6 +118,7 @@
                     android:layout_marginTop="12dp">
 
                     <TextView
+                        android:id="@+id/text_change_pass"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:clickable="true"

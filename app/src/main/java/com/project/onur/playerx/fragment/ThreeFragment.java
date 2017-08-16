@@ -94,12 +94,7 @@ public class ThreeFragment extends Fragment{
 
     }
 
-    private void logoutUser() {
-        mAuth.signOut();
-        LoginManager.getInstance().logOut();
-        Intent intent = new Intent(getActivity(),LoginActivity.class);
-        startActivity(intent);
-    }
+
 
     private void startSettingsFragment(){
         Fragment fragment = new SettingsFragment();

@@ -54,5 +54,6 @@
     <string name="change_password">Change Password</string>
     <string name="save_changes">Save Changes</string>
     <string name="string_logout">Logout</string>
+    <string name="string_settings">Settings</string>
 
 </resources>
