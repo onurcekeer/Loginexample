@@ -66,12 +66,7 @@ public class SettingsFragment extends Fragment {
         sqLiteUser = new SQLiteUser(getActivity().getApplicationContext());
         mAuth = FirebaseAuth.getInstance();
 
-        for (UserInfo user: FirebaseAuth.getInstance().getCurrentUser().getProviderData()) {
-            if (!(user.getProviderId().equals("facebook.com") || user.getProviderId().equals("google.com"))) {
-                System.out.println("User is signed in with Email");
-            }
 
-        }
 
         Cursor cursor = sqLiteUser.query();
         user = sqLiteUser.getUserFromSQLite(cursor);
@@ -100,7 +95,12 @@ public class SettingsFragment extends Fragment {
         button_save_changes = (Button)v.findViewById(R.id.save_changes_button);
         button_logout = (Button)v.findViewById(R.id.logout);
 
-
+        for (UserInfo user: FirebaseAuth.getInstance().getCurrentUser().getProviderData()) {
+            if (user.getProviderId().equals("password")) {
+                text_change_password.setVisibility(View.VISIBLE);
+                System.out.println("User is signed in with email/password");
+            }
+        }
 
 
         edit_fullname.setText(user.getUsername());
