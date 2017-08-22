@@ -34,8 +34,8 @@
     <string name="concert_text">Konser</string>
     <string name="title_messages">Mesajlar</string>
     <string name="title_profile">Profil</string>
-    <string name="range">Mesafe :</string>
-    <string name="change_password">Şifreyi Değiştir</string>
+    <string name="range">Mesafe(km) :</string>
+    <string name="change_password">Şifre veya e-posta Değiştir</string>
     <string name="save_changes">Değişiklikleri Kaydet</string>
     <string name="string_logout">Çıkış Yap</string>
     <string name="string_settings">Ayarlar</string>

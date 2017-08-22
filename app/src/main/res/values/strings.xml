@@ -50,8 +50,8 @@
         "seams, divides space, and indicates moving parts.\n\n"
 
     </string>
-    <string name="range">Distance :</string>
-    <string name="change_password">Change Password</string>
+    <string name="range">Distance(km) :</string>
+    <string name="change_password">Change Password or E-mail</string>
     <string name="save_changes">Save Changes</string>
     <string name="string_logout">Logout</string>
     <string name="string_settings">Settings</string>

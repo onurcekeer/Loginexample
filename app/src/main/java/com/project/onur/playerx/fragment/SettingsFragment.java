@@ -11,6 +11,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -85,6 +86,31 @@ public class SettingsFragment extends Fragment {
         return view;
     }
 
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+
+
+        switch (item.getItemId()) {
+            case R.id.navigation_home:
+                //pushFragment(new OneFragment());
+                break;
+            case R.id.navigation_messages:
+                //pushFragment(new TwoFragment());
+                break;
+            case R.id.navigation_profile:
+                //pushFragment(new ThreeFragment());
+                break;
+        }
+        return super.onContextItemSelected(item);
+    }
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        getActivity().getMenuInflater().inflate(R.menu.context_menu,menu);
+
+    }
+
     private void perform(View v) {
 
         image_profile = (CircleImageView)v.findViewById(R.id.profile_image);
@@ -102,6 +128,13 @@ public class SettingsFragment extends Fragment {
             }
         }
 
+        registerForContextMenu(fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                fab.performLongClick();
+            }
+        });
 
         edit_fullname.setText(user.getUsername());
         rangeBar.setSeekPinByValue(user.getRange());
@@ -142,8 +175,6 @@ public class SettingsFragment extends Fragment {
         Intent intent = new Intent(getActivity(),LoginActivity.class);
         startActivity(intent);
     }
-
-
 
 
 
