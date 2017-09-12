@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -24,6 +25,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.appyvet.rangebar.RangeBar;
 import com.facebook.login.LoginManager;
@@ -44,6 +46,9 @@ import com.project.onur.playerx.activity.LoginActivity;
 import com.squareup.picasso.Picasso;
 
 import java.io.ByteArrayOutputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -51,10 +56,12 @@ public class SettingsFragment extends Fragment {
 
 
     private static final int CAMERA_REQUEST = 1888;
+    final int GET_FROM_GALLERY = 54;
+    private static final String DEFAULT_USER_PROFİLE = "https://firebasestorage.googleapis.com/v0/b/playerx-e6194.appspot.com/o/default_user.png?alt=media&token=ae78ed09-9dfb-4c6d-a261-2aec523d22a0";
+
 
     User user;
     SQLiteUser sqLiteUser;
-    FirebaseUser firebaseUser;
     DatabaseReference mDatabase;
     FirebaseAuth mAuth;
     String new_fullname;
@@ -110,10 +117,14 @@ public class SettingsFragment extends Fragment {
                 startActivityForResult(cameraIntent, CAMERA_REQUEST);
                 break;
             case R.id.select_photo:
-                //pushFragment(new TwoFragment());
+                Intent intent = new Intent(Intent.ACTION_PICK,android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                if(intent.resolveActivity(getContext().getPackageManager()) != null)
+                    startActivityForResult(intent,GET_FROM_GALLERY);
                 break;
             case R.id.remove_photo:
-                //pushFragment(new ThreeFragment());
+                image_profile.setImageResource(R.drawable.ic_default_user);
+                new_Url = DEFAULT_USER_PROFİLE;
+                user.setProfilURL(new_Url);
                 break;
         }
         return super.onContextItemSelected(item);
@@ -166,7 +177,13 @@ public class SettingsFragment extends Fragment {
         button_save_changes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                saveChanges();
+                new_fullname= edit_fullname.getText().toString();
+                if(isFullnameValid(new_fullname)){
+                    saveChanges();
+                }
+                else{
+                    edit_fullname.setError(getString(R.string.error_invalid_fullname));
+                }
             }
         });
         button_logout.setOnClickListener(new View.OnClickListener() {
@@ -210,8 +227,30 @@ public class SettingsFragment extends Fragment {
             if(isOnline()){
                 uploadUserPhoto(bitmap_new);
             }
+            else{
+                // TODO: 12.9.2017 add snackbar 
+            }
+        }
+
+        if(requestCode==GET_FROM_GALLERY && resultCode == Activity.RESULT_OK) {
+            try {
+                final Uri imageUri = data.getData();
+                final InputStream imageStream = getContext().getContentResolver().openInputStream(imageUri);
+                bitmap_new = BitmapFactory.decodeStream(imageStream);
+                image_profile.setImageBitmap(bitmap_new);
+                if(isOnline()){
+                    uploadUserPhoto(bitmap_new);
+                }
+                else{
+                    // TODO: 12.9.2017 add snackbar
+                }
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+                //Toast.makeText(SettingsFragment.this, "Something went wrong", Toast.LENGTH_LONG).show();
+            }
 
         }
+
     }
 
 
@@ -221,7 +260,7 @@ public class SettingsFragment extends Fragment {
             @Override
             public void run() {
                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 60, baos);
                 byte[] data = baos.toByteArray();
 
                 FirebaseStorage storage = FirebaseStorage.getInstance();
@@ -253,7 +292,7 @@ public class SettingsFragment extends Fragment {
 
     public void saveChanges(){
 
-        new_fullname= edit_fullname.getText().toString();
+
         new_range= Integer.parseInt(rangeBar.getRightPinValue());
 
         if(isOnline()){
@@ -283,6 +322,10 @@ public class SettingsFragment extends Fragment {
         return netInfo != null && netInfo.isConnectedOrConnecting();
     }
 
+    private boolean isFullnameValid(String fullname) {
+        //TODO: Replace this with your own logic
+        return fullname.length() > 5;
+    }
 
 
 
