@@ -42,5 +42,6 @@
     <string name="remove_photo">Fotoğrafı kaldır</string>
     <string name="select_photo">Fotoğrraf seç</string>
     <string name="camera">Kamera</string>
+    <string name="changes_saved">Değişiklikler başarıyla kaydedildi</string>
 
 </resources>

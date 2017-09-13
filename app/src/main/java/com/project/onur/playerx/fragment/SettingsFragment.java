@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -32,7 +33,6 @@ import com.facebook.login.LoginManager;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserInfo;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -47,7 +47,6 @@ import com.squareup.picasso.Picasso;
 
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.io.InputStream;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -56,7 +55,7 @@ public class SettingsFragment extends Fragment {
 
 
     private static final int CAMERA_REQUEST = 1888;
-    final int GET_FROM_GALLERY = 54;
+    private static final int GET_FROM_GALLERY = 54;
     private static final String DEFAULT_USER_PROFİLE = "https://firebasestorage.googleapis.com/v0/b/playerx-e6194.appspot.com/o/default_user.png?alt=media&token=ae78ed09-9dfb-4c6d-a261-2aec523d22a0";
 
 
@@ -209,6 +208,13 @@ public class SettingsFragment extends Fragment {
         ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayShowHomeEnabled(true);
         toolbar.setTitle(getString(R.string.string_settings));
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentManager fm = getActivity().getSupportFragmentManager();
+                fm.popBackStack();
+            }
+        });
 
 
     }
@@ -305,6 +311,11 @@ public class SettingsFragment extends Fragment {
                 mDatabase.child("User").child(user.getUserID()).setValue(user);
                 SQLiteUser sqliteUser = new SQLiteUser(getContext());
                 sqliteUser.addUserToSQLite(user);
+                FragmentManager fm = getActivity().getSupportFragmentManager();
+                fm.popBackStack();
+
+                Toast.makeText(getContext(),getString(R.string.changes_saved),Toast.LENGTH_SHORT).show();
+
 
             }
         }
@@ -316,6 +327,8 @@ public class SettingsFragment extends Fragment {
 
     }
 
+
+
     public boolean isOnline() {
         ConnectivityManager cm = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo netInfo = cm.getActiveNetworkInfo();
@@ -323,48 +336,8 @@ public class SettingsFragment extends Fragment {
     }
 
     private boolean isFullnameValid(String fullname) {
-        //TODO: Replace this with your own logic
         return fullname.length() > 5;
     }
 
 
-
-
-
-
-
-
-
-
-/*
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                // todo: goto back activity from here
-                //backPreviousFragment();
-                getFragmentManager().popBackStack();
-                return true;
-
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
-
-    private void backPreviousFragment(){
-        Fragment fragment = new ThreeFragment();
-        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.main_container, fragment);
-        fragmentTransaction.addToBackStack(null);
-        fragmentTransaction.commit();
-    }
-
-
-    public void onBackPressed()
-    {
-        FragmentManager fm = getActivity().getSupportFragmentManager();
-        fm.popBackStack();
-    }
-*/
 }

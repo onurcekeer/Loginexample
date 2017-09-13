@@ -30,6 +30,7 @@
     <string name="facebook_app_id" translatable="false">1628314297242547</string>
     <string name="fb_login_protocol_scheme" translatable="false">fb1628314297242547</string>
     <string name="something_went_wrong">Something went wrong. Please try again</string>
+    <string name="changes_saved">Changes saved successfully</string>
     <string name="sport_text">Sport</string>
     <string name="table_games_text">Table Games</string>
     <string name="pc_games_text">PC Games</string>

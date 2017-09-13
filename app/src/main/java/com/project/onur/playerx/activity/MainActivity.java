@@ -11,8 +11,10 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.project.onur.playerx.SQLiteUser;
 import com.project.onur.playerx.User;
@@ -113,6 +115,7 @@ public class MainActivity extends AppCompatActivity {
                 ft.commit();
             }
         }
+
     }
 
     private String getCurrentLocation(){
@@ -142,9 +145,18 @@ public class MainActivity extends AppCompatActivity {
         mLocation.endUpdates();
     }
 
-    public User getUser(){
-        return user;
+    @Override
+    public void onBackPressed(){
+        FragmentManager fm = getSupportFragmentManager();
+        if (fm.getBackStackEntryCount() > 0) {
+            Log.i("MainActivity", "popping backstack");
+            fm.popBackStack();
+        } else {
+            Intent intent = new Intent(Intent.ACTION_MAIN);
+            intent.addCategory(Intent.CATEGORY_HOME);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+        }
     }
-
 
 }
