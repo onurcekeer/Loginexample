@@ -60,5 +60,7 @@
     <string name="select_photo">Select photo</string>
     <string name="remove_photo">Remove photo</string>
     <string name="change_pass_toolbar_tittle">E-mail and Password</string>
+    <string name="current_password">Current password</string>
+    <string name="new_password">New password</string>
 
 </resources>
