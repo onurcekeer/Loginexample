@@ -1,11 +1,11 @@
 package com.project.onur.playerx.fragment;
 
-import android.content.Intent;
+
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
+
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -15,15 +15,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 
-import com.facebook.login.LoginManager;
 import com.google.firebase.auth.FirebaseAuth;
 import com.project.onur.playerx.R;
 import com.project.onur.playerx.SQLiteUser;
 import com.project.onur.playerx.User;
-import com.project.onur.playerx.activity.LoginActivity;
-import com.project.onur.playerx.activity.MainActivity;
+
 import com.squareup.picasso.Picasso;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -98,8 +95,10 @@ public class ThreeFragment extends Fragment{
 
     private void startSettingsFragment(){
         Fragment fragment = new SettingsFragment();
-        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+        FragmentManager fragmentManager = getFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_left,
+                R.anim.slide_out_right, R.anim.slide_in_right);
         fragmentTransaction.replace(R.id.main_container, fragment);
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();

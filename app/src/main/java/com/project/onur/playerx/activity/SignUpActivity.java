@@ -311,7 +311,6 @@ public class SignUpActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
-        // make the device update its location
 
         // ...
     }
@@ -321,5 +320,10 @@ public class SignUpActivity extends AppCompatActivity {
         super.onPause();
     }
 
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+    }
 
 }
