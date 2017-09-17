@@ -46,5 +46,6 @@
     <string name="change_pass_toolbar_tittle">E-posta ve Şifre</string>
     <string name="current_password">Geçerli şifre</string>
     <string name="new_password">Yeni şifre</string>
+    <string name="current_pass_incorrect">Geçerli şifre yanlış</string>
 
 </resources>

@@ -25,7 +25,7 @@ public class SQLiteUser extends SQLiteOpenHelper {
     private static final String USERNAME = "USERNAME";
     private static final String PROFILURL = "PROFILEURL";
     private static final String RANGE = "RANGE";
-    private static final String LASTLOCATION = "LASTLOCATION";
+
 
     public SQLiteUser(Context context) {
         super(context, DATABASE_NAME, null, VERSION);
@@ -38,9 +38,8 @@ public class SQLiteUser extends SQLiteOpenHelper {
                 +TABLE_NAME+"("
                 +USERID+" TEXT,"
                 +EMAIL+" TEXT,"
-                +PASSWORD+" TEXT "
+                +PASSWORD+" TEXT, "
                 +USERNAME+" TEXT,"
-                +LASTLOCATION+" TEXT,"
                 +PROFILURL+" TEXT,"
                 +RANGE+" INTEGER)");
 
@@ -100,7 +99,7 @@ public class SQLiteUser extends SQLiteOpenHelper {
     public Cursor query(){
 
         SQLiteDatabase db = this.getReadableDatabase();
-        String[] COLUMNS = {USERID,EMAIL,PASSWORD,USERNAME,LASTLOCATION,PROFILURL,RANGE};
+        String[] COLUMNS = {USERID,EMAIL,PASSWORD,USERNAME,PROFILURL,RANGE};
         Cursor cursor = db.query(TABLE_NAME,COLUMNS,null,null,null,null,null,null);
 
         return cursor;
