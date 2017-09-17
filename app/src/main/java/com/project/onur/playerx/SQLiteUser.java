@@ -21,6 +21,7 @@ public class SQLiteUser extends SQLiteOpenHelper {
 
     private static final String USERID = "USERID";
     private static final String EMAIL = "EMAIL";
+    private static final String PASSWORD = "PASSWORD";
     private static final String USERNAME = "USERNAME";
     private static final String PROFILURL = "PROFILEURL";
     private static final String RANGE = "RANGE";
@@ -37,6 +38,7 @@ public class SQLiteUser extends SQLiteOpenHelper {
                 +TABLE_NAME+"("
                 +USERID+" TEXT,"
                 +EMAIL+" TEXT,"
+                +PASSWORD+" TEXT "
                 +USERNAME+" TEXT,"
                 +LASTLOCATION+" TEXT,"
                 +PROFILURL+" TEXT,"
@@ -63,6 +65,7 @@ public class SQLiteUser extends SQLiteOpenHelper {
 
         values.put(USERID,user.getUserID());
         values.put(EMAIL,user.getEmail());
+        values.put(PASSWORD,user.getPassword());
         values.put(USERNAME,user.getUsername());
         values.put(PROFILURL,user.getProfilURL());
         values.put(RANGE,user.getRange());
@@ -78,6 +81,7 @@ public class SQLiteUser extends SQLiteOpenHelper {
         User user = new User();
         user.setUserID(cursor.getString(cursor.getColumnIndex(USERID)));
         user.setEmail(cursor.getString(cursor.getColumnIndex(EMAIL)));
+        user.setPassword(cursor.getString(cursor.getColumnIndex(PASSWORD)));
         user.setUsername(cursor.getString(cursor.getColumnIndex(USERNAME)));
         user.setProfilURL(cursor.getString(cursor.getColumnIndex(PROFILURL)));
         user.setRange(cursor.getInt(cursor.getColumnIndex(RANGE)));
@@ -96,7 +100,7 @@ public class SQLiteUser extends SQLiteOpenHelper {
     public Cursor query(){
 
         SQLiteDatabase db = this.getReadableDatabase();
-        String[] COLUMNS = {USERID,EMAIL,USERNAME,LASTLOCATION,PROFILURL,RANGE};
+        String[] COLUMNS = {USERID,EMAIL,PASSWORD,USERNAME,LASTLOCATION,PROFILURL,RANGE};
         Cursor cursor = db.query(TABLE_NAME,COLUMNS,null,null,null,null,null,null);
 
         return cursor;

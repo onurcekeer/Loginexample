@@ -84,7 +84,6 @@ public class ThreeFragment extends Fragment{
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //logoutUser();
                 startSettingsFragment();
             }
         });

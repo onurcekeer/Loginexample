@@ -15,14 +15,16 @@ public class User implements Serializable {
     private String Email;
     private String Username;
     private String ProfilURL;
+    private String Password;
     private int Range;
 
-    public User(String userID, String email, String username, String profilURL, int range) {
+    public User(String userID, String email, String username, String profilURL, int range, String password) {
         UserID = userID;
         Email = email;
         Username = username;
         ProfilURL = profilURL;
         Range = range;
+        Password = password;
     }
 
     public User(){
@@ -39,6 +41,14 @@ public class User implements Serializable {
 
     public String getEmail() {
         return Email;
+    }
+
+    public String getPassword() {
+        return Password;
+    }
+
+    public void setPassword(String password) {
+        Password = password;
     }
 
     public void setEmail(String email) {

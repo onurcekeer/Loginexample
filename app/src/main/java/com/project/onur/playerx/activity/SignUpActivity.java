@@ -146,7 +146,7 @@ public class SignUpActivity extends AppCompatActivity {
         }
     }
 
-    public void createUser(final String email, String password, final String fullname){
+    public void createUser(final String email, final String password, final String fullname){
 
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -157,7 +157,7 @@ public class SignUpActivity extends AppCompatActivity {
                             Log.d(TAG, "createUserWithEmail:success");
                             mUser = mAuth.getCurrentUser();
 
-                            addUserDatabase(email,fullname);
+                            addUserDatabase(email,fullname,password);
 
                             //updateUI(user);
                         } else {
@@ -175,7 +175,7 @@ public class SignUpActivity extends AppCompatActivity {
 
     }
 
-    public void addUserDatabase(final String email, final String fullname){
+    public void addUserDatabase(final String email, final String fullname, final String password){
 
 
         new Thread(new Runnable() {
@@ -188,7 +188,7 @@ public class SignUpActivity extends AppCompatActivity {
 
                 FirebaseDatabase database = FirebaseDatabase.getInstance();
                 DatabaseReference reference = database.getReference("User");
-                user = new User(_userId,email,fullname,_profilUrl,_range);
+                user = new User(_userId,email,fullname,_profilUrl,_range,password);
                 reference.child(_userId).setValue(user);
 
                 SQLiteUser sqLiteUser = new SQLiteUser(getApplicationContext());
