@@ -43,5 +43,6 @@
     <string name="select_photo">Fotoğraf seç</string>
     <string name="camera">Kamera</string>
     <string name="changes_saved">Değişiklikler başarıyla kaydedildi</string>
+    <string name="change_pass_toolbar_tittle">E-posta ve Şifre</string>
 
 </resources>

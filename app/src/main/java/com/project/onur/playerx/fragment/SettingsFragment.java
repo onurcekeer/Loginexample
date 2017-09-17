@@ -15,6 +15,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -145,6 +146,16 @@ public class SettingsFragment extends Fragment {
         text_change_password = (TextView)v.findViewById(R.id.text_change_pass);
         button_save_changes = (Button)v.findViewById(R.id.save_changes_button);
         button_logout = (Button)v.findViewById(R.id.logout);
+
+        text_change_password.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startChangePasswordFragment();
+            }
+        });
+
+
+
 
         for (UserInfo user: FirebaseAuth.getInstance().getCurrentUser().getProviderData()) {
             if (user.getProviderId().equals("password")) {
@@ -339,5 +350,15 @@ public class SettingsFragment extends Fragment {
         return fullname.length() > 5;
     }
 
+    private void startChangePasswordFragment(){
+        Fragment fragment = new ChangePasswordFragment();
+        FragmentManager fragmentManager = getFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_left,
+                R.anim.slide_out_right, R.anim.slide_in_right);
+        fragmentTransaction.replace(R.id.main_container, fragment);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
+    }
 
 }
