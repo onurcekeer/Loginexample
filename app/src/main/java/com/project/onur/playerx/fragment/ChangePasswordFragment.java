@@ -82,6 +82,7 @@ public class ChangePasswordFragment extends android.support.v4.app.Fragment{
             @Override
             public void onClick(View v) {
 
+                View focusView = null;
                 new_password = edit_new_password.getText().toString();
                 currentPassword = edit_currentPassword.getText().toString();
                 email = edit_email.getText().toString();
@@ -95,11 +96,14 @@ public class ChangePasswordFragment extends android.support.v4.app.Fragment{
                 }
                 else {
                     if(!isPasswordValid(new_password)){
+                        focusView = edit_new_password;
                         edit_new_password.setError(getString(R.string.error_invalid_password));
                     }
                     if(!currentPassword.equals(user.getPassword())){
+                        focusView = edit_currentPassword;
                         edit_currentPassword.setError(getString(R.string.current_pass_incorrect));
                     }
+                    focusView.requestFocus();
                 }
 
             }

@@ -47,5 +47,6 @@
     <string name="current_password">Geçerli şifre</string>
     <string name="new_password">Yeni şifre</string>
     <string name="current_pass_incorrect">Geçerli şifre yanlış</string>
+    <string name="change_password_button_text">E-posta/şifre değiştir</string>
 
 </resources>

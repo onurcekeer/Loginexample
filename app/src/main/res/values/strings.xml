@@ -63,5 +63,6 @@
     <string name="current_password">Current password</string>
     <string name="new_password">New password</string>
     <string name="current_pass_incorrect">Current password is incorrect</string>
+    <string name="change_password_button_text">Change email/password</string>
 
 </resources>
