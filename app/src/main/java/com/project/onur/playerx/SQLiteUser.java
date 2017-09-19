@@ -102,6 +102,27 @@ public class SQLiteUser extends SQLiteOpenHelper {
         String[] COLUMNS = {USERID,EMAIL,PASSWORD,USERNAME,PROFILURL,RANGE};
         Cursor cursor = db.query(TABLE_NAME,COLUMNS,null,null,null,null,null,null);
 
+
         return cursor;
     }
+
+    public void setEmail(String userId,String email){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+        db.execSQL("UPDATE "+TABLE_NAME+" SET "+EMAIL+"='"+email+"' WHERE "+USERID+"='"+userId+"'");
+        Log.e("EMAİL","veritabanındaki email bilgisi değişti");
+        db.close();
+    }
+
+    public void setPassword(String userId,String password){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+        db.execSQL("UPDATE "+TABLE_NAME+" SET "+PASSWORD+"='"+password+"' WHERE "+USERID+"='"+userId+"'");
+        Log.e("PASSWORD","veritabanındaki şifre bilgisi değişti");
+        db.close();
+    }
+
+
+
+
 }

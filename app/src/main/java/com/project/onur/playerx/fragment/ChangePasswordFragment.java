@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -86,10 +87,10 @@ public class ChangePasswordFragment extends android.support.v4.app.Fragment{
                 email = edit_email.getText().toString();
 
 
-                if(!user.getEmail().equals(email)){
-                    changeEmail(email);
-                }
                 if(isPasswordValid(new_password) && currentPassword.equals(user.getPassword())){
+                    if(!user.getEmail().equals(email)){
+                        changeEmail(email);
+                    }
                     changePassword(new_password);
                 }
                 else {
@@ -121,26 +122,28 @@ public class ChangePasswordFragment extends android.support.v4.app.Fragment{
 
     }
 
-    public void changeEmail(String email){
+    public void changeEmail(final String email){
         mUser.updateEmail(email)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
-                            Log.d("E-MAİL", "User email address updated.");
+                            Toast.makeText(getContext(),"User email address updated.",Toast.LENGTH_SHORT).show();
+                            sqLiteUser.setEmail(user.getUserID(),email);
                         }
                     }
                 });
     }
 
-    public void changePassword(String newPassword){
+    public void changePassword(final String newPassword){
 
         mUser.updatePassword(newPassword)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
-                            Log.d("PASSWORD", "User password updated.");
+                            Toast.makeText(getContext(),"User password updated",Toast.LENGTH_SHORT).show();
+                            sqLiteUser.setPassword(user.getUserID(),newPassword);
                         }
                     }
                 });
