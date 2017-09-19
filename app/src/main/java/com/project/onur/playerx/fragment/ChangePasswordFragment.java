@@ -1,12 +1,20 @@
 package com.project.onur.playerx.fragment;
 
 import android.app.Fragment;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.database.Cursor;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentManager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -36,6 +44,7 @@ public class ChangePasswordFragment extends android.support.v4.app.Fragment{
     EditText edit_email,edit_currentPassword,edit_new_password;
     Button button_change_pass;
     String currentPassword,new_password,email;
+    View view;
 
 
 
@@ -61,7 +70,7 @@ public class ChangePasswordFragment extends android.support.v4.app.Fragment{
 
 
         // Inflate the layout for this fragment
-        View view =  inflater.inflate(R.layout.fragment_change_password, container, false);
+        view =  inflater.inflate(R.layout.fragment_change_password, container, false);
         perform(view);
         return view;
     }
@@ -81,30 +90,51 @@ public class ChangePasswordFragment extends android.support.v4.app.Fragment{
         button_change_pass.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(isOnline())
+                {
+                    View focusView = null;
+                    new_password = edit_new_password.getText().toString();
+                    currentPassword = edit_currentPassword.getText().toString();
+                    email = edit_email.getText().toString();
 
-                View focusView = null;
-                new_password = edit_new_password.getText().toString();
-                currentPassword = edit_currentPassword.getText().toString();
-                email = edit_email.getText().toString();
-
-
-                if(isPasswordValid(new_password) && currentPassword.equals(user.getPassword())){
                     if(!user.getEmail().equals(email)){
                         changeEmail(email);
                     }
-                    changePassword(new_password);
-                }
-                else {
-                    if(!isPasswordValid(new_password)){
-                        focusView = edit_new_password;
-                        edit_new_password.setError(getString(R.string.error_invalid_password));
+
+                    if(!new_password.equals(user.getPassword())){
+                        if(isPasswordValid(new_password) && currentPassword.equals(user.getPassword())){
+
+                            changePassword(new_password);
+                            showInfoDialog();
+                        }
                     }
-                    if(!currentPassword.equals(user.getPassword())){
-                        focusView = edit_currentPassword;
-                        edit_currentPassword.setError(getString(R.string.current_pass_incorrect));
+
+
+                    if(!TextUtils.isEmpty(currentPassword) && !TextUtils.isEmpty(new_password)){
+                        if(!isPasswordValid(new_password)){
+                            focusView = edit_new_password;
+                            edit_new_password.setError(getString(R.string.error_invalid_password));
+                        }
+                        if(!currentPassword.equals(user.getPassword())){
+                            focusView = edit_currentPassword;
+                            edit_currentPassword.setError(getString(R.string.current_pass_incorrect));
+                        }
+                        if(new_password.equals(user.getPassword())){
+                            focusView = edit_new_password;
+                            edit_new_password.setError(getString(R.string.same_password));
+                        }
+                        if(focusView!=null){
+                            focusView.requestFocus();
+                        }
                     }
-                    focusView.requestFocus();
                 }
+                else{
+                    Snackbar snackbar = Snackbar.make(view, getString(R.string.check_internet_conn), Snackbar.LENGTH_LONG);
+                    snackbar.show();
+
+                }
+
+
 
             }
         });
@@ -135,6 +165,10 @@ public class ChangePasswordFragment extends android.support.v4.app.Fragment{
                             Toast.makeText(getContext(),"User email address updated.",Toast.LENGTH_SHORT).show();
                             sqLiteUser.setEmail(user.getUserID(),email);
                         }
+                        else{
+                            Snackbar snackbar = Snackbar.make(view, getString(R.string.change_email_exeption), Snackbar.LENGTH_LONG);
+                            snackbar.show();
+                        }
                     }
                 });
     }
@@ -149,16 +183,45 @@ public class ChangePasswordFragment extends android.support.v4.app.Fragment{
                             Toast.makeText(getContext(),"User password updated",Toast.LENGTH_SHORT).show();
                             sqLiteUser.setPassword(user.getUserID(),newPassword);
                         }
+                        else{
+                            Snackbar snackbar = Snackbar.make(view, getString(R.string.change_email_exeption), Snackbar.LENGTH_LONG);
+                            snackbar.show();
+                        }
                     }
                 });
 
     }
 
     private boolean isPasswordValid(String password) {
-        //TODO: Replace this with your own logic
         return password.length() > 5;
     }
 
+
+    public void showInfoDialog(){
+
+        AlertDialog.Builder builder;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            builder = new AlertDialog.Builder(getContext(), android.R.style.Theme_Material_Dialog_Alert);
+        } else {
+            builder = new AlertDialog.Builder(getContext());
+        }
+        builder.setTitle("Delete entry")
+                .setMessage("Are you sure you want to delete this entry?")
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        // continue with delete
+                    }
+                })
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .show();
+
+    }
+
+    public boolean isOnline() {
+        ConnectivityManager cm = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+        return netInfo != null && netInfo.isConnectedOrConnecting();
+    }
 
 
 }
