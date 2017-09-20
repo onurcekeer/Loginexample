@@ -66,5 +66,7 @@
     <string name="change_password_button_text">Change email/password</string>
     <string name="same_password">Your new password is the same as your current password</string>
     <string name="change_email_exeption">Something went wrong. Please try again after logging in again</string>
+    <string name="ok">Ok</string>
+    <string name="information_updated">Your information has been successfully updated</string>
 
 </resources>

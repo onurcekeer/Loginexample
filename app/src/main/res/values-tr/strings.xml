@@ -50,5 +50,7 @@
     <string name="change_password_button_text">E-posta/şifre değiştir</string>
     <string name="same_password">Yeni şifreniz şimdiki şifreniz ile aynı</string>
     <string name="change_email_exeption">Bir şeyler yanlış gitti. Lütfen tekrar giriş yaptıktan sonra deneyin</string>
+    <string name="ok">Tamam</string>
+    <string name="information_updated">Bilgileriniz başarıyla güncellendi</string>
 
 </resources>
