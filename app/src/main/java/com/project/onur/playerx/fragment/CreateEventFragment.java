@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.project.onur.playerx.CharacterCountErrorWatcher;
 import com.project.onur.playerx.ItemData;
@@ -75,8 +76,18 @@ public class CreateEventFragment extends Fragment {
         TextInputLayout title = (TextInputLayout) v.findViewById(R.id.text_title);
         TextInputLayout description = (TextInputLayout) v.findViewById(R.id.text_description);
 
-        title.getEditText().addTextChangedListener(new CharacterCountErrorWatcher(title, 1, 50));
-        description.getEditText().addTextChangedListener(new CharacterCountErrorWatcher(description, 1, 140));
+        title.getEditText().addTextChangedListener(new CharacterCountErrorWatcher(title, 1, 80));
+        description.getEditText().addTextChangedListener(new CharacterCountErrorWatcher(description, 1, 200));
+
+
+        View add_location = v.findViewById(R.id.add_location_form);
+        add_location.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getContext(),"Harita açılacak",Toast.LENGTH_SHORT).show();
+            }
+        });
+
 
 
     }

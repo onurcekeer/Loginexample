@@ -57,5 +57,6 @@
     <string name="cinema_text">Sinema</string>
     <string name="title">Başlık</string>
     <string name="description">Açıklama</string>
+    <string name="add_location">Konum Ekle</string>
 
 </resources>

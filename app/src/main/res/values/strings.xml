@@ -73,5 +73,6 @@
     <string name="cinema_text">Cinema</string>
     <string name="title">Title</string>
     <string name="description">Description</string>
+    <string name="add_location">Add Location</string>
 
 </resources>
