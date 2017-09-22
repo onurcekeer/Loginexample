@@ -136,7 +136,6 @@ public class ChangePasswordFragment extends android.support.v4.app.Fragment{
                     new_password = edit_new_password.getText().toString();
                     currentPassword = edit_currentPassword.getText().toString();
                     email = edit_email.getText().toString();
-
                     if(!user.getEmail().equals(email)){
                         changeEmail(email);
                     }
@@ -146,7 +145,6 @@ public class ChangePasswordFragment extends android.support.v4.app.Fragment{
                             changePassword(new_password);
                         }
                     }
-
 
                     if(!TextUtils.isEmpty(currentPassword) && !TextUtils.isEmpty(new_password)){
                         if(!isPasswordValid(new_password)){

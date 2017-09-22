@@ -71,5 +71,7 @@
     <string name="create_event">Create Event</string>
     <string name="category">Category</string>
     <string name="cinema_text">Cinema</string>
+    <string name="title">Title</string>
+    <string name="description">Description</string>
 
 </resources>
