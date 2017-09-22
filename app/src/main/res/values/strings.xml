@@ -68,5 +68,8 @@
     <string name="change_email_exeption">Something went wrong. Please try again after logging in again</string>
     <string name="ok">Ok</string>
     <string name="information_updated">Your information has been successfully updated</string>
+    <string name="create_event">Create Event</string>
+    <string name="category">Category</string>
+    <string name="cinema_text">Cinema</string>
 
 </resources>

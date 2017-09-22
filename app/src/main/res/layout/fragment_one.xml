@@ -1,8 +1,9 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-xmlns:tools="http://schemas.android.com/tools"
-android:layout_width="match_parent"
-android:layout_height="match_parent"
-tools:context="com.project.onur.playerx.activity.MainActivity">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context="com.project.onur.playerx.activity.MainActivity">
 
 
     <android.support.v7.widget.Toolbar
@@ -164,6 +165,24 @@ tools:context="com.project.onur.playerx.activity.MainActivity">
                 <LinearLayout
                     android:padding="@dimen/horizontal_scroll_padding"
                     android:clickable="true"
+                    android:id="@+id/lineer_cinema"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="vertical">
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_cinema" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/cinema_text" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:padding="@dimen/horizontal_scroll_padding"
+                    android:clickable="true"
                     android:id="@+id/lineer_other"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -172,7 +191,7 @@ tools:context="com.project.onur.playerx.activity.MainActivity">
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:src="@mipmap/ic_launcher" />
+                        android:src="@drawable/ic_other" />
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -185,7 +204,26 @@ tools:context="com.project.onur.playerx.activity.MainActivity">
 
         </HorizontalScrollView>
 
-
     </LinearLayout>
+
+
+
+    <android.support.design.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/content_linear"
+        android:orientation="vertical">
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|right"
+            android:layout_margin="@dimen/fab_margin"
+            app:fabSize="auto"
+            android:src="@drawable/ic_add" />
+
+
+    </android.support.design.widget.CoordinatorLayout>
 
 </RelativeLayout>

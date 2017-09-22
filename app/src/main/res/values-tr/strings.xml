@@ -52,5 +52,8 @@
     <string name="change_email_exeption">Bir şeyler yanlış gitti. Lütfen tekrar giriş yaptıktan sonra deneyin</string>
     <string name="ok">Tamam</string>
     <string name="information_updated">Bilgileriniz başarıyla güncellendi</string>
+    <string name="create_event">Etkinlik Oluştur</string>
+    <string name="category">Kategori</string>
+    <string name="cinema_text">Sinema</string>
 
 </resources>

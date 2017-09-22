@@ -3,7 +3,10 @@ package com.project.onur.playerx.fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
@@ -75,6 +78,16 @@ public class OneFragment extends Fragment implements View.OnClickListener {
         });
 
 
+        FloatingActionButton fab = (FloatingActionButton)v.findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startCreateEventFragment();
+            }
+        });
+
+
+
         Toolbar toolbar = (Toolbar) v.findViewById(R.id.toolbar);
         ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
         toolbar.setTitle(getString(R.string.title_home));
@@ -119,12 +132,13 @@ public class OneFragment extends Fragment implements View.OnClickListener {
         concert.setOnClickListener(this);
         View pc_games = v.findViewById(R.id.lineer_pc_game);
         pc_games.setOnClickListener(this);
+        View cinema = v.findViewById(R.id.lineer_cinema);
+        cinema.setOnClickListener(this);
         View other = v.findViewById(R.id.lineer_other);
         other.setOnClickListener(this);
 
 
     }
-
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -168,6 +182,10 @@ public class OneFragment extends Fragment implements View.OnClickListener {
                 text_category.setText(R.string.pc_games_text);
                 break;
 
+            case R.id.lineer_cinema:
+                text_category.setText(R.string.cinema_text);
+                break;
+
             case R.id.lineer_other:
                 text_category.setText(R.string.other_text);
                 break;
@@ -184,5 +202,15 @@ public class OneFragment extends Fragment implements View.OnClickListener {
         searchView.setMenuItem(item);
     }
 
+    private void startCreateEventFragment(){
+        Fragment fragment = new CreateEventFragment();
+        FragmentManager fragmentManager = getFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_left,
+                R.anim.slide_out_right, R.anim.slide_in_right);
+        fragmentTransaction.replace(R.id.main_container, fragment);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
+    }
 
 }
