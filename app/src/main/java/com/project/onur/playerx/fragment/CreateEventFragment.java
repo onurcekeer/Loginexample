@@ -9,21 +9,30 @@ import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.project.onur.playerx.CharacterCountErrorWatcher;
 import com.project.onur.playerx.ItemData;
 import com.project.onur.playerx.R;
 import com.project.onur.playerx.SpinnerAdapter;
+import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
+import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 /**
  * Created by onur on 22.9.2017 at 00:44.
  */
 
-public class CreateEventFragment extends Fragment {
+public class CreateEventFragment extends Fragment implements TimePickerDialog.OnTimeSetListener, DatePickerDialog.OnDateSetListener {
+
+
+    TextView dateTextView,timeTextView;
+
 
     public CreateEventFragment(){
 
@@ -47,6 +56,11 @@ public class CreateEventFragment extends Fragment {
     }
 
     private void perform(View v) {
+
+        dateTextView = v.findViewById(R.id.date_text);
+        timeTextView = v.findViewById(R.id.time_text);
+
+
 
         Toolbar toolbar = (Toolbar) v.findViewById(R.id.toolbar);
         ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
@@ -85,10 +99,58 @@ public class CreateEventFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Toast.makeText(getContext(),"Harita açılacak",Toast.LENGTH_SHORT).show();
+                showDate();
+            }
+        });
+
+        Button button = (Button)v.findViewById(R.id.show);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showTime();
             }
         });
 
 
+
+    }
+
+
+    @Override
+    public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
+        String date = ""+dayOfMonth+"/"+(monthOfYear+1)+"/"+year;
+        dateTextView.setText(date);
+    }
+
+    @Override
+    public void onTimeSet(TimePickerDialog view, int hourOfDay, int minute, int second) {
+        String time = " "+hourOfDay+"h"+minute+"m"+second;
+        timeTextView.setText(time);
+    }
+
+    public void showDate(){
+
+        Calendar now = Calendar.getInstance();
+        DatePickerDialog dpd = DatePickerDialog.newInstance(
+                CreateEventFragment.this,
+                now.get(Calendar.YEAR),
+                now.get(Calendar.MONTH),
+                now.get(Calendar.DAY_OF_MONTH)
+        );
+        dpd.show(getActivity().getFragmentManager(), "Datepickerdialog");
+
+    }
+
+    public void showTime(){
+
+        Calendar now = Calendar.getInstance();
+        TimePickerDialog dpd = TimePickerDialog.newInstance(
+                CreateEventFragment.this,
+                now.get(Calendar.HOUR_OF_DAY),
+                now.get(Calendar.MINUTE),
+                true
+        );
+        dpd.show(getActivity().getFragmentManager(), "Timepickerdialog");
 
     }
 
