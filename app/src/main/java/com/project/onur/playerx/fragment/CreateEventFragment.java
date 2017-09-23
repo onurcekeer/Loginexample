@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,8 +22,10 @@ import com.project.onur.playerx.SpinnerAdapter;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 
 /**
  * Created by onur on 22.9.2017 at 00:44.
@@ -30,6 +33,8 @@ import java.util.Calendar;
 
 public class CreateEventFragment extends Fragment implements TimePickerDialog.OnTimeSetListener, DatePickerDialog.OnDateSetListener {
 
+
+    Date eventDate,now;
 
     TextView dateTextView,timeTextView;
 
@@ -62,7 +67,7 @@ public class CreateEventFragment extends Fragment implements TimePickerDialog.On
 
 
 
-        Toolbar toolbar = (Toolbar) v.findViewById(R.id.toolbar);
+        Toolbar toolbar = v.findViewById(R.id.toolbar);
         ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
         ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayShowHomeEnabled(true);
@@ -87,8 +92,8 @@ public class CreateEventFragment extends Fragment implements TimePickerDialog.On
                 R.layout.spinner_row,R.id.txt,list);
         sp.setAdapter(adapter);
 
-        TextInputLayout title = (TextInputLayout) v.findViewById(R.id.text_title);
-        TextInputLayout description = (TextInputLayout) v.findViewById(R.id.text_description);
+        TextInputLayout title = v.findViewById(R.id.text_title);
+        TextInputLayout description = v.findViewById(R.id.text_description);
 
         title.getEditText().addTextChangedListener(new CharacterCountErrorWatcher(title, 1, 80));
         description.getEditText().addTextChangedListener(new CharacterCountErrorWatcher(description, 1, 200));
@@ -103,7 +108,7 @@ public class CreateEventFragment extends Fragment implements TimePickerDialog.On
             }
         });
 
-        Button button = (Button)v.findViewById(R.id.show);
+        Button button = v.findViewById(R.id.show);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -118,8 +123,17 @@ public class CreateEventFragment extends Fragment implements TimePickerDialog.On
 
     @Override
     public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
-        String date = ""+dayOfMonth+"/"+(monthOfYear+1)+"/"+year;
-        dateTextView.setText(date);
+       //String date = ""+dayOfMonth+"/"+(monthOfYear+1)+"/"+year;
+        eventDate = new Date(year-1900,monthOfYear,dayOfMonth);
+        SimpleDateFormat df = new SimpleDateFormat("dd.MM.yyyy");
+        now = new Date();
+        Calendar calendar = Calendar.getInstance();
+        now = calendar.getTime();
+        timeTextView.setText(df.format(now));
+        dateTextView.setText(df.format(eventDate));
+        if(eventDate.after(now)){
+            Log.e("DATE","TARİH GEÇERLİ");
+        }
     }
 
     @Override
@@ -130,13 +144,14 @@ public class CreateEventFragment extends Fragment implements TimePickerDialog.On
 
     public void showDate(){
 
-        Calendar now = Calendar.getInstance();
+        final Calendar now = Calendar.getInstance();
         DatePickerDialog dpd = DatePickerDialog.newInstance(
                 CreateEventFragment.this,
                 now.get(Calendar.YEAR),
                 now.get(Calendar.MONTH),
                 now.get(Calendar.DAY_OF_MONTH)
         );
+        dpd.setMinDate(now);
         dpd.show(getActivity().getFragmentManager(), "Datepickerdialog");
 
     }
@@ -150,6 +165,7 @@ public class CreateEventFragment extends Fragment implements TimePickerDialog.On
                 now.get(Calendar.MINUTE),
                 true
         );
+
         dpd.show(getActivity().getFragmentManager(), "Timepickerdialog");
 
     }
