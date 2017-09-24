@@ -3,6 +3,8 @@ package com.project.onur.playerx.fragment;
 import android.Manifest;
 import android.app.Dialog;
 import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationListener;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.ActivityCompat;
@@ -38,6 +40,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+
+import im.delight.android.location.SimpleLocation;
 
 /**
  * Created by onur on 22.9.2017 at 00:44.
@@ -187,7 +191,6 @@ public class CreateEventFragment extends Fragment implements TimePickerDialog.On
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.map_dialog);
         dialog.show();
-        GoogleMap googleMap;
 
 
         MapView mMapView;
@@ -207,10 +210,11 @@ public class CreateEventFragment extends Fragment implements TimePickerDialog.On
                 }
                 mMap.setMyLocationEnabled(true);
 
+                SimpleLocation simpleLocation = new SimpleLocation(getContext());
+                LatLng myLocation = new LatLng(simpleLocation.getLatitude(),simpleLocation.getLongitude());
+                //LatLng myLatlng = new LatLng(myLocation.getLatitude(),myLocation.getLongitude());
                 // Add a marker in Sydney and move the camera
-                LatLng sydney = new LatLng(-34, 151);
-                mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-                mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(myLocation,15));
             }
         });
 
