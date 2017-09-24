@@ -1,7 +1,11 @@
 package com.project.onur.playerx.fragment;
 
+import android.Manifest;
+import android.app.Dialog;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
@@ -10,11 +14,19 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapView;
+import com.google.android.gms.maps.MapsInitializer;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.project.onur.playerx.CharacterCountErrorWatcher;
 import com.project.onur.playerx.ItemData;
 import com.project.onur.playerx.R;
@@ -34,12 +46,13 @@ import java.util.Date;
 public class CreateEventFragment extends Fragment implements TimePickerDialog.OnTimeSetListener, DatePickerDialog.OnDateSetListener {
 
 
-    Date eventDate,now;
+    Date eventDate, now;
+    GoogleMap mMap;
 
-    TextView dateTextView,timeTextView;
+    TextView dateTextView, timeTextView;
 
 
-    public CreateEventFragment(){
+    public CreateEventFragment() {
 
     }
 
@@ -49,13 +62,14 @@ public class CreateEventFragment extends Fragment implements TimePickerDialog.On
 
 
     }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
 
         // Inflate the layout for this fragment
-        View view =  inflater.inflate(R.layout.fragment_create_event, container, false);
+        View view = inflater.inflate(R.layout.fragment_create_event, container, false);
         perform(view);
         return view;
     }
@@ -66,11 +80,10 @@ public class CreateEventFragment extends Fragment implements TimePickerDialog.On
         timeTextView = v.findViewById(R.id.time_text);
 
 
-
         Toolbar toolbar = v.findViewById(R.id.toolbar);
-        ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
-        ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayShowHomeEnabled(true);
+        ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayShowHomeEnabled(true);
         toolbar.setTitle(getString(R.string.create_event));
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -80,16 +93,16 @@ public class CreateEventFragment extends Fragment implements TimePickerDialog.On
             }
         });
 
-        ArrayList<ItemData> list=new ArrayList<>();
-        list.add(new ItemData(getString(R.string.sport_text),R.drawable.ic_football_mini));
-        list.add(new ItemData(getString(R.string.table_games_text),R.drawable.ic_table_games_mini));
-        list.add(new ItemData(getString(R.string.concert_text),R.drawable.ic_concert_mini));
-        list.add(new ItemData(getString(R.string.pc_games_text),R.drawable.ic_pc_games_mini));
-        list.add(new ItemData(getString(R.string.cinema_text),R.drawable.ic_cinema_mini));
-        list.add(new ItemData(getString(R.string.other_text),R.drawable.ic_other_mini));
-        Spinner sp=(Spinner)v.findViewById(R.id.spinner);
-        SpinnerAdapter adapter=new SpinnerAdapter(getActivity(),
-                R.layout.spinner_row,R.id.txt,list);
+        ArrayList<ItemData> list = new ArrayList<>();
+        list.add(new ItemData(getString(R.string.sport_text), R.drawable.ic_football_mini));
+        list.add(new ItemData(getString(R.string.table_games_text), R.drawable.ic_table_games_mini));
+        list.add(new ItemData(getString(R.string.concert_text), R.drawable.ic_concert_mini));
+        list.add(new ItemData(getString(R.string.pc_games_text), R.drawable.ic_pc_games_mini));
+        list.add(new ItemData(getString(R.string.cinema_text), R.drawable.ic_cinema_mini));
+        list.add(new ItemData(getString(R.string.other_text), R.drawable.ic_other_mini));
+        Spinner sp = (Spinner) v.findViewById(R.id.spinner);
+        SpinnerAdapter adapter = new SpinnerAdapter(getActivity(),
+                R.layout.spinner_row, R.id.txt, list);
         sp.setAdapter(adapter);
 
         TextInputLayout title = v.findViewById(R.id.text_title);
@@ -103,8 +116,7 @@ public class CreateEventFragment extends Fragment implements TimePickerDialog.On
         add_location.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getContext(),"Harita açılacak",Toast.LENGTH_SHORT).show();
-                showDate();
+                showMapDialog();
             }
         });
 
@@ -117,32 +129,31 @@ public class CreateEventFragment extends Fragment implements TimePickerDialog.On
         });
 
 
-
     }
 
 
     @Override
     public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
-       //String date = ""+dayOfMonth+"/"+(monthOfYear+1)+"/"+year;
-        eventDate = new Date(year-1900,monthOfYear,dayOfMonth);
+        //String date = ""+dayOfMonth+"/"+(monthOfYear+1)+"/"+year;
+        eventDate = new Date(year - 1900, monthOfYear, dayOfMonth);
         SimpleDateFormat df = new SimpleDateFormat("dd.MM.yyyy");
         now = new Date();
         Calendar calendar = Calendar.getInstance();
         now = calendar.getTime();
         timeTextView.setText(df.format(now));
         dateTextView.setText(df.format(eventDate));
-        if(eventDate.after(now)){
-            Log.e("DATE","TARİH GEÇERLİ");
+        if (eventDate.after(now)) {
+            Log.e("DATE", "TARİH GEÇERLİ");
         }
     }
 
     @Override
     public void onTimeSet(TimePickerDialog view, int hourOfDay, int minute, int second) {
-        String time = " "+hourOfDay+"h"+minute+"m"+second;
+        String time = " " + hourOfDay + "h" + minute + "m" + second;
         timeTextView.setText(time);
     }
 
-    public void showDate(){
+    public void showDate() {
 
         final Calendar now = Calendar.getInstance();
         DatePickerDialog dpd = DatePickerDialog.newInstance(
@@ -156,7 +167,7 @@ public class CreateEventFragment extends Fragment implements TimePickerDialog.On
 
     }
 
-    public void showTime(){
+    public void showTime() {
 
         Calendar now = Calendar.getInstance();
         TimePickerDialog dpd = TimePickerDialog.newInstance(
@@ -167,6 +178,41 @@ public class CreateEventFragment extends Fragment implements TimePickerDialog.On
         );
 
         dpd.show(getActivity().getFragmentManager(), "Timepickerdialog");
+
+    }
+
+    public void showMapDialog() {
+
+        Dialog dialog = new Dialog(getActivity());
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.map_dialog);
+        dialog.show();
+        GoogleMap googleMap;
+
+
+        MapView mMapView;
+        MapsInitializer.initialize(getActivity());
+
+        mMapView = dialog.findViewById(R.id.mapView);
+        mMapView.onCreate(dialog.onSaveInstanceState());
+        mMapView.onResume();// needed to get the map to display immediately
+
+        mMapView.getMapAsync(new OnMapReadyCallback() {
+            @Override
+            public void onMapReady(GoogleMap googleMap) {
+                mMap = googleMap;
+                if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext()  , Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                    // TODO: Consider calling
+                    return;
+                }
+                mMap.setMyLocationEnabled(true);
+
+                // Add a marker in Sydney and move the camera
+                LatLng sydney = new LatLng(-34, 151);
+                mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
+                mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+            }
+        });
 
     }
 
