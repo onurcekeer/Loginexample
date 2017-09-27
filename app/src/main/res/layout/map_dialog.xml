@@ -32,7 +32,7 @@
                 android:layout_gravity="bottom|right"
                 android:layout_margin="@dimen/fab_margin"
                 app:fabSize="auto"
-                android:src="@drawable/ic_add_marker" />
+                app:srcCompat="@drawable/ic_add_location" />
 
 
         </android.support.design.widget.CoordinatorLayout>

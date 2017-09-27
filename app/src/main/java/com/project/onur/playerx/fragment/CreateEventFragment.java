@@ -52,7 +52,7 @@ import im.delight.android.location.SimpleLocation;
  * Created by onur on 22.9.2017 at 00:44.
  */
 
-public class CreateEventFragment extends Fragment implements TimePickerDialog.OnTimeSetListener, DatePickerDialog.OnDateSetListener, GoogleMap.OnMarkerDragListener{
+public class CreateEventFragment extends Fragment implements TimePickerDialog.OnTimeSetListener, DatePickerDialog.OnDateSetListener{
 
 
     Date eventDate, now;
@@ -60,7 +60,9 @@ public class CreateEventFragment extends Fragment implements TimePickerDialog.On
     LatLng myLocation,lastLocation;
     Marker marker;
 
-    TextView dateTextView, timeTextView;
+    TextView dateTextView, timeTextView, location_text;
+    FloatingActionButton add_marker;
+    Dialog dialog;
 
 
     public CreateEventFragment() {
@@ -88,6 +90,7 @@ public class CreateEventFragment extends Fragment implements TimePickerDialog.On
 
         dateTextView = v.findViewById(R.id.date_text);
         timeTextView = v.findViewById(R.id.time_text);
+        location_text = v.findViewById(R.id.location_text);
 
 
         Toolbar toolbar = v.findViewById(R.id.toolbar);
@@ -193,10 +196,11 @@ public class CreateEventFragment extends Fragment implements TimePickerDialog.On
 
     public void showMapDialog() {
 
-        final Dialog dialog = new Dialog(getActivity());
+        dialog = new Dialog(getActivity());
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.map_dialog);
         dialog.show();
+        dialog.setCancelable(false);
 
 
         MapView mMapView;
@@ -205,6 +209,7 @@ public class CreateEventFragment extends Fragment implements TimePickerDialog.On
         mMapView = dialog.findViewById(R.id.mapView);
         mMapView.onCreate(dialog.onSaveInstanceState());
         mMapView.onResume();// needed to get the map to display immediately
+
 
         mMapView.getMapAsync(new OnMapReadyCallback() {
             @Override
@@ -222,11 +227,25 @@ public class CreateEventFragment extends Fragment implements TimePickerDialog.On
             }
         });
 
-        FloatingActionButton add_marker = dialog.findViewById(R.id.add_marker);
+        add_marker = dialog.findViewById(R.id.add_marker);
         add_marker.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 addDraggableMarker();
+                mMap.setOnMarkerDragListener(new GoogleMap.OnMarkerDragListener() {
+                    @Override
+                    public void onMarkerDragStart(Marker marker) {
+                    }
+
+                    @Override
+                    public void onMarkerDrag(Marker marker) {
+                    }
+
+                    @Override
+                    public void onMarkerDragEnd(Marker marker) {
+                        lastLocation = marker.getPosition();
+                    }
+                });
             }
         });
 
@@ -234,32 +253,34 @@ public class CreateEventFragment extends Fragment implements TimePickerDialog.On
         dissmis.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                dialog.dismiss();
+                if(marker!=null){
+                    add_marker.setImageResource(R.drawable.ic_add_location);
+                    marker = null;
+                    mMap.clear();
+                }
+                else{
+                    marker = null;
+                    dialog.dismiss();
+                }
             }
         });
 
+
+
     }
 
 
-    @Override
-    public void onMarkerDragStart(Marker marker) {
-
-    }
-
-    @Override
-    public void onMarkerDrag(Marker marker) {
-
-    }
-
-    @Override
-    public void onMarkerDragEnd(Marker marker) {
-        this.marker = marker;
-        lastLocation = marker.getPosition();
-    }
     public void addDraggableMarker(){
         if(marker==null) {
+            add_marker.setImageResource(R.drawable.ic_done);
             marker = mMap.addMarker(new MarkerOptions().position(mMap.getCameraPosition().target).draggable(true));
             lastLocation = marker.getPosition();
+        }
+        else{
+            lastLocation = marker.getPosition();
+            location_text.setText(lastLocation.latitude+" , "+lastLocation.longitude);
+            marker = null;
+            dialog.dismiss();
         }
     }
 
