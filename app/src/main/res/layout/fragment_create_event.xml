@@ -1,6 +1,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/lineer_change_password"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -87,58 +88,62 @@
                 android:id="@+id/add_location_form"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="10dp">
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal">
 
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
                     android:layout_marginRight="5dp"
-                    android:src="@drawable/ic_location_mini"
-                    android:layout_gravity="center_vertical"/>
+                    android:src="@drawable/ic_location_mini" />
 
                 <TextView
                     android:id="@+id/location_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Konum Ekle"
-                    android:layout_gravity="center_vertical"/>
+                    android:layout_gravity="center_vertical"
+                    android:text="@string/add_location" />
 
             </LinearLayout>
+
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="10dp">
+                android:layout_marginTop="30dp"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:srcCompat= "@drawable/ic_date_range"/>
 
                 <TextView
+                    android:layout_marginLeft="3dp"
                     android:id="@+id/date_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Date" />
+                    android:layout_gravity="center_vertical"
+                    android:text="@string/date" />
+
+                <ImageView
+                    android:layout_marginLeft="30dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:srcCompat= "@drawable/ic_access_time"/>
 
                 <TextView
                     android:id="@+id/time_text"
                     android:layout_width="wrap_content"
-                    android:layout_marginLeft="10dp"
                     android:layout_height="wrap_content"
-                    android:text="Time"/>
-
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <Button
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:id="@+id/show"
-                    android:text="show Time"/>
+                    android:layout_marginLeft="3dp"
+                    android:layout_gravity="center_vertical"
+                    android:text="@string/time" />
 
             </LinearLayout>
+
+
 
         </LinearLayout>
 

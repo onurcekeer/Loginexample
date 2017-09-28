@@ -58,5 +58,8 @@
     <string name="title">Başlık</string>
     <string name="description">Açıklama</string>
     <string name="add_location">Konum Ekle</string>
+    <string name="event_end_text">Etkinliğin sonlanacağı: </string>
+    <string name="date">Tarih</string>
+    <string name="time">Saat</string>
 
 </resources>

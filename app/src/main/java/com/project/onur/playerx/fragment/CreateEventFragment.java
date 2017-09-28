@@ -55,7 +55,7 @@ import im.delight.android.location.SimpleLocation;
 public class CreateEventFragment extends Fragment implements TimePickerDialog.OnTimeSetListener, DatePickerDialog.OnDateSetListener{
 
 
-    Date eventDate, now;
+    Date eventDate, now, eventTime;
     GoogleMap mMap;
     LatLng myLocation,lastLocation;
     Marker marker;
@@ -89,7 +89,9 @@ public class CreateEventFragment extends Fragment implements TimePickerDialog.On
     private void perform(View v) {
 
         dateTextView = v.findViewById(R.id.date_text);
+        dateTextView.setClickable(true);
         timeTextView = v.findViewById(R.id.time_text);
+        timeTextView.setClickable(true);
         location_text = v.findViewById(R.id.location_text);
 
 
@@ -133,14 +135,19 @@ public class CreateEventFragment extends Fragment implements TimePickerDialog.On
             }
         });
 
-        Button button = v.findViewById(R.id.show);
-        button.setOnClickListener(new View.OnClickListener() {
+        dateTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showDate();
+            }
+        });
+
+        timeTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 showTime();
             }
         });
-
 
     }
 
@@ -153,7 +160,6 @@ public class CreateEventFragment extends Fragment implements TimePickerDialog.On
         now = new Date();
         Calendar calendar = Calendar.getInstance();
         now = calendar.getTime();
-        timeTextView.setText(df.format(now));
         dateTextView.setText(df.format(eventDate));
         if (eventDate.after(now)) {
             Log.e("DATE", "TARİH GEÇERLİ");
@@ -162,8 +168,10 @@ public class CreateEventFragment extends Fragment implements TimePickerDialog.On
 
     @Override
     public void onTimeSet(TimePickerDialog view, int hourOfDay, int minute, int second) {
-        String time = " " + hourOfDay + "h" + minute + "m" + second;
-        timeTextView.setText(time);
+        eventTime = new Date(0,0,0,hourOfDay,minute,0);
+        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+        //String time = " " + hourOfDay + ":" + minute;
+        timeTextView.setText(sdf.format(eventTime));
     }
 
     public void showDate() {
@@ -264,8 +272,6 @@ public class CreateEventFragment extends Fragment implements TimePickerDialog.On
                 }
             }
         });
-
-
 
     }
 

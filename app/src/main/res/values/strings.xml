@@ -75,5 +75,8 @@
     <string name="description">Description</string>
     <string name="add_location">Add Location</string>
     <string name="google_maps_key">AIzaSyDieRa-MiFqtQslyrvkxMtFKSIQtpgjRks</string>
+    <string name="event_end_text">Event end:</string>
+    <string name="date">Date</string>
+    <string name="time">Time</string>
 
 </resources>
