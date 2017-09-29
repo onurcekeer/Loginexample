@@ -20,7 +20,9 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -46,6 +48,7 @@ import com.project.onur.playerx.SpinnerAdapter;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
 
+import java.sql.Time;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -60,7 +63,7 @@ import im.delight.android.location.SimpleLocation;
 public class CreateEventFragment extends Fragment implements TimePickerDialog.OnTimeSetListener, DatePickerDialog.OnDateSetListener{
 
 
-    Date eventDate, now, eventTime;
+    Date eventDate, nowDate, eventTime, nowTime;
     GoogleMap mMap;
     LatLng myLocation,lastLocation;
     Marker marker;
@@ -134,6 +137,42 @@ public class CreateEventFragment extends Fragment implements TimePickerDialog.On
         til_description.getEditText().addTextChangedListener(new CharacterCountErrorWatcher(til_description, 1, 200));
 
 
+        til_title.getEditText().addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            public void afterTextChanged(Editable edt) {
+                if (til_title.getEditText().getText().length() > 0) {
+                       til_title.getEditText().setError(null);
+                }
+            }
+        });
+
+        til_description.getEditText().addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            public void afterTextChanged(Editable edt) {
+                if (til_description.getEditText().getText().length() > 0) {
+                    til_description.getEditText().setError(null);
+                }
+            }
+        });
+
         View add_location = v.findViewById(R.id.add_location_form);
         add_location.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -172,16 +211,20 @@ public class CreateEventFragment extends Fragment implements TimePickerDialog.On
         //String date = ""+dayOfMonth+"/"+(monthOfYear+1)+"/"+year;
         eventDate = new Date(year - 1900, monthOfYear, dayOfMonth);
         SimpleDateFormat df = new SimpleDateFormat("dd.MM.yyyy");
-        now = new Date();
+        nowDate = new Date();
         Calendar calendar = Calendar.getInstance();
-        now = calendar.getTime();
+        nowDate = calendar.getTime();
         dateTextView.setText(df.format(eventDate));
 
     }
 
     @Override
     public void onTimeSet(TimePickerDialog view, int hourOfDay, int minute, int second) {
-        eventTime = new Date(0,0,0,hourOfDay,minute,0);
+        nowTime = new Date();
+        Calendar calendar = Calendar.getInstance();
+        nowTime = calendar.getTime();
+        eventTime = new Date(nowTime.getYear(),nowTime.getMonth(),nowTime.getDate(),hourOfDay,minute,nowTime.getSeconds());
+
         SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
         //String time = " " + hourOfDay + ":" + minute;
         timeTextView.setText(sdf.format(eventTime));
@@ -321,11 +364,11 @@ public class CreateEventFragment extends Fragment implements TimePickerDialog.On
     }
 
     public boolean isDateValid(){
-        return eventDate.after(now);
+        return eventDate.after(nowDate);
     }
 
     public boolean isTimeValid(){
-        return eventTime.after(now);
+        return eventTime.after(nowTime);
     }
 
     public void attemptCreate(){
@@ -340,32 +383,33 @@ public class CreateEventFragment extends Fragment implements TimePickerDialog.On
             focusView = til_title.getEditText();
             cancel = true;
         }
-        if (TextUtils.isEmpty(description)){
+        else if (TextUtils.isEmpty(description)){
             til_description.getEditText().setError(getString(R.string.please_add_desc));
             focusView = til_description.getEditText();
             cancel = true;
         }
-        if(isDateEmpty()){
+
+
+        else if(isDateEmpty()){
             cancel = true;
             Snackbar snackbar = Snackbar.make(view, getString(R.string.please_select_date), Snackbar.LENGTH_LONG);
             snackbar.show();
         }
-        else{
+        else if(!isDateEmpty()){
             if(!isDateValid()){
-                if(!isTimeValid()){
+
+                if(isTimeEmpty()){
+                    cancel = true;
+                    Snackbar snackbar = Snackbar.make(view, getString(R.string.please_select_time), Snackbar.LENGTH_LONG);
+                    snackbar.show();
+                }
+                else if(!isTimeValid()){
                     cancel = true;
                     Snackbar snackbar = Snackbar.make(view, getString(R.string.in_future), Snackbar.LENGTH_LONG);
                     snackbar.show();
                 }
             }
         }
-
-        if(isTimeEmpty()){
-            cancel = true;
-            Snackbar snackbar = Snackbar.make(view, getString(R.string.please_select_time), Snackbar.LENGTH_LONG);
-            snackbar.show();
-        }
-
 
 
         if(isLocationEmpty()){
