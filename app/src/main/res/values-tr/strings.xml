@@ -61,5 +61,10 @@
     <string name="event_end_text">Etkinliğin sonlanacağı: </string>
     <string name="date">Tarih</string>
     <string name="time">Saat</string>
+    <string name="please_add_title">Lütfen başlık metni ekleyiniz</string>
+    <string name="please_add_desc">Lütfen açıklama metni ekleyiniz</string>
+    <string name="please_select_date">Lütfen etkinliğin sonlanacağı bir tarih seçiniz</string>
+    <string name="please_select_time">Lütfen etkinliğin sonlanacağı bir saat seçiniz</string>
+    <string name="in_future">Lütfen gelecek zamanda bir tarih ve saat seçiniz</string>
 
 </resources>

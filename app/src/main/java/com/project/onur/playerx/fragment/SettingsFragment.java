@@ -13,6 +13,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -78,6 +79,7 @@ public class SettingsFragment extends Fragment {
     TextView text_change_password;
     Button button_save_changes;
     Button button_logout;
+    View view;
 
 
     public SettingsFragment() {
@@ -102,7 +104,7 @@ public class SettingsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_settings, container, false);
+        view = inflater.inflate(R.layout.fragment_settings, container, false);
         perform(view);
         return view;
     }
@@ -245,7 +247,8 @@ public class SettingsFragment extends Fragment {
                 uploadUserPhoto(bitmap_new);
             }
             else{
-                // TODO: 12.9.2017 add snackbar 
+                Snackbar snackbar = Snackbar.make(view, getString(R.string.check_internet_conn), Snackbar.LENGTH_LONG);
+                snackbar.show();
             }
         }
 
@@ -259,7 +262,8 @@ public class SettingsFragment extends Fragment {
                     uploadUserPhoto(bitmap_new);
                 }
                 else{
-                    // TODO: 12.9.2017 add snackbar
+                    Snackbar snackbar = Snackbar.make(view, getString(R.string.check_internet_conn), Snackbar.LENGTH_LONG);
+                    snackbar.show();
                 }
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
@@ -287,8 +291,8 @@ public class SettingsFragment extends Fragment {
                 uploadTask.addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception exception) {
-
-                        // TODO: add snackbar
+                        Snackbar snackbar = Snackbar.make(view, getString(R.string.something_went_wrong), Snackbar.LENGTH_LONG);
+                        snackbar.show();
                     }
                 }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                     @Override
@@ -327,12 +331,12 @@ public class SettingsFragment extends Fragment {
 
                 Toast.makeText(getContext(),getString(R.string.changes_saved),Toast.LENGTH_SHORT).show();
 
-
             }
         }
-        else {
-
-            // TODO: 22.8.2017 add snackbar
+        else
+        {
+            Snackbar snackbar = Snackbar.make(view, getString(R.string.check_internet_conn), Snackbar.LENGTH_LONG);
+            snackbar.show();
         }
 
 

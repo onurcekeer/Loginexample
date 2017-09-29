@@ -2,12 +2,16 @@ package com.project.onur.playerx.fragment;
 
 import android.Manifest;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.SwipeDismissBehavior;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.ActivityCompat;
@@ -16,6 +20,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -59,11 +64,13 @@ public class CreateEventFragment extends Fragment implements TimePickerDialog.On
     GoogleMap mMap;
     LatLng myLocation,lastLocation;
     Marker marker;
+    String title,description;
 
     TextView dateTextView, timeTextView, location_text;
     FloatingActionButton add_marker;
     Dialog dialog;
-
+    TextInputLayout til_title,til_description;
+    View view;
 
     public CreateEventFragment() {
 
@@ -81,7 +88,7 @@ public class CreateEventFragment extends Fragment implements TimePickerDialog.On
                              Bundle savedInstanceState) {
 
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_create_event, container, false);
+        view = inflater.inflate(R.layout.fragment_create_event, container, false);
         perform(view);
         return view;
     }
@@ -115,16 +122,16 @@ public class CreateEventFragment extends Fragment implements TimePickerDialog.On
         list.add(new ItemData(getString(R.string.pc_games_text), R.drawable.ic_pc_games_mini));
         list.add(new ItemData(getString(R.string.cinema_text), R.drawable.ic_cinema_mini));
         list.add(new ItemData(getString(R.string.other_text), R.drawable.ic_other_mini));
-        Spinner sp = (Spinner) v.findViewById(R.id.spinner);
+        Spinner sp = v.findViewById(R.id.spinner);
         SpinnerAdapter adapter = new SpinnerAdapter(getActivity(),
                 R.layout.spinner_row, R.id.txt, list);
         sp.setAdapter(adapter);
 
-        TextInputLayout title = v.findViewById(R.id.text_title);
-        TextInputLayout description = v.findViewById(R.id.text_description);
+        til_title = v.findViewById(R.id.text_title);
+        til_description = v.findViewById(R.id.text_description);
 
-        title.getEditText().addTextChangedListener(new CharacterCountErrorWatcher(title, 1, 80));
-        description.getEditText().addTextChangedListener(new CharacterCountErrorWatcher(description, 1, 200));
+        til_title.getEditText().addTextChangedListener(new CharacterCountErrorWatcher(til_title, 1, 80));
+        til_description.getEditText().addTextChangedListener(new CharacterCountErrorWatcher(til_description, 1, 200));
 
 
         View add_location = v.findViewById(R.id.add_location_form);
@@ -149,6 +156,14 @@ public class CreateEventFragment extends Fragment implements TimePickerDialog.On
             }
         });
 
+        Button create_event_button = v.findViewById(R.id.create_event_button);
+        create_event_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                attemptCreate();
+            }
+        });
+
     }
 
 
@@ -161,9 +176,7 @@ public class CreateEventFragment extends Fragment implements TimePickerDialog.On
         Calendar calendar = Calendar.getInstance();
         now = calendar.getTime();
         dateTextView.setText(df.format(eventDate));
-        if (eventDate.after(now)) {
-            Log.e("DATE", "TARİH GEÇERLİ");
-        }
+
     }
 
     @Override
@@ -272,7 +285,6 @@ public class CreateEventFragment extends Fragment implements TimePickerDialog.On
                 }
             }
         });
-
     }
 
 
@@ -290,5 +302,91 @@ public class CreateEventFragment extends Fragment implements TimePickerDialog.On
         }
     }
 
+    public boolean isOnline() {
+        ConnectivityManager cm = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+        return netInfo != null && netInfo.isConnectedOrConnecting();
+    }
+
+    public boolean isDateEmpty(){
+        return eventDate==null;
+    }
+
+    public boolean isTimeEmpty(){
+        return eventTime==null;
+    }
+
+    public boolean isLocationEmpty(){
+        return lastLocation==null;
+    }
+
+    public boolean isDateValid(){
+        return eventDate.after(now);
+    }
+
+    public boolean isTimeValid(){
+        return eventTime.after(now);
+    }
+
+    public void attemptCreate(){
+
+        boolean cancel = false;
+        View focusView = null;
+        title = til_title.getEditText().getText().toString();
+        description = til_description.getEditText().getText().toString();
+
+        if(TextUtils.isEmpty(title)){
+            til_title.getEditText().setError(getString(R.string.please_add_title));
+            focusView = til_title.getEditText();
+            cancel = true;
+        }
+        if (TextUtils.isEmpty(description)){
+            til_description.getEditText().setError(getString(R.string.please_add_desc));
+            focusView = til_description.getEditText();
+            cancel = true;
+        }
+        if(isDateEmpty()){
+            cancel = true;
+            Snackbar snackbar = Snackbar.make(view, getString(R.string.please_select_date), Snackbar.LENGTH_LONG);
+            snackbar.show();
+        }
+        else{
+            if(!isDateValid()){
+                if(!isTimeValid()){
+                    cancel = true;
+                    Snackbar snackbar = Snackbar.make(view, getString(R.string.in_future), Snackbar.LENGTH_LONG);
+                    snackbar.show();
+                }
+            }
+        }
+
+        if(isTimeEmpty()){
+            cancel = true;
+            Snackbar snackbar = Snackbar.make(view, getString(R.string.please_select_time), Snackbar.LENGTH_LONG);
+            snackbar.show();
+        }
+
+
+
+        if(isLocationEmpty()){
+            SimpleLocation simpleLocation = new SimpleLocation(getContext());
+            lastLocation = new LatLng(simpleLocation.getLatitude(),simpleLocation.getLongitude());
+        }
+
+        if(cancel){
+            if(focusView!=null){
+                focusView.requestFocus();
+            }
+        }
+        else{
+            if(isOnline()){
+                Toast.makeText(getContext(),"Etkinlik başarıyla oluşturuldu",Toast.LENGTH_LONG).show();
+            }
+            else{
+                Snackbar snackbar = Snackbar.make(view, getString(R.string.check_internet_conn), Snackbar.LENGTH_LONG);
+                snackbar.show();
+            }
+        }
+    }
 
 }

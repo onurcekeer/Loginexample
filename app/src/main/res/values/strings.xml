@@ -78,5 +78,10 @@
     <string name="event_end_text">Event end:</string>
     <string name="date">Date</string>
     <string name="time">Time</string>
+    <string name="please_add_title">Please add title text</string>
+    <string name="please_add_desc">Please add description text</string>
+    <string name="please_select_date">Please select a date to end your event</string>
+    <string name="please_select_time">Please select a time to end your event</string>
+    <string name="in_future">Please select a date and time in the future</string>
 
 </resources>

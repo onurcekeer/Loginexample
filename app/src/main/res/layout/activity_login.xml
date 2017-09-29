@@ -73,6 +73,7 @@
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
             android:layout_marginTop="10dp"
+            android:layout_marginBottom="5dp"
             android:background="@drawable/sign_button_style"
             android:text="@string/action_sign_in_short"
             android:textColor="@color/colorPrimary"
