@@ -5,14 +5,12 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
-import android.location.Location;
-import android.location.LocationListener;
+import android.database.Cursor;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.support.design.widget.SwipeDismissBehavior;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
@@ -24,11 +22,13 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -41,18 +41,23 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.project.onur.playerx.CharacterCountErrorWatcher;
+import com.project.onur.playerx.Event;
 import com.project.onur.playerx.ItemData;
 import com.project.onur.playerx.R;
+import com.project.onur.playerx.SQLiteUser;
 import com.project.onur.playerx.SpinnerAdapter;
+import com.project.onur.playerx.User;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
 
-import java.sql.Time;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.UUID;
 
 import im.delight.android.location.SimpleLocation;
 
@@ -63,17 +68,22 @@ import im.delight.android.location.SimpleLocation;
 public class CreateEventFragment extends Fragment implements TimePickerDialog.OnTimeSetListener, DatePickerDialog.OnDateSetListener{
 
 
-    Date eventDate, nowDate, eventTime, nowTime;
+    Date selectedDate, nowDate, selectedTime, nowTime, eventDateTime;
     GoogleMap mMap;
     LatLng myLocation,lastLocation;
     Marker marker;
-    String title,description;
+    String title,description, newEventID;
+    int category;
+    Event mEvent;
+    User user;
+    SQLiteUser sqLiteUser;
 
     TextView dateTextView, timeTextView, location_text;
     FloatingActionButton add_marker;
     Dialog dialog;
     TextInputLayout til_title,til_description;
     View view;
+    Spinner spinner_category;
 
     public CreateEventFragment() {
 
@@ -83,6 +93,10 @@ public class CreateEventFragment extends Fragment implements TimePickerDialog.On
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        sqLiteUser = new SQLiteUser(getActivity().getApplicationContext());
+        Cursor cursor = sqLiteUser.query();
+        user = sqLiteUser.getUserFromSQLite(cursor);
+        Log.e("user",user.toString());
 
     }
 
@@ -125,10 +139,10 @@ public class CreateEventFragment extends Fragment implements TimePickerDialog.On
         list.add(new ItemData(getString(R.string.pc_games_text), R.drawable.ic_pc_games_mini));
         list.add(new ItemData(getString(R.string.cinema_text), R.drawable.ic_cinema_mini));
         list.add(new ItemData(getString(R.string.other_text), R.drawable.ic_other_mini));
-        Spinner sp = v.findViewById(R.id.spinner);
+        spinner_category = v.findViewById(R.id.spinner);
         SpinnerAdapter adapter = new SpinnerAdapter(getActivity(),
                 R.layout.spinner_row, R.id.txt, list);
-        sp.setAdapter(adapter);
+        spinner_category.setAdapter(adapter);
 
         til_title = v.findViewById(R.id.text_title);
         til_description = v.findViewById(R.id.text_description);
@@ -173,6 +187,7 @@ public class CreateEventFragment extends Fragment implements TimePickerDialog.On
             }
         });
 
+
         View add_location = v.findViewById(R.id.add_location_form);
         add_location.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -209,12 +224,12 @@ public class CreateEventFragment extends Fragment implements TimePickerDialog.On
     @Override
     public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
         //String date = ""+dayOfMonth+"/"+(monthOfYear+1)+"/"+year;
-        eventDate = new Date(year - 1900, monthOfYear, dayOfMonth);
+        selectedDate = new Date(year - 1900, monthOfYear, dayOfMonth);
         SimpleDateFormat df = new SimpleDateFormat("dd.MM.yyyy");
         nowDate = new Date();
         Calendar calendar = Calendar.getInstance();
         nowDate = calendar.getTime();
-        dateTextView.setText(df.format(eventDate));
+        dateTextView.setText(df.format(selectedDate));
 
     }
 
@@ -223,11 +238,11 @@ public class CreateEventFragment extends Fragment implements TimePickerDialog.On
         nowTime = new Date();
         Calendar calendar = Calendar.getInstance();
         nowTime = calendar.getTime();
-        eventTime = new Date(nowTime.getYear(),nowTime.getMonth(),nowTime.getDate(),hourOfDay,minute,nowTime.getSeconds());
+        selectedTime = new Date(nowTime.getYear(),nowTime.getMonth(),nowTime.getDate(),hourOfDay,minute,nowTime.getSeconds());
 
         SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
         //String time = " " + hourOfDay + ":" + minute;
-        timeTextView.setText(sdf.format(eventTime));
+        timeTextView.setText(sdf.format(selectedTime));
     }
 
     public void showDate() {
@@ -345,31 +360,6 @@ public class CreateEventFragment extends Fragment implements TimePickerDialog.On
         }
     }
 
-    public boolean isOnline() {
-        ConnectivityManager cm = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo netInfo = cm.getActiveNetworkInfo();
-        return netInfo != null && netInfo.isConnectedOrConnecting();
-    }
-
-    public boolean isDateEmpty(){
-        return eventDate==null;
-    }
-
-    public boolean isTimeEmpty(){
-        return eventTime==null;
-    }
-
-    public boolean isLocationEmpty(){
-        return lastLocation==null;
-    }
-
-    public boolean isDateValid(){
-        return eventDate.after(nowDate);
-    }
-
-    public boolean isTimeValid(){
-        return eventTime.after(nowTime);
-    }
 
     public void attemptCreate(){
 
@@ -389,12 +379,18 @@ public class CreateEventFragment extends Fragment implements TimePickerDialog.On
             cancel = true;
         }
 
-
         else if(isDateEmpty()){
             cancel = true;
             Snackbar snackbar = Snackbar.make(view, getString(R.string.please_select_date), Snackbar.LENGTH_LONG);
             snackbar.show();
         }
+
+        else if(isTimeEmpty()){
+            cancel = true;
+            Snackbar snackbar = Snackbar.make(view, getString(R.string.please_select_time), Snackbar.LENGTH_LONG);
+            snackbar.show();
+        }
+
         else if(!isDateEmpty()){
             if(!isDateValid()){
 
@@ -412,6 +408,7 @@ public class CreateEventFragment extends Fragment implements TimePickerDialog.On
         }
 
 
+
         if(isLocationEmpty()){
             SimpleLocation simpleLocation = new SimpleLocation(getContext());
             lastLocation = new LatLng(simpleLocation.getLatitude(),simpleLocation.getLongitude());
@@ -424,13 +421,67 @@ public class CreateEventFragment extends Fragment implements TimePickerDialog.On
         }
         else{
             if(isOnline()){
-                Toast.makeText(getContext(),"Etkinlik başarıyla oluşturuldu",Toast.LENGTH_LONG).show();
+                title = til_title.getEditText().getText().toString();
+                description = til_description.getEditText().getText().toString();
+                eventDateTime = new Date(selectedDate.getYear(),selectedDate.getMonth(),selectedDate.getDate(),selectedTime.getHours(),selectedTime.getMinutes());
+                newEventID = UUID.randomUUID().toString();
+                category = spinner_category.getSelectedItemPosition();
+
+                mEvent = new Event(newEventID,user.getUserID(),category,title,description,lastLocation,eventDateTime);
+                uploadEvent(mEvent);
+
+
             }
             else{
                 Snackbar snackbar = Snackbar.make(view, getString(R.string.check_internet_conn), Snackbar.LENGTH_LONG);
                 snackbar.show();
             }
         }
+    }
+
+    public void uploadEvent(final Event event){
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                FirebaseDatabase database = FirebaseDatabase.getInstance();
+                DatabaseReference reference = database.getReference("Events");
+                reference.child(event.getEventID()).setValue(event);
+                Log.e("UPLOAD","Etkinlik başarıyla oluşturuldu");
+            }
+        }).start();
+    }
+
+    public void showSuccessDialog(){
+
+
+
+    }
+
+    public boolean isOnline() {
+        ConnectivityManager cm = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+        return netInfo != null && netInfo.isConnectedOrConnecting();
+    }
+
+    public boolean isDateEmpty(){
+        return selectedDate ==null;
+    }
+
+    public boolean isTimeEmpty(){
+        return selectedTime ==null;
+    }
+
+    public boolean isLocationEmpty(){
+        return lastLocation==null;
+    }
+
+    public boolean isDateValid(){
+        return selectedDate.after(nowDate);
+    }
+
+    public boolean isTimeValid(){
+        return selectedTime.after(nowTime);
     }
 
 }
