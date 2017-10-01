@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.ConnectivityManager;
@@ -31,6 +32,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -67,6 +69,7 @@ import im.delight.android.location.SimpleLocation;
 public class CreateEventFragment extends Fragment implements TimePickerDialog.OnTimeSetListener, DatePickerDialog.OnDateSetListener{
 
 
+    private static final String FIRSTMAPACTION = "FIRSTMAPACTION";
     Date selectedDate, nowDate, selectedTime, nowTime, eventDateTime;
     GoogleMap mMap;
     LatLng myLocation,lastLocation;
@@ -76,6 +79,7 @@ public class CreateEventFragment extends Fragment implements TimePickerDialog.On
     Event mEvent;
     User user;
     SQLiteUser sqLiteUser;
+    boolean firstMapAction;
 
     TextView dateTextView, timeTextView, location_text;
     FloatingActionButton add_marker;
@@ -276,7 +280,6 @@ public class CreateEventFragment extends Fragment implements TimePickerDialog.On
         dialog.show();
         dialog.setCancelable(false);
 
-
         MapView mMapView;
         MapsInitializer.initialize(getActivity());
 
@@ -373,6 +376,18 @@ public class CreateEventFragment extends Fragment implements TimePickerDialog.On
     }
 
     public void addDraggableMarker(){
+
+        SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
+        firstMapAction = sharedPref.getBoolean(FIRSTMAPACTION,false);
+
+        if(!firstMapAction){
+            Toast.makeText(getContext(),getString(R.string.hold_to_drag_marker),Toast.LENGTH_SHORT).show();
+            SharedPreferences.Editor editor = sharedPref.edit();
+            editor.putBoolean(FIRSTMAPACTION,true);
+            editor.apply();
+
+        }
+
         if(marker==null) {
             add_marker.setImageResource(R.drawable.ic_done);
             marker = mMap.addMarker(new MarkerOptions().position(mMap.getCameraPosition().target).draggable(true));

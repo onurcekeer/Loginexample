@@ -67,5 +67,6 @@
     <string name="please_select_time">Lütfen etkinliğin sonlanacağı bir saat seçiniz</string>
     <string name="in_future">Lütfen gelecek zamanda bir tarih ve saat seçiniz</string>
     <string name="event_created_success">Etkinliğiniz başarıyla oluşturuldu</string>
+    <string name="hold_to_drag_marker">İşaretçiyi sürüklemek için basılı tutun</string>
 
 </resources>
