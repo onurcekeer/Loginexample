@@ -83,5 +83,6 @@
     <string name="please_select_date">Please select a date to end your event</string>
     <string name="please_select_time">Please select a time to end your event</string>
     <string name="in_future">Please select a date and time in the future</string>
+    <string name="event_created_success">Your event has been successfully created</string>
 
 </resources>

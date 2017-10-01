@@ -66,5 +66,6 @@
     <string name="please_select_date">Lütfen etkinliğin sonlanacağı bir tarih seçiniz</string>
     <string name="please_select_time">Lütfen etkinliğin sonlanacağı bir saat seçiniz</string>
     <string name="in_future">Lütfen gelecek zamanda bir tarih ve saat seçiniz</string>
+    <string name="event_created_success">Etkinliğiniz başarıyla oluşturuldu</string>
 
 </resources>

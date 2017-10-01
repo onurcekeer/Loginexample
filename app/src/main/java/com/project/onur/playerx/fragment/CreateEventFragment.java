@@ -31,7 +31,6 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -81,6 +80,7 @@ public class CreateEventFragment extends Fragment implements TimePickerDialog.On
     TextView dateTextView, timeTextView, location_text;
     FloatingActionButton add_marker;
     Dialog dialog;
+    AlertDialog successDialog;
     TextInputLayout til_title,til_description;
     View view;
     Spinner spinner_category;
@@ -97,13 +97,11 @@ public class CreateEventFragment extends Fragment implements TimePickerDialog.On
         Cursor cursor = sqLiteUser.query();
         user = sqLiteUser.getUserFromSQLite(cursor);
         Log.e("user",user.toString());
-
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_create_event, container, false);
         perform(view);
@@ -154,12 +152,10 @@ public class CreateEventFragment extends Fragment implements TimePickerDialog.On
         til_title.getEditText().addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
             }
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
             }
 
             public void afterTextChanged(Editable edt) {
@@ -219,7 +215,6 @@ public class CreateEventFragment extends Fragment implements TimePickerDialog.On
         });
 
     }
-
 
     @Override
     public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
@@ -345,6 +340,37 @@ public class CreateEventFragment extends Fragment implements TimePickerDialog.On
         });
     }
 
+    public void showSuccessDialog(){
+
+        final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setView(R.layout.success_dialog);
+        builder.setCancelable(false);
+        builder.setPositiveButton(android.R.string.ok,null);
+        successDialog = builder.create();
+
+        successDialog.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialogInterface) {
+
+                TextView dialog_description = successDialog.findViewById(R.id.success_info);
+                dialog_description.setText(getString(R.string.event_created_success));
+                Button button_positive = successDialog.getButton(AlertDialog.BUTTON_POSITIVE);
+                LinearLayout.LayoutParams positiveButtonLL = (LinearLayout.LayoutParams) button_positive.getLayoutParams();
+                positiveButtonLL.gravity = Gravity.CENTER;
+                button_positive.setLayoutParams(positiveButtonLL);
+                button_positive.setTextSize(20);
+                button_positive.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        successDialog.dismiss();
+                        FragmentManager fm = getActivity().getSupportFragmentManager();
+                        fm.popBackStack();
+                    }
+                });
+            }
+        });
+        successDialog.show();
+    }
 
     public void addDraggableMarker(){
         if(marker==null) {
@@ -359,7 +385,6 @@ public class CreateEventFragment extends Fragment implements TimePickerDialog.On
             dialog.dismiss();
         }
     }
-
 
     public void attemptCreate(){
 
@@ -407,8 +432,6 @@ public class CreateEventFragment extends Fragment implements TimePickerDialog.On
             }
         }
 
-
-
         if(isLocationEmpty()){
             SimpleLocation simpleLocation = new SimpleLocation(getContext());
             lastLocation = new LatLng(simpleLocation.getLatitude(),simpleLocation.getLongitude());
@@ -441,21 +464,10 @@ public class CreateEventFragment extends Fragment implements TimePickerDialog.On
 
     public void uploadEvent(final Event event){
 
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                FirebaseDatabase database = FirebaseDatabase.getInstance();
-                DatabaseReference reference = database.getReference("Events");
-                reference.child(event.getEventID()).setValue(event);
-                Log.e("UPLOAD","Etkinlik başarıyla oluşturuldu");
-            }
-        }).start();
-    }
-
-    public void showSuccessDialog(){
-
-
-
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference reference = database.getReference("Events");
+        reference.child(event.getEventID()).setValue(event);
+        showSuccessDialog();
     }
 
     public boolean isOnline() {
