@@ -11,17 +11,15 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 
 import com.project.onur.playerx.SQLiteUser;
 import com.project.onur.playerx.User;
-import com.project.onur.playerx.fragment.OneFragment;
+import com.project.onur.playerx.fragment.HomeFragment;
 import com.project.onur.playerx.R;
-import com.project.onur.playerx.fragment.ThreeFragment;
-import com.project.onur.playerx.fragment.TwoFragment;
+import com.project.onur.playerx.fragment.ProfileFragment;
+import com.project.onur.playerx.fragment.MessagesFragment;
 
 import im.delight.android.location.SimpleLocation;
 
@@ -91,13 +89,13 @@ public class MainActivity extends AppCompatActivity {
 
         switch (item.getItemId()) {
             case R.id.navigation_home:
-                pushFragment(new OneFragment());
+                pushFragment(new HomeFragment());
                 break;
             case R.id.navigation_messages:
-                pushFragment(new TwoFragment());
+                pushFragment(new MessagesFragment());
                 break;
             case R.id.navigation_profile:
-                pushFragment(new ThreeFragment());
+                pushFragment(new ProfileFragment());
                 break;
             }
     }

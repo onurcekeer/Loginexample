@@ -26,14 +26,14 @@ import com.squareup.picasso.Picasso;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 
-public class ThreeFragment extends Fragment{
+public class ProfileFragment extends Fragment{
 
     FirebaseAuth mAuth;
     User user;
     SQLiteUser sqLiteUser;
 
 
-    public ThreeFragment() {
+    public ProfileFragment() {
         // Required empty public constructor
     }
 
@@ -53,7 +53,7 @@ public class ThreeFragment extends Fragment{
 
 
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_three, container, false);
+        View view = inflater.inflate(R.layout.fragment_profile, container, false);
         perform(view);
         return view;
     }

@@ -19,18 +19,16 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.miguelcatalan.materialsearchview.MaterialSearchView;
 import com.project.onur.playerx.R;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import static android.app.Activity.RESULT_OK;
 
 
-public class OneFragment extends Fragment implements View.OnClickListener {
+public class HomeFragment extends Fragment implements View.OnClickListener {
 
 
 
@@ -40,7 +38,7 @@ public class OneFragment extends Fragment implements View.OnClickListener {
     ImageView clear_category;
     MaterialSearchView searchView;
 
-    public OneFragment() {
+    public HomeFragment() {
         // Required empty public constructor
     }
 
@@ -57,7 +55,7 @@ public class OneFragment extends Fragment implements View.OnClickListener {
 
 
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_one, container, false);
+        View view = inflater.inflate(R.layout.fragment_home, container, false);
         perform(view);
         return view;
     }

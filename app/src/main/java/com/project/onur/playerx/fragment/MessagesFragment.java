@@ -11,10 +11,10 @@ import android.view.ViewGroup;
 import com.project.onur.playerx.R;
 
 
-public class TwoFragment extends Fragment {
+public class MessagesFragment extends Fragment {
 
 
-    public TwoFragment() {
+    public MessagesFragment() {
         // Required empty public constructor
     }
 
@@ -30,7 +30,7 @@ public class TwoFragment extends Fragment {
 
 
         // Inflate the layout for this fragment
-        View view =  inflater.inflate(R.layout.fragment_two, container, false);
+        View view =  inflater.inflate(R.layout.fragment_messages, container, false);
         perform(view);
         return view;
     }
