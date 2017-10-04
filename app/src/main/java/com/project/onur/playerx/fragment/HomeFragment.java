@@ -70,7 +70,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         clear_category.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                selectedItem_layout.setVisibility(View.INVISIBLE);
+                selectedItem_layout.setVisibility(View.GONE);
                 scroolView_layout.setVisibility(View.VISIBLE);
             }
         });
