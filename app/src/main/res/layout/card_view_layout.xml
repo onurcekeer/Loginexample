@@ -3,7 +3,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical" android:layout_width="match_parent"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
-    android:padding="16dp"
+    android:paddingLeft="10dp"
+    android:paddingRight="10dp"
+    android:paddingBottom="5dp"
+    android:paddingTop="5dp"
     android:layout_height="wrap_content">
 
 
@@ -70,17 +73,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
-                android:textStyle="bold"
-                android:text="okeye dördüncü aranıyor köylü kahvesinde saat geç olmadan gelecek kişi haber ver"/>
+                android:textStyle="bold"/>
 
             <TextView
                 android:id="@+id/text_description"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
-                android:layout_marginTop="5dp"
-                android:text="A material metaphor is the unifying theory of a crationalized space and a system of motion.The material is grounded in tactile reality, inspired by the study of paper and ink, yet technologically asdf"/>
-
+                android:layout_marginTop="5dp"/>
 
         </LinearLayout>
 

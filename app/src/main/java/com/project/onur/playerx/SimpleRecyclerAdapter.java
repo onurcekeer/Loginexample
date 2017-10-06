@@ -2,6 +2,7 @@ package com.project.onur.playerx;
 
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -127,12 +128,13 @@ public class SimpleRecyclerAdapter extends RecyclerView.Adapter<SimpleRecyclerAd
 
         final User[] user = {new User()};
 
+        Log.e("USERID",userID);
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference("User");
         Query query = reference.orderByChild("userID").equalTo(userID);
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                user[0] = dataSnapshot.child(userID).getValue(User.class);
+                user[0] = dataSnapshot.child("User").child(userID).getValue(User.class);
             }
 
             @Override

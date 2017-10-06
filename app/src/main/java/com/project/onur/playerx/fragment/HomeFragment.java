@@ -8,8 +8,12 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -19,11 +23,21 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.miguelcatalan.materialsearchview.MaterialSearchView;
+import com.project.onur.playerx.CustomItemClickListener;
+import com.project.onur.playerx.Event;
 import com.project.onur.playerx.R;
+import com.project.onur.playerx.SimpleRecyclerAdapter;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -37,6 +51,9 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     TextView text_category ;
     ImageView clear_category;
     MaterialSearchView searchView;
+    RecyclerView recycler_view;
+
+    List<Event> event_list;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -62,10 +79,10 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
     private void perform(View v) {
 
-        scroolView_layout = (LinearLayout)v.findViewById(R.id.scrollView_layout);
-        selectedItem_layout = (LinearLayout)v.findViewById(R.id.selecteditem);
-        text_category = (TextView)v.findViewById(R.id.categoryName);
-        clear_category = (ImageView)v.findViewById(R.id.clear);
+        scroolView_layout = v.findViewById(R.id.scrollView_layout);
+        selectedItem_layout = v.findViewById(R.id.selecteditem);
+        text_category = v.findViewById(R.id.categoryName);
+        clear_category = v.findViewById(R.id.clear);
 
         clear_category.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -76,7 +93,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         });
 
 
-        FloatingActionButton fab = (FloatingActionButton)v.findViewById(R.id.fab);
+        FloatingActionButton fab = v.findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -86,17 +103,17 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
 
 
-        Toolbar toolbar = (Toolbar) v.findViewById(R.id.toolbar);
+        Toolbar toolbar =  v.findViewById(R.id.toolbar);
         ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
         toolbar.setTitle(getString(R.string.title_home));
 
-        searchView = (MaterialSearchView) v.findViewById(R.id.search_view);
+        searchView =  v.findViewById(R.id.search_view);
         searchView.setVoiceSearch(true); //or false
         searchView.setOnQueryTextListener(new MaterialSearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 //Do some magic
-                scroolView_layout.setVisibility(View.INVISIBLE);
+                scroolView_layout.setVisibility(View.GONE);
                 selectedItem_layout.setVisibility(View.VISIBLE);
                 text_category.setText(query);
                 return false;
@@ -135,7 +152,40 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         View other = v.findViewById(R.id.lineer_other);
         other.setOnClickListener(this);
 
+        event_list = new ArrayList<Event>();
 
+        recycler_view = v.findViewById(R.id.recycler_view);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        layoutManager.scrollToPosition(0);
+        recycler_view.setLayoutManager(layoutManager);
+
+        DatabaseReference myRef = FirebaseDatabase.getInstance().getReference("Events");
+        myRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+                    event_list.add(postSnapshot.getValue(Event.class));
+                    Log.e("EVENT",postSnapshot.toString());
+                }
+                SimpleRecyclerAdapter recycler_adapter = new SimpleRecyclerAdapter(event_list, new CustomItemClickListener() {
+                    @Override
+                    public void onItemClick(View v, int position) {
+                        Log.d("position", "Tıklanan Pozisyon:" + position);
+                        Event event = event_list.get(position);
+                        Toast.makeText(getContext(),"pozisyon:"+" "+position+" "+"Ad:"+event.getTitle(),Toast.LENGTH_SHORT).show();
+                    }
+                });
+                recycler_view.setHasFixedSize(true);
+                recycler_view.setAdapter(recycler_adapter);
+                recycler_view.setItemAnimator(new DefaultItemAnimator());
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 
     @Override
@@ -159,7 +209,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onClick(View v) {
 
-        scroolView_layout.setVisibility(View.INVISIBLE);
+        scroolView_layout.setVisibility(View.GONE);
         selectedItem_layout.setVisibility(View.VISIBLE);
 
         switch (v.getId()) {

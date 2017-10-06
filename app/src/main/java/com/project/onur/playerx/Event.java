@@ -15,10 +15,10 @@ public class Event {
     private int category;
     private String title;
     private String description;
-    private LatLng location;
+    private LatLon location;
     private Date dateTime;
 
-    public Event(String mEventID, String mUserID, int mCategory, String mTitle, String mDescription, LatLng mLocation, Date mDateTime){
+    public Event(String mEventID, String mUserID, int mCategory, String mTitle, String mDescription, LatLon mLocation, Date mDateTime){
 
         eventID = mEventID;
         userID = mUserID;
@@ -76,11 +76,11 @@ public class Event {
         this.description = description;
     }
 
-    public LatLng getLocation() {
+    public LatLon getLocation() {
         return location;
     }
 
-    public void setLocation(LatLng location) {
+    public void setLocation(LatLon location) {
         this.location = location;
     }
 

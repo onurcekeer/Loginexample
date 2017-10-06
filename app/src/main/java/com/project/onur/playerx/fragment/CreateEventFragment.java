@@ -47,6 +47,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.project.onur.playerx.CharacterCountErrorWatcher;
 import com.project.onur.playerx.Event;
 import com.project.onur.playerx.ItemData;
+import com.project.onur.playerx.LatLon;
 import com.project.onur.playerx.R;
 import com.project.onur.playerx.SQLiteUser;
 import com.project.onur.playerx.SpinnerAdapter;
@@ -72,7 +73,8 @@ public class CreateEventFragment extends Fragment implements TimePickerDialog.On
     private static final String FIRSTMAPACTION = "FIRSTMAPACTION";
     Date selectedDate, nowDate, selectedTime, nowTime, eventDateTime;
     GoogleMap mMap;
-    LatLng myLocation,lastLocation;
+    LatLng myLocation;
+    LatLon lastLocation;
     Marker marker;
     String title,description, newEventID;
     int category;
@@ -320,7 +322,7 @@ public class CreateEventFragment extends Fragment implements TimePickerDialog.On
 
                     @Override
                     public void onMarkerDragEnd(Marker marker) {
-                        lastLocation = marker.getPosition();
+                        lastLocation = new LatLon(marker.getPosition().latitude,marker.getPosition().longitude);
                     }
                 });
             }
@@ -391,11 +393,11 @@ public class CreateEventFragment extends Fragment implements TimePickerDialog.On
         if(marker==null) {
             add_marker.setImageResource(R.drawable.ic_done);
             marker = mMap.addMarker(new MarkerOptions().position(mMap.getCameraPosition().target).draggable(true));
-            lastLocation = marker.getPosition();
+            lastLocation = new LatLon(marker.getPosition().latitude,marker.getPosition().longitude);
         }
         else{
-            lastLocation = marker.getPosition();
-            location_text.setText(lastLocation.latitude+" , "+lastLocation.longitude);
+            lastLocation = new LatLon(marker.getPosition().latitude,marker.getPosition().longitude);
+            location_text.setText(lastLocation.getLatitude()+" , "+lastLocation.getLongitude());
             marker = null;
             dialog.dismiss();
         }
@@ -449,7 +451,7 @@ public class CreateEventFragment extends Fragment implements TimePickerDialog.On
 
         if(isLocationEmpty()){
             SimpleLocation simpleLocation = new SimpleLocation(getContext());
-            lastLocation = new LatLng(simpleLocation.getLatitude(),simpleLocation.getLongitude());
+            lastLocation = new LatLon(simpleLocation.getLatitude(),simpleLocation.getLongitude());
         }
 
         if(cancel){
