@@ -467,7 +467,7 @@ public class CreateEventFragment extends Fragment implements TimePickerDialog.On
                 newEventID = UUID.randomUUID().toString();
                 category = spinner_category.getSelectedItemPosition();
 
-                mEvent = new Event(newEventID,user.getUserID(),category,title,description,lastLocation,eventDateTime);
+                mEvent = new Event(newEventID,user.getUserID(),category,title,description,lastLocation,eventDateTime,user.getUsername(),user.getProfilURL());
                 uploadEvent(mEvent);
 
 

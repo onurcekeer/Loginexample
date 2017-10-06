@@ -2,18 +2,11 @@ package com.project.onur.playerx;
 
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
-import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -34,7 +27,6 @@ public class SimpleRecyclerAdapter extends RecyclerView.Adapter<SimpleRecyclerAd
         public ImageView categoryImage;
         public CircleImageView image_profile;
         public CardView card_view;
-
 
         public ViewHolder(View view) {
             super(view);
@@ -79,13 +71,11 @@ public class SimpleRecyclerAdapter extends RecyclerView.Adapter<SimpleRecyclerAd
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
 
-        User user = getUser(list_event.get(position).getUserID());
-
-        holder.text_username.setText(user.getUsername());
+        holder.text_username.setText(list_event.get(position).getUsername());
         holder.text_title.setText(list_event.get(position).getTitle());
         holder.text_description.setText(list_event.get(position).getDescription());
         Picasso.with(holder.itemView.getContext())
-                .load(user.getProfilURL())
+                .load(list_event.get(position).getProfileURL())
                 .resize(30,30)
                 .centerCrop()
                 .placeholder(R.drawable.ic_default_user)
@@ -122,29 +112,6 @@ public class SimpleRecyclerAdapter extends RecyclerView.Adapter<SimpleRecyclerAd
 
         }
 
-    }
-
-    private User getUser(final String userID){
-
-        final User[] user = {new User()};
-
-        Log.e("USERID",userID);
-        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("User");
-        Query query = reference.orderByChild("userID").equalTo(userID);
-        query.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                user[0] = dataSnapshot.child("User").child(userID).getValue(User.class);
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                // TODO: 6.10.2017 set error
-
-            }
-        });
-
-        return user[0];
     }
 
     @Override

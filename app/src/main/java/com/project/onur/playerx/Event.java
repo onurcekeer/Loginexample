@@ -16,13 +16,33 @@ public class Event {
     private String title;
     private String description;
     private LatLon location;
+    private String username;
+    private String profileURL;
     private Date dateTime;
 
-    public Event(String mEventID, String mUserID, int mCategory, String mTitle, String mDescription, LatLon mLocation, Date mDateTime){
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getProfileURL() {
+        return profileURL;
+    }
+
+    public void setProfileURL(String profileURL) {
+        this.profileURL = profileURL;
+    }
+
+    public Event(String mEventID, String mUserID, int mCategory, String mTitle, String mDescription, LatLon mLocation, Date mDateTime, String mUsername, String mProfileURL){
 
         eventID = mEventID;
         userID = mUserID;
         category = mCategory;
+        username = mUsername;
+        profileURL = mProfileURL;
 
         title = mTitle;
         description = mDescription;
