@@ -29,6 +29,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.miguelcatalan.materialsearchview.MaterialSearchView;
 import com.project.onur.playerx.CustomItemClickListener;
@@ -36,7 +37,11 @@ import com.project.onur.playerx.Event;
 import com.project.onur.playerx.R;
 import com.project.onur.playerx.SimpleRecyclerAdapter;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import static android.app.Activity.RESULT_OK;
@@ -54,6 +59,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     RecyclerView recycler_view;
 
     List<Event> event_list;
+    Date nowTime;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -160,13 +166,22 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         layoutManager.scrollToPosition(0);
         recycler_view.setLayoutManager(layoutManager);
 
+        nowTime = new Date();
+        Calendar calendar = Calendar.getInstance();
+        nowTime = calendar.getTime();
+
         DatabaseReference myRef = FirebaseDatabase.getInstance().getReference("Events");
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
-                    event_list.add(postSnapshot.getValue(Event.class));
-                    Log.e("EVENT",postSnapshot.toString());
+                    Date eventDate = postSnapshot.child("dateTime").getValue(Date.class);
+
+                    if(eventDate.after(nowTime))
+                    {
+                        event_list.add(postSnapshot.getValue(Event.class));
+                        Log.e("EVENT",postSnapshot.toString());
+                    }
                 }
                 SimpleRecyclerAdapter recycler_adapter = new SimpleRecyclerAdapter(event_list, new CustomItemClickListener() {
                     @Override
