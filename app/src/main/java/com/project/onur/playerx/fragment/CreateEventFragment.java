@@ -82,6 +82,7 @@ public class CreateEventFragment extends Fragment implements TimePickerDialog.On
     User user;
     SQLiteUser sqLiteUser;
     boolean firstMapAction;
+    SimpleLocation simpleLocation;
 
     TextView dateTextView, timeTextView, location_text;
     FloatingActionButton add_marker;
@@ -103,6 +104,8 @@ public class CreateEventFragment extends Fragment implements TimePickerDialog.On
         Cursor cursor = sqLiteUser.query();
         user = sqLiteUser.getUserFromSQLite(cursor);
         Log.e("user",user.toString());
+        simpleLocation = new SimpleLocation(getContext());
+
     }
 
     @Override
@@ -115,7 +118,7 @@ public class CreateEventFragment extends Fragment implements TimePickerDialog.On
     }
 
     private void perform(View v) {
-
+        simpleLocation.beginUpdates();
         dateTextView = v.findViewById(R.id.date_text);
         dateTextView.setClickable(true);
         timeTextView = v.findViewById(R.id.time_text);
@@ -131,6 +134,7 @@ public class CreateEventFragment extends Fragment implements TimePickerDialog.On
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                simpleLocation.endUpdates();
                 FragmentManager fm = getActivity().getSupportFragmentManager();
                 fm.popBackStack();
             }
@@ -300,7 +304,6 @@ public class CreateEventFragment extends Fragment implements TimePickerDialog.On
                 }
                 mMap.setMyLocationEnabled(true);
 
-                SimpleLocation simpleLocation = new SimpleLocation(getContext());
                 myLocation = new LatLng(simpleLocation.getLatitude(),simpleLocation.getLongitude());
                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(myLocation,15));
             }
@@ -368,6 +371,7 @@ public class CreateEventFragment extends Fragment implements TimePickerDialog.On
                     @Override
                     public void onClick(View v) {
                         successDialog.dismiss();
+                        simpleLocation.endUpdates();
                         FragmentManager fm = getActivity().getSupportFragmentManager();
                         fm.popBackStack();
                     }

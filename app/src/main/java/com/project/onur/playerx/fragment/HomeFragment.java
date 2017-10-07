@@ -47,7 +47,7 @@ import java.util.List;
 import static android.app.Activity.RESULT_OK;
 
 
-public class HomeFragment extends Fragment implements View.OnClickListener {
+public class HomeFragment extends Fragment implements View.OnClickListener{
 
 
 
@@ -95,6 +95,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             public void onClick(View v) {
                 selectedItem_layout.setVisibility(View.GONE);
                 scroolView_layout.setVisibility(View.VISIBLE);
+                getEventData();
             }
         });
 
@@ -132,18 +133,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             }
         });
 
-        searchView.setOnSearchViewListener(new MaterialSearchView.SearchViewListener() {
-            @Override
-            public void onSearchViewShown() {
-                //Do some magic
-            }
-
-            @Override
-            public void onSearchViewClosed() {
-                //Do some magic
-            }
-        });
-
 
         View sport = v.findViewById(R.id.lineer_sport);
         sport.setOnClickListener(this);
@@ -169,6 +158,13 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         nowTime = new Date();
         Calendar calendar = Calendar.getInstance();
         nowTime = calendar.getTime();
+        getEventData();
+
+    }
+
+    public void getEventData(){
+
+        event_list.clear();
 
         DatabaseReference myRef = FirebaseDatabase.getInstance().getReference("Events");
         myRef.addValueEventListener(new ValueEventListener() {
@@ -201,6 +197,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
             }
         });
+
     }
 
     @Override
@@ -221,6 +218,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     }
 
 
+
     @Override
     public void onClick(View v) {
 
@@ -231,26 +229,32 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
             case R.id.lineer_sport:
                 text_category.setText(R.string.sport_text);
+                setCategoryFilter(0);
                 break;
 
             case R.id.lineer_table_game:
                 text_category.setText(R.string.table_games_text);
+                setCategoryFilter(1);
                 break;
 
             case R.id.lineer_concert:
                 text_category.setText(R.string.concert_text);
+                setCategoryFilter(2);
                 break;
 
             case R.id.lineer_pc_game:
                 text_category.setText(R.string.pc_games_text);
+                setCategoryFilter(3);
                 break;
 
             case R.id.lineer_cinema:
                 text_category.setText(R.string.cinema_text);
+                setCategoryFilter(4);
                 break;
 
             case R.id.lineer_other:
                 text_category.setText(R.string.other_text);
+                setCategoryFilter(5);
                 break;
             default:
                 break;
@@ -274,6 +278,45 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         fragmentTransaction.replace(R.id.main_container, fragment);
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
+    }
+
+    public void setCategoryFilter(int category){
+
+        event_list.clear();
+
+        DatabaseReference myRef = FirebaseDatabase.getInstance().getReference("Events");
+        Query query = myRef.orderByChild("category").equalTo(category);
+        query.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+                    Date eventDate = postSnapshot.child("dateTime").getValue(Date.class);
+
+                    if(eventDate.after(nowTime))
+                    {
+                        event_list.add(postSnapshot.getValue(Event.class));
+                        Log.e("EVENT",postSnapshot.toString());
+                    }
+                }
+                SimpleRecyclerAdapter recycler_adapter = new SimpleRecyclerAdapter(event_list, new CustomItemClickListener() {
+                    @Override
+                    public void onItemClick(View v, int position) {
+                        Log.d("position", "Tıklanan Pozisyon:" + position);
+                        Event event = event_list.get(position);
+                        Toast.makeText(getContext(),"pozisyon:"+" "+position+" "+"Ad:"+event.getTitle(),Toast.LENGTH_SHORT).show();
+                    }
+                });
+                recycler_view.setHasFixedSize(true);
+                recycler_view.setAdapter(recycler_adapter);
+                recycler_view.setItemAnimator(new DefaultItemAnimator());
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
     }
 
 }
