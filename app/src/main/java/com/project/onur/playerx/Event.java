@@ -2,13 +2,14 @@ package com.project.onur.playerx;
 
 import com.google.android.gms.maps.model.LatLng;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  * Created by onur on 30.9.2017 at 01:54.
  */
 
-public class Event {
+public class Event implements Serializable {
 
     private String eventID;
     private String userID;

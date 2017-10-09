@@ -123,6 +123,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
                 scroolView_layout.setVisibility(View.GONE);
                 selectedItem_layout.setVisibility(View.VISIBLE);
                 text_category.setText(query);
+                //searchOnFirebase(query);
                 return false;
             }
 
@@ -147,7 +148,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         View other = v.findViewById(R.id.lineer_other);
         other.setOnClickListener(this);
 
-        event_list = new ArrayList<Event>();
+        event_list = new ArrayList<>();
 
         recycler_view = v.findViewById(R.id.recycler_view);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
@@ -179,17 +180,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
                         Log.e("EVENT",postSnapshot.toString());
                     }
                 }
-                SimpleRecyclerAdapter recycler_adapter = new SimpleRecyclerAdapter(event_list, new CustomItemClickListener() {
-                    @Override
-                    public void onItemClick(View v, int position) {
-                        Log.d("position", "Tıklanan Pozisyon:" + position);
-                        Event event = event_list.get(position);
-                        Toast.makeText(getContext(),"pozisyon:"+" "+position+" "+"Ad:"+event.getTitle(),Toast.LENGTH_SHORT).show();
-                    }
-                });
-                recycler_view.setHasFixedSize(true);
-                recycler_view.setAdapter(recycler_adapter);
-                recycler_view.setItemAnimator(new DefaultItemAnimator());
+
+                setAdapter(event_list);
             }
 
             @Override
@@ -298,17 +290,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
                         Log.e("EVENT",postSnapshot.toString());
                     }
                 }
-                SimpleRecyclerAdapter recycler_adapter = new SimpleRecyclerAdapter(event_list, new CustomItemClickListener() {
-                    @Override
-                    public void onItemClick(View v, int position) {
-                        Log.d("position", "Tıklanan Pozisyon:" + position);
-                        Event event = event_list.get(position);
-                        Toast.makeText(getContext(),"pozisyon:"+" "+position+" "+"Ad:"+event.getTitle(),Toast.LENGTH_SHORT).show();
-                    }
-                });
-                recycler_view.setHasFixedSize(true);
-                recycler_view.setAdapter(recycler_adapter);
-                recycler_view.setItemAnimator(new DefaultItemAnimator());
+                setAdapter(event_list);
             }
 
             @Override
@@ -316,6 +298,71 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
 
             }
         });
+
+    }
+
+    public void setAdapter(final List<Event> list){
+
+        SimpleRecyclerAdapter recycler_adapter = new SimpleRecyclerAdapter(list, new CustomItemClickListener() {
+            @Override
+            public void onItemClick(View v, int position) {
+                Log.d("position", "Tıklanan Pozisyon:" + position);
+                Event event = list.get(position);
+                Toast.makeText(getContext(),"pozisyon:"+" "+position+" "+"Ad:"+event.getTitle(),Toast.LENGTH_SHORT).show();
+                startEventDetailFragment(event);
+            }
+        });
+        recycler_view.setHasFixedSize(true);
+        recycler_view.setAdapter(recycler_adapter);
+        recycler_view.setItemAnimator(new DefaultItemAnimator());
+
+    }
+
+    public void searchOnFirebase(String text){
+
+        event_list.clear();
+
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Events");
+        Query query = databaseReference.getParent()
+                .startAt("[a-zA-Z0-9]*")
+                .endAt(text);
+        query.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+                    Date eventDate = postSnapshot.child("dateTime").getValue(Date.class);
+
+                    if(eventDate.after(nowTime))
+                    {
+                        event_list.add(postSnapshot.getValue(Event.class));
+                        Log.e("EVENT",postSnapshot.toString());
+                    }
+                }
+
+                setAdapter(event_list);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    public void startEventDetailFragment(Event event){
+
+        Fragment fragment = new EventDetailFragment();
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("EVENT", event);
+        fragment.setArguments(bundle);
+        FragmentManager fragmentManager = getFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_left,
+                R.anim.slide_out_right, R.anim.slide_in_right);
+        fragmentTransaction.replace(R.id.main_container, fragment);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
+
 
     }
 
