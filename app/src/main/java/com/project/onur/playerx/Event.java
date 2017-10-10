@@ -8,7 +8,7 @@ import java.util.Date;
 /**
  * Created by onur on 30.9.2017 at 01:54.
  */
-
+@SuppressWarnings("serial")
 public class Event implements Serializable {
 
     private String eventID;

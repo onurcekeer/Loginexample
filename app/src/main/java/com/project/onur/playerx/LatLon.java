@@ -1,10 +1,12 @@
 package com.project.onur.playerx;
 
+import java.io.Serializable;
+
 /**
  * Created by onur on 6.10.2017 at 02:18.
  */
-
-public class LatLon {
+@SuppressWarnings("serial")
+public class LatLon implements Serializable{
     private Double latitude;
     private Double longitude;
 

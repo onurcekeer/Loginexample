@@ -306,9 +306,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         SimpleRecyclerAdapter recycler_adapter = new SimpleRecyclerAdapter(list, new CustomItemClickListener() {
             @Override
             public void onItemClick(View v, int position) {
-                Log.d("position", "Tıklanan Pozisyon:" + position);
                 Event event = list.get(position);
-                Toast.makeText(getContext(),"pozisyon:"+" "+position+" "+"Ad:"+event.getTitle(),Toast.LENGTH_SHORT).show();
                 startEventDetailFragment(event);
             }
         });

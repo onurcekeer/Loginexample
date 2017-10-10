@@ -34,6 +34,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -305,7 +306,8 @@ public class CreateEventFragment extends Fragment implements TimePickerDialog.On
                 mMap.setMyLocationEnabled(true);
 
                 myLocation = new LatLng(simpleLocation.getLatitude(),simpleLocation.getLongitude());
-                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(myLocation,15));
+                CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(myLocation,15);
+                mMap.animateCamera(cameraUpdate);
             }
         });
 
