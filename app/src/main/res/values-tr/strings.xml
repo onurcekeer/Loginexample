@@ -17,7 +17,7 @@
     <string name="fullname">İsim</string>
     <string name="register">Kayıt Ol</string>
     <string name="action_settings">Ayarlar</string>
-    <string name="title_activity_main">MainActivity</string>
+    <string name="title_activity_main">Anasayfa</string>
     <string name="title_home">Anasayfa</string>
     <string name="error_invalid_fullname">İsim en az 6 karakterden oluşmalıdır</string>
     <string name="user_is_being_created">Kullanıcı oluşturuluyor...</string>

@@ -2,6 +2,7 @@ package com.project.onur.playerx.fragment;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.content.Context;
@@ -9,6 +10,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -130,6 +132,26 @@ public class EventDetailFragment extends Fragment {
         text_description.setText(event.getDescription());
         text_dateTime.setText(sdp.format(date));
 
+        text_username.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startGuestProfileFragment(event);
+            }
+        });
+        image_profile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startGuestProfileFragment(event);
+            }
+        });
+
+        FloatingActionButton fab = v.findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //startChatFragment
+            }
+        });
 
 
 
@@ -178,5 +200,18 @@ public class EventDetailFragment extends Fragment {
         return netInfo != null && netInfo.isConnectedOrConnecting();
     }
 
+    public void startGuestProfileFragment(Event event){
+        Fragment fragment = new GuestProfileFragment();
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("EVENT", event);
+        fragment.setArguments(bundle);
+        FragmentManager fragmentManager = getFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_left,
+                R.anim.slide_out_right, R.anim.slide_in_right);
+        fragmentTransaction.replace(R.id.main_container, fragment);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
+    }
 
 }
