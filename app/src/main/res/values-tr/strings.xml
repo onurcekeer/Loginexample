@@ -69,5 +69,6 @@
     <string name="event_created_success">Etkinliğiniz başarıyla oluşturuldu</string>
     <string name="hold_to_drag_marker">İşaretçiyi sürüklemek için basılı tutun</string>
     <string name="event_detail_text">Etkinlik Detayları</string>
+    <string name="event_end_time">Etkinlik bitiş zamanı:</string>
 
 </resources>

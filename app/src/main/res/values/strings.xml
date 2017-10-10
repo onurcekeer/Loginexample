@@ -86,5 +86,6 @@
     <string name="event_created_success">Your event has been successfully created</string>
     <string name="hold_to_drag_marker">Press and hold to drag the marker</string>
     <string name="event_detail_text">Event Detail</string>
+    <string name="event_end_time">Event end time:</string>
 
 </resources>
