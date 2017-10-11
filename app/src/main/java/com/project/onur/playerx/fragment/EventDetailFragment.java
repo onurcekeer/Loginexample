@@ -129,12 +129,7 @@ public class EventDetailFragment extends Fragment {
         text_title = view.findViewById(R.id.text_title);
         text_description = view.findViewById(R.id.text_description);
         text_dateTime = view.findViewById(R.id.datetime);
-        text_distance = view.findViewById(R.id.distance);
 
-
-        double distance = SimpleLocation.calculateDistance(simpleLocation.getLatitude(),simpleLocation.getLongitude(),event.getLocation().getLatitude(),event.getLocation().getLongitude());
-
-        text_distance.setText(String.valueOf(distance));
 
         text_username.setText(event.getUsername());
         text_title.setText(event.getTitle());

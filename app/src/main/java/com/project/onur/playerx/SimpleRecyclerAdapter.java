@@ -12,23 +12,26 @@ import com.squareup.picasso.Picasso;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import im.delight.android.location.SimpleLocation;
 
 /**
  * Created by onur on 6.10.2017 at 00:13.
  */
 public class SimpleRecyclerAdapter extends RecyclerView.Adapter<SimpleRecyclerAdapter.ViewHolder> {
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    static class ViewHolder extends RecyclerView.ViewHolder {
 
-        public TextView text_title;
-        public TextView text_description;
-        public TextView text_category;
-        public TextView text_username;
-        public ImageView categoryImage;
-        public CircleImageView image_profile;
-        public CardView card_view;
+        TextView text_title;
+        TextView text_description;
+        TextView text_category;
+        TextView text_username;
+        TextView text_distance;
+        ImageView categoryImage;
+        CircleImageView image_profile;
+        CardView card_view;
 
-        public ViewHolder(View view) {
+
+        ViewHolder(View view) {
             super(view);
 
             card_view = view.findViewById(R.id.card_view);
@@ -38,12 +41,15 @@ public class SimpleRecyclerAdapter extends RecyclerView.Adapter<SimpleRecyclerAd
             categoryImage = view.findViewById(R.id.categoryImage);
             text_title = view.findViewById(R.id.text_title);
             text_description = view.findViewById(R.id.text_description);
+            text_distance = view.findViewById(R.id.distance);
+
+
 
         }
     }
 
-    List<Event> list_event;
-    CustomItemClickListener listener;
+    private List<Event> list_event;
+    private CustomItemClickListener listener;
     public SimpleRecyclerAdapter(List<Event> list_event, CustomItemClickListener listener) {
 
         this.list_event= list_event;
@@ -64,6 +70,7 @@ public class SimpleRecyclerAdapter extends RecyclerView.Adapter<SimpleRecyclerAd
             }
         });
 
+
         return view_holder;
     }
 
@@ -74,6 +81,19 @@ public class SimpleRecyclerAdapter extends RecyclerView.Adapter<SimpleRecyclerAd
         holder.text_username.setText(list_event.get(position).getUsername());
         holder.text_title.setText(list_event.get(position).getTitle());
         holder.text_description.setText(list_event.get(position).getDescription());
+
+        SimpleLocation simpleLocation = new SimpleLocation(holder.itemView.getContext());
+
+        double distance = SimpleLocation.calculateDistance(simpleLocation.getLatitude(), simpleLocation.getLongitude(),list_event.get(position).getLocation().getLatitude(),list_event.get(position).getLocation().getLongitude());
+        int int_distance = (int) distance/1000;
+        if(int_distance==0){
+            holder.text_distance.setText(R.string.very_close);
+        }
+        else{
+            holder.text_distance.setText(String.valueOf(int_distance)+" km");
+        }
+
+
         Picasso.with(holder.itemView.getContext())
                 .load(list_event.get(position).getProfileURL())
                 .resize(30,30)

@@ -1,6 +1,7 @@
 package com.project.onur.playerx.fragment;
 
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
 import android.support.design.widget.FloatingActionButton;
@@ -25,6 +26,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -34,8 +36,11 @@ import com.google.firebase.database.ValueEventListener;
 import com.miguelcatalan.materialsearchview.MaterialSearchView;
 import com.project.onur.playerx.CustomItemClickListener;
 import com.project.onur.playerx.Event;
+import com.project.onur.playerx.LatLon;
 import com.project.onur.playerx.R;
+import com.project.onur.playerx.SQLiteUser;
 import com.project.onur.playerx.SimpleRecyclerAdapter;
+import com.project.onur.playerx.User;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -43,6 +48,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+
+import im.delight.android.location.SimpleLocation;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -57,9 +64,12 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
     ImageView clear_category;
     MaterialSearchView searchView;
     RecyclerView recycler_view;
+    SimpleLocation simpleLocation;
 
     List<Event> event_list;
     Date nowTime;
+    User user;
+    SQLiteUser sqLiteUser;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -69,6 +79,11 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+        sqLiteUser = new SQLiteUser(getActivity().getApplicationContext());
+        Cursor cursor = sqLiteUser.query();
+        user = sqLiteUser.getUserFromSQLite(cursor);
+        Log.e("user",user.toString());
+
 
     }
 
@@ -76,8 +91,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
+        simpleLocation = new SimpleLocation(getContext());
 
-        // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         perform(view);
         return view;
@@ -173,14 +188,16 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
                     Date eventDate = postSnapshot.child("dateTime").getValue(Date.class);
+                    LatLon eventLocation = postSnapshot.child("location").getValue(LatLon.class);
+                    double distance = SimpleLocation.calculateDistance(simpleLocation.getLatitude(), simpleLocation.getLongitude(),eventLocation.getLatitude(),eventLocation.getLongitude());
+                    int int_distance = (int) distance/1000;
 
-                    if(eventDate.after(nowTime))
+                    if(eventDate.after(nowTime) && int_distance < user.getRange())
                     {
                         event_list.add(postSnapshot.getValue(Event.class));
                         Log.e("EVENT",postSnapshot.toString());
                     }
                 }
-
                 setAdapter(event_list);
             }
 
@@ -283,8 +300,11 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
                     Date eventDate = postSnapshot.child("dateTime").getValue(Date.class);
+                    LatLon eventLocation = postSnapshot.child("location").getValue(LatLon.class);
+                    double distance = SimpleLocation.calculateDistance(simpleLocation.getLatitude(), simpleLocation.getLongitude(),eventLocation.getLatitude(),eventLocation.getLongitude());
+                    int int_distance = (int) distance/1000;
 
-                    if(eventDate.after(nowTime))
+                    if(eventDate.after(nowTime) && int_distance < user.getRange())
                     {
                         event_list.add(postSnapshot.getValue(Event.class));
                         Log.e("EVENT",postSnapshot.toString());
