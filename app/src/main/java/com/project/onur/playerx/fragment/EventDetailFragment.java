@@ -13,7 +13,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,7 +25,6 @@ import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.project.onur.playerx.Event;
 import com.project.onur.playerx.R;
@@ -36,6 +34,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import im.delight.android.location.SimpleLocation;
 
 /**
  * Created by onur on 9.10.2017 at 16:01.
@@ -45,6 +44,7 @@ public class EventDetailFragment extends Fragment {
 
     Event event;
     GoogleMap map;
+    SimpleLocation simpleLocation;
 
 
     MapView mapView;
@@ -53,6 +53,7 @@ public class EventDetailFragment extends Fragment {
     public TextView text_description;
     public TextView text_category;
     public TextView text_username;
+    public TextView text_distance;
     public ImageView categoryImage;
     public TextView text_dateTime;
     public CircleImageView image_profile;
@@ -76,11 +77,13 @@ public class EventDetailFragment extends Fragment {
             event = (Event) bundle.getSerializable("EVENT");
         }
 
+        simpleLocation = new SimpleLocation(getContext());
         view = inflater.inflate(R.layout.fragment_event_detail, container, false);
 
         mapView = view.findViewById(R.id.mapView);
         mapView.onCreate(savedInstanceState);
         mapView.onResume();
+
         MapsInitializer.initialize(this.getActivity());
 
         mapView.getMapAsync(new OnMapReadyCallback() {
@@ -126,6 +129,12 @@ public class EventDetailFragment extends Fragment {
         text_title = view.findViewById(R.id.text_title);
         text_description = view.findViewById(R.id.text_description);
         text_dateTime = view.findViewById(R.id.datetime);
+        text_distance = view.findViewById(R.id.distance);
+
+
+        double distance = SimpleLocation.calculateDistance(simpleLocation.getLatitude(),simpleLocation.getLongitude(),event.getLocation().getLatitude(),event.getLocation().getLongitude());
+
+        text_distance.setText(String.valueOf(distance));
 
         text_username.setText(event.getUsername());
         text_title.setText(event.getTitle());

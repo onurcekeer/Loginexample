@@ -7,14 +7,14 @@ import java.io.Serializable;
  */
 @SuppressWarnings("serial")
 public class LatLon implements Serializable{
-    private Double latitude;
-    private Double longitude;
+    private double latitude;
+    private double longitude;
 
-    public Double getLatitude() {
+    public double getLatitude() {
         return latitude;
     }
 
-    public Double getLongitude() {
+    public double getLongitude() {
         return longitude;
     }
 
