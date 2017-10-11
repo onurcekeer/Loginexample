@@ -62,6 +62,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.UUID;
 
+import cn.pedant.SweetAlert.SweetAlertDialog;
 import im.delight.android.location.SimpleLocation;
 
 /**
@@ -352,35 +353,21 @@ public class CreateEventFragment extends Fragment implements TimePickerDialog.On
 
     public void showSuccessDialog(){
 
-        final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        builder.setView(R.layout.success_dialog);
-        builder.setCancelable(false);
-        builder.setPositiveButton(android.R.string.ok,null);
-        successDialog = builder.create();
-
-        successDialog.setOnShowListener(new DialogInterface.OnShowListener() {
-            @Override
-            public void onShow(DialogInterface dialogInterface) {
-
-                TextView dialog_description = successDialog.findViewById(R.id.success_info);
-                dialog_description.setText(getString(R.string.event_created_success));
-                Button button_positive = successDialog.getButton(AlertDialog.BUTTON_POSITIVE);
-                LinearLayout.LayoutParams positiveButtonLL = (LinearLayout.LayoutParams) button_positive.getLayoutParams();
-                positiveButtonLL.gravity = Gravity.CENTER;
-                button_positive.setLayoutParams(positiveButtonLL);
-                button_positive.setTextSize(20);
-                button_positive.setOnClickListener(new View.OnClickListener() {
+        SweetAlertDialog sweetAlertDialog = new SweetAlertDialog(getContext(), SweetAlertDialog.SUCCESS_TYPE)
+                .setTitleText(getString(R.string.successful))
+                .setContentText(getString(R.string.event_created_success))
+                .setConfirmText(getString(android.R.string.ok))
+                .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
                     @Override
-                    public void onClick(View v) {
-                        successDialog.dismiss();
+                    public void onClick(SweetAlertDialog sweetAlertDialog) {
                         simpleLocation.endUpdates();
                         FragmentManager fm = getActivity().getSupportFragmentManager();
                         fm.popBackStack();
+                        sweetAlertDialog.dismiss();
                     }
                 });
-            }
-        });
-        successDialog.show();
+        sweetAlertDialog.show();
+
     }
 
     public void addDraggableMarker(){

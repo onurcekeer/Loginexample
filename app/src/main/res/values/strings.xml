@@ -88,5 +88,6 @@
     <string name="event_detail_text">Event Detail</string>
     <string name="event_end_time">Event end time:</string>
     <string name="very_close">very close</string>
+    <string name="successful">Successful</string>
 
 </resources>

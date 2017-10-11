@@ -71,5 +71,6 @@
     <string name="event_detail_text">Etkinlik Detayları</string>
     <string name="event_end_time">Etkinlik bitiş zamanı:</string>
     <string name="very_close">çok yakın</string>
+    <string name="successful">Başarılı</string>
 
 </resources>

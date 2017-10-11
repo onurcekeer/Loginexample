@@ -1,34 +1,21 @@
 package com.project.onur.playerx.fragment;
 
-import android.app.Fragment;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.database.Cursor;
-import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentManager;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.Toast;
-
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -39,9 +26,7 @@ import com.project.onur.playerx.R;
 import com.project.onur.playerx.SQLiteUser;
 import com.project.onur.playerx.User;
 
-import java.util.UUID;
-
-import de.hdodenhof.circleimageview.CircleImageView;
+import cn.pedant.SweetAlert.SweetAlertDialog;
 
 /**
  * Created by onur on 17.9.2017 at 14:39.
@@ -58,10 +43,7 @@ public class ChangePasswordFragment extends android.support.v4.app.Fragment{
     Button button_change_pass;
     String currentPassword,new_password,email;
     View view;
-    AlertDialog dialog;
-
-
-
+    SweetAlertDialog dialog;
 
 
     public ChangePasswordFragment() {
@@ -92,40 +74,31 @@ public class ChangePasswordFragment extends android.support.v4.app.Fragment{
 
     private void perform(View v) {
 
-        edit_email = (EditText) v.findViewById(R.id.email);
-        edit_currentPassword = (EditText)v.findViewById(R.id.password);
-        edit_new_password = (EditText)v.findViewById(R.id.new_password);
+        edit_email = v.findViewById(R.id.email);
+        edit_currentPassword = v.findViewById(R.id.password);
+        edit_new_password = v.findViewById(R.id.new_password);
 
-        button_change_pass = (Button)v.findViewById(R.id.change_password_button);
+        button_change_pass = v.findViewById(R.id.change_password_button);
 
         edit_email.setText(user.getEmail());
 
-        final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        builder.setView(R.layout.success_dialog);
-        builder.setCancelable(false);
-        builder.setPositiveButton(android.R.string.ok,null);
-        dialog = builder.create();
 
 
-        dialog.setOnShowListener(new DialogInterface.OnShowListener() {
-            @Override
-            public void onShow(DialogInterface dialogInterface) {
 
-                Button button_positive = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
-                LinearLayout.LayoutParams positiveButtonLL = (LinearLayout.LayoutParams) button_positive.getLayoutParams();
-                positiveButtonLL.gravity = Gravity.CENTER;
-                button_positive.setLayoutParams(positiveButtonLL);
-                button_positive.setTextSize(20);
-                button_positive.setOnClickListener(new View.OnClickListener() {
+
+        dialog = new SweetAlertDialog(getContext(), SweetAlertDialog.SUCCESS_TYPE)
+                .setTitleText(getString(R.string.successful))
+                .setContentText(getString(R.string.information_updated))
+                .setConfirmText(getString(android.R.string.ok))
+                .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
                     @Override
-                    public void onClick(View v) {
-                        dialog.dismiss();
+                    public void onClick(SweetAlertDialog sweetAlertDialog) {
                         FragmentManager fm = getActivity().getSupportFragmentManager();
                         fm.popBackStack();
+                        sweetAlertDialog.dismiss();
                     }
                 });
-            }
-        });
+
 
         button_change_pass.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -177,7 +150,7 @@ public class ChangePasswordFragment extends android.support.v4.app.Fragment{
 
 
 
-        Toolbar toolbar = (Toolbar) v.findViewById(R.id.toolbar);
+        Toolbar toolbar = v.findViewById(R.id.toolbar);
         ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
         ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayShowHomeEnabled(true);
