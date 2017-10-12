@@ -282,8 +282,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         Fragment fragment = new CreateEventFragment();
         FragmentManager fragmentManager = getFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_left,
-                R.anim.slide_out_right, R.anim.slide_in_right);
+        fragmentTransaction.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right,
+                R.anim.slide_in_right, R.anim.slide_out_left);
         fragmentTransaction.replace(R.id.main_container, fragment);
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
@@ -375,8 +375,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         fragment.setArguments(bundle);
         FragmentManager fragmentManager = getFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_left,
-                R.anim.slide_out_right, R.anim.slide_in_right);
+        fragmentTransaction.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right,
+                R.anim.slide_in_right, R.anim.slide_out_left);
         fragmentTransaction.replace(R.id.main_container, fragment);
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
