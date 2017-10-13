@@ -361,9 +361,9 @@ public class CreateEventFragment extends Fragment implements TimePickerDialog.On
                     @Override
                     public void onClick(SweetAlertDialog sweetAlertDialog) {
                         simpleLocation.endUpdates();
+                        sweetAlertDialog.dismiss();
                         FragmentManager fm = getActivity().getSupportFragmentManager();
                         fm.popBackStack();
-                        sweetAlertDialog.dismiss();
                     }
                 });
         sweetAlertDialog.show();

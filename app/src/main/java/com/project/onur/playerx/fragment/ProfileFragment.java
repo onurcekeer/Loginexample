@@ -10,6 +10,9 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,13 +20,29 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
+import com.project.onur.playerx.CustomItemClickListener;
+import com.project.onur.playerx.Event;
+import com.project.onur.playerx.LatLon;
 import com.project.onur.playerx.R;
 import com.project.onur.playerx.SQLiteUser;
+import com.project.onur.playerx.SimpleRecyclerAdapter;
 import com.project.onur.playerx.User;
 
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+
 import de.hdodenhof.circleimageview.CircleImageView;
+import im.delight.android.location.SimpleLocation;
 
 
 public class ProfileFragment extends Fragment{
@@ -31,6 +50,12 @@ public class ProfileFragment extends Fragment{
     FirebaseAuth mAuth;
     User user;
     SQLiteUser sqLiteUser;
+
+    RecyclerView recycler_view;
+    SimpleLocation simpleLocation;
+
+    List<Event> event_list;
+    Date nowTime;
 
 
     public ProfileFragment() {
@@ -45,6 +70,7 @@ public class ProfileFragment extends Fragment{
         Cursor cursor = sqLiteUser.query();
         user = sqLiteUser.getUserFromSQLite(cursor);
         Log.e("user",user.toString());
+        simpleLocation = new SimpleLocation(getContext());
 
     }
     @Override
@@ -88,8 +114,67 @@ public class ProfileFragment extends Fragment{
             }
         });
 
+        event_list = new ArrayList<>();
+
+        recycler_view = v.findViewById(R.id.recycler_view);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        layoutManager.scrollToPosition(0);
+        recycler_view.setLayoutManager(layoutManager);
+
+        nowTime = new Date();
+        Calendar calendar = Calendar.getInstance();
+        nowTime = calendar.getTime();
+        getEventData();
+
     }
 
+    public void getEventData(){
+
+        event_list.clear();
+
+        DatabaseReference myRef = FirebaseDatabase.getInstance().getReference("Events");
+        Query query = myRef.orderByChild("userID").equalTo(user.getUserID());
+        query.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+                    Date eventDate = postSnapshot.child("dateTime").getValue(Date.class);
+                    LatLon eventLocation = postSnapshot.child("location").getValue(LatLon.class);
+                    double distance = SimpleLocation.calculateDistance(simpleLocation.getLatitude(), simpleLocation.getLongitude(),eventLocation.getLatitude(),eventLocation.getLongitude());
+                    int int_distance = (int) distance/1000;
+
+                    if(eventDate.after(nowTime) && int_distance < user.getRange())
+                    {
+                        event_list.add(postSnapshot.getValue(Event.class));
+                        Log.e("EVENT",postSnapshot.toString());
+                    }
+                }
+                setAdapter(event_list);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+    }
+
+    public void setAdapter(final List<Event> list){
+
+        SimpleRecyclerAdapter recycler_adapter = new SimpleRecyclerAdapter(list, new CustomItemClickListener() {
+            @Override
+            public void onItemClick(View v, int position) {
+                Event event = list.get(position);
+                startEventDetailFragment(event);
+            }
+        });
+        recycler_view.setHasFixedSize(true);
+        recycler_view.setAdapter(recycler_adapter);
+        recycler_view.setItemAnimator(new DefaultItemAnimator());
+
+    }
 
 
     private void startSettingsFragment(){
@@ -103,5 +188,21 @@ public class ProfileFragment extends Fragment{
         fragmentTransaction.commit();
     }
 
+    public void startEventDetailFragment(Event event){
+
+        Fragment fragment = new EventDetailFragment();
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("EVENT", event);
+        fragment.setArguments(bundle);
+        FragmentManager fragmentManager = getFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right,
+                R.anim.slide_in_right, R.anim.slide_out_left);
+        fragmentTransaction.replace(R.id.main_container, fragment);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
+
+
+    }
 
 }

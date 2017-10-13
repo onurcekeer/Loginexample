@@ -24,9 +24,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -41,9 +38,6 @@ import com.project.onur.playerx.R;
 import com.project.onur.playerx.SQLiteUser;
 import com.project.onur.playerx.SimpleRecyclerAdapter;
 import com.project.onur.playerx.User;
-
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -56,8 +50,6 @@ import static android.app.Activity.RESULT_OK;
 
 
 public class HomeFragment extends Fragment implements View.OnClickListener{
-
-
 
     LinearLayout scroolView_layout;
     LinearLayout selectedItem_layout;
@@ -176,7 +168,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         nowTime = new Date();
         Calendar calendar = Calendar.getInstance();
         nowTime = calendar.getTime();
-
+        getEventData();
 
     }
 
@@ -227,7 +219,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
-
 
 
     @Override
@@ -337,7 +328,36 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         recycler_view.setItemAnimator(new DefaultItemAnimator());
 
     }
+/*
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case MY_PERMISSIONS_REQUEST_LOCATION: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // permission was granted, yay! Do the
+                    // location-related task you need to do.
+                    if (ContextCompat.checkSelfPermission(getContext(),
+                            Manifest.permission.ACCESS_FINE_LOCATION)
+                            == PackageManager.PERMISSION_GRANTED) {
 
+                        simpleLocation = new SimpleLocation(getContext());
+                    }
+
+                } else {
+
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+
+                }
+                return;
+            }
+
+        }
+    }
+*/
     public void searchOnFirebase(String text){
 
         event_list.clear();
@@ -386,6 +406,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
 
     }
 
+
     public void checkLocationPermission(){
 
         if (!simpleLocation.hasLocationEnabled()) {
@@ -399,9 +420,11 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
                         public void onClick(SweetAlertDialog sweetAlertDialog) {
                             SimpleLocation.openSettings(getContext());
                             sweetAlertDialog.dismiss();
-                            onPause();
                         }
                     }).show();
+        }
+        else {
+            simpleLocation = new SimpleLocation(getContext());
         }
 
     }
