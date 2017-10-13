@@ -72,5 +72,7 @@
     <string name="event_end_time">Etkinlik bitiş zamanı:</string>
     <string name="very_close">çok yakın</string>
     <string name="successful">Başarılı</string>
+    <string name="allow_location_title">Location access</string>
+    <string name="allow_location">PlayerX\'in bu cihazın konumuna erişmesine izin ver</string>
 
 </resources>

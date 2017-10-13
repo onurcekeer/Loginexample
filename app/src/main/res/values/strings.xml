@@ -89,5 +89,7 @@
     <string name="event_end_time">Event end time:</string>
     <string name="very_close">very close</string>
     <string name="successful">Successful</string>
+    <string name="allow_location_title">Konum erişimi</string>
+    <string name="allow_location">Allow PlayerX to access this device\'s location</string>
 
 </resources>

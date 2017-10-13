@@ -49,6 +49,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import cn.pedant.SweetAlert.SweetAlertDialog;
 import im.delight.android.location.SimpleLocation;
 
 import static android.app.Activity.RESULT_OK;
@@ -92,6 +93,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
                              Bundle savedInstanceState) {
 
         simpleLocation = new SimpleLocation(getContext());
+        checkLocationPermission();
 
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         perform(view);
@@ -174,7 +176,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         nowTime = new Date();
         Calendar calendar = Calendar.getInstance();
         nowTime = calendar.getTime();
-        getEventData();
+
 
     }
 
@@ -381,6 +383,26 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
 
+
+    }
+
+    public void checkLocationPermission(){
+
+        if (!simpleLocation.hasLocationEnabled()) {
+            new SweetAlertDialog(getContext(), SweetAlertDialog.NORMAL_TYPE)
+                    .setTitleText(getString(R.string.allow_location_title))
+                    .setContentText(getString(R.string.allow_location))
+                    .setConfirmText(getString(android.R.string.ok))
+                    .setCancelText(getString(android.R.string.cancel))
+                    .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                        @Override
+                        public void onClick(SweetAlertDialog sweetAlertDialog) {
+                            SimpleLocation.openSettings(getContext());
+                            sweetAlertDialog.dismiss();
+                            onPause();
+                        }
+                    }).show();
+        }
 
     }
 
