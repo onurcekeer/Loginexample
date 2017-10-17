@@ -28,7 +28,6 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.project.onur.playerx.CustomItemClickListener;
 import com.project.onur.playerx.Event;
-import com.project.onur.playerx.LatLon;
 import com.project.onur.playerx.R;
 import com.project.onur.playerx.SQLiteUser;
 import com.project.onur.playerx.SimpleRecyclerAdapter;
@@ -164,7 +163,7 @@ public class ProfileFragment extends Fragment{
             @Override
             public void onItemClick(View v, int position) {
                 Event event = list.get(position);
-                startEventDetailFragment(event);
+                startMyFragment(event);
             }
         });
         recycler_view.setHasFixedSize(true);
@@ -185,9 +184,10 @@ public class ProfileFragment extends Fragment{
         fragmentTransaction.commit();
     }
 
-    public void startEventDetailFragment(Event event){
 
-        Fragment fragment = new EventDetailFragment();
+    public void startMyFragment(Event event){
+
+        Fragment fragment = new MyEventFragment();
         Bundle bundle = new Bundle();
         bundle.putSerializable("EVENT", event);
         fragment.setArguments(bundle);
@@ -201,5 +201,6 @@ public class ProfileFragment extends Fragment{
 
 
     }
+
 
 }

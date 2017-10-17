@@ -216,12 +216,10 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
     public void onActivityResult(int requestCode, int resultCode, Intent data){
         if(requestCode == REQUEST_CODE && resultCode == 0){
             restartFragment();
-            //String provider = Settings.Secure.getString(getContext().getContentResolver(), Settings.Secure.LOCATION_PROVIDERS_ALLOWED);
-            if(simpleLocation.hasLocationEnabled()){
-                Log.v("GPS", " Location providers: ");
-
+            String provider = Settings.Secure.getString(getContext().getContentResolver(), Settings.Secure.LOCATION_PROVIDERS_ALLOWED);
+            if(provider!=null){
+                Log.v("GPS", " Location providers: "+provider);
                 getEventData();
-
 
             }else{
                 Toast.makeText(getContext(),"Konum aktif değil",Toast.LENGTH_LONG).show();

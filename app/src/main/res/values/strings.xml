@@ -91,5 +91,9 @@
     <string name="successful">Successful</string>
     <string name="allow_location_title">Konum erişimi</string>
     <string name="allow_location">Allow PlayerX to access this device\'s location</string>
+    <string name="edit_event">Edit Event</string>
+    <string name="update_event">Update Event</string>
+    <string name="event_updated">Your event has been successfully updated</string>
+    <string name="delete_event">Delete Event</string>
 
 </resources>

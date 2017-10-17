@@ -87,11 +87,11 @@ public class SimpleRecyclerAdapter extends RecyclerView.Adapter<SimpleRecyclerAd
         double distance = SimpleLocation.calculateDistance(simpleLocation.getLatitude(), simpleLocation.getLongitude(),list_event.get(position).getLocation().getLatitude(),list_event.get(position).getLocation().getLongitude());
         int int_distance = (int) distance/1000;
         if(int_distance==0){
-            holder.text_distance.setText(R.string.very_close);
+            int_distance = 1;
         }
-        else{
-            holder.text_distance.setText(String.valueOf(int_distance)+" km");
-        }
+
+        holder.text_distance.setText(String.valueOf(int_distance)+" km");
+
 
 
         Picasso.with(holder.itemView.getContext())
