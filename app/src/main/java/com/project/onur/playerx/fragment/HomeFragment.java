@@ -1,13 +1,17 @@
 package com.project.onur.playerx.fragment;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.speech.RecognizerIntent;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -24,12 +28,16 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.iid.FirebaseInstanceIdReceiver;
 import com.miguelcatalan.materialsearchview.MaterialSearchView;
 import com.project.onur.playerx.CustomItemClickListener;
 import com.project.onur.playerx.Event;
@@ -63,6 +71,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
     Date nowTime;
     User user;
     SQLiteUser sqLiteUser;
+    private final int REQUEST_CODE = 1;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -85,7 +94,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
                              Bundle savedInstanceState) {
 
         simpleLocation = new SimpleLocation(getContext());
-        checkLocationPermission();
 
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         perform(view);
@@ -168,7 +176,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         nowTime = new Date();
         Calendar calendar = Calendar.getInstance();
         nowTime = calendar.getTime();
-        getEventData();
+        checkLocationPermission();
 
     }
 
@@ -203,21 +211,22 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
 
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == MaterialSearchView.REQUEST_VOICE && resultCode == RESULT_OK) {
-            ArrayList<String> matches = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
-            if (matches != null && matches.size() > 0) {
-                String searchWrd = matches.get(0);
-                if (!TextUtils.isEmpty(searchWrd)) {
-                    searchView.setQuery(searchWrd, false);
 
-                }
+
+    public void onActivityResult(int requestCode, int resultCode, Intent data){
+        if(requestCode == REQUEST_CODE && resultCode == 0){
+            restartFragment();
+            //String provider = Settings.Secure.getString(getContext().getContentResolver(), Settings.Secure.LOCATION_PROVIDERS_ALLOWED);
+            if(simpleLocation.hasLocationEnabled()){
+                Log.v("GPS", " Location providers: ");
+
+                getEventData();
+
+
+            }else{
+                Toast.makeText(getContext(),"Konum aktif değil",Toast.LENGTH_LONG).show();
             }
-
-            return;
         }
-        super.onActivityResult(requestCode, resultCode, data);
     }
 
 
@@ -328,36 +337,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         recycler_view.setItemAnimator(new DefaultItemAnimator());
 
     }
-/*
-    @Override
-    public void onRequestPermissionsResult(int requestCode,
-                                           String permissions[], int[] grantResults) {
-        switch (requestCode) {
-            case MY_PERMISSIONS_REQUEST_LOCATION: {
-                // If request is cancelled, the result arrays are empty.
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    // permission was granted, yay! Do the
-                    // location-related task you need to do.
-                    if (ContextCompat.checkSelfPermission(getContext(),
-                            Manifest.permission.ACCESS_FINE_LOCATION)
-                            == PackageManager.PERMISSION_GRANTED) {
 
-                        simpleLocation = new SimpleLocation(getContext());
-                    }
-
-                } else {
-
-                    // permission denied, boo! Disable the
-                    // functionality that depends on this permission.
-
-                }
-                return;
-            }
-
-        }
-    }
-*/
     public void searchOnFirebase(String text){
 
         event_list.clear();
@@ -418,15 +398,22 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
                     .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
                         @Override
                         public void onClick(SweetAlertDialog sweetAlertDialog) {
-                            SimpleLocation.openSettings(getContext());
+                            Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                            startActivityForResult(intent, REQUEST_CODE);
                             sweetAlertDialog.dismiss();
                         }
                     }).show();
         }
         else {
-            simpleLocation = new SimpleLocation(getContext());
+            getEventData();
         }
+    }
 
+    public void restartFragment(){
+        getFragmentManager().beginTransaction()
+                .detach(this)
+                .attach(this)
+                .commit();
     }
 
 }

@@ -140,11 +140,8 @@ public class ProfileFragment extends Fragment{
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
                     Date eventDate = postSnapshot.child("dateTime").getValue(Date.class);
-                    LatLon eventLocation = postSnapshot.child("location").getValue(LatLon.class);
-                    double distance = SimpleLocation.calculateDistance(simpleLocation.getLatitude(), simpleLocation.getLongitude(),eventLocation.getLatitude(),eventLocation.getLongitude());
-                    int int_distance = (int) distance/1000;
 
-                    if(eventDate.after(nowTime) && int_distance < user.getRange())
+                    if(eventDate.after(nowTime))
                     {
                         event_list.add(postSnapshot.getValue(Event.class));
                         Log.e("EVENT",postSnapshot.toString());
