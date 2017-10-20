@@ -163,7 +163,7 @@ public class ProfileFragment extends Fragment{
             @Override
             public void onItemClick(View v, int position) {
                 Event event = list.get(position);
-                startMyFragment(event);
+                startMyEventFragment(event);
             }
         });
         recycler_view.setHasFixedSize(true);
@@ -185,7 +185,7 @@ public class ProfileFragment extends Fragment{
     }
 
 
-    public void startMyFragment(Event event){
+    public void startMyEventFragment(Event event){
 
         Fragment fragment = new MyEventFragment();
         Bundle bundle = new Bundle();

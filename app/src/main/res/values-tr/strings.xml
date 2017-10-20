@@ -78,5 +78,7 @@
     <string name="update_event">Etkinliği Güncelle</string>
     <string name="event_updated">Etkinliğiniz başarıyla güncellendi</string>
     <string name="delete_event">Etkinliği Sil</string>
+    <string name="delete_event_question">Bu etkinliği silmek istiyor musunuz?</string>
+    <string name="event_deleted">Etkinlik silindi</string>
 
 </resources>

@@ -326,8 +326,7 @@ public class SettingsFragment extends Fragment {
                 mDatabase.child("User").child(user.getUserID()).setValue(user);
                 SQLiteUser sqliteUser = new SQLiteUser(getContext());
                 sqliteUser.addUserToSQLite(user);
-                FragmentManager fm = getActivity().getSupportFragmentManager();
-                fm.popBackStack();
+                startProfileFragment();
 
                 Toast.makeText(getContext(),getString(R.string.changes_saved),Toast.LENGTH_SHORT).show();
 
@@ -356,6 +355,18 @@ public class SettingsFragment extends Fragment {
 
     private void startChangePasswordFragment(){
         Fragment fragment = new ChangePasswordFragment();
+        FragmentManager fragmentManager = getFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right,
+                R.anim.slide_in_right, R.anim.slide_out_left);
+        fragmentTransaction.replace(R.id.main_container, fragment);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
+    }
+
+    public void startProfileFragment(){
+
+        Fragment fragment = new ProfileFragment();
         FragmentManager fragmentManager = getFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right,

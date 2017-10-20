@@ -16,6 +16,7 @@ import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -43,8 +44,12 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.project.onur.playerx.CharacterCountErrorWatcher;
 import com.project.onur.playerx.Event;
 import com.project.onur.playerx.ItemData;
@@ -241,7 +246,44 @@ public class MyEventFragment extends Fragment implements TimePickerDialog.OnTime
         create_event_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                attemptCreate();
+                attemptUpdate();
+            }
+        });
+
+        Button delete_event_button = v.findViewById(R.id.delete_event);
+        delete_event_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View view) {
+
+                SweetAlertDialog sweetAlertDialog = new SweetAlertDialog(getContext(), SweetAlertDialog.WARNING_TYPE)
+                        .setTitleText(getString(R.string.delete_event))
+                        .setContentText(getString(R.string.delete_event_question))
+                        .setCancelText(getString(android.R.string.cancel))
+                        .setConfirmText(getString(android.R.string.yes))
+                        .setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                            @Override
+                            public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                sweetAlertDialog.cancel();
+                            }
+                        })
+                        .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                            @Override
+                            public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                if(isOnline()){
+                                    deleteEvent(event);
+                                    sweetAlertDialog.dismiss();
+                                    Toast.makeText(getContext(),getString(R.string.event_deleted),Toast.LENGTH_SHORT).show();
+                                    FragmentManager fm = getActivity().getSupportFragmentManager();
+                                    fm.popBackStack();
+                                }
+                                else {
+                                    Snackbar snackbar = Snackbar.make(view, getString(R.string.check_internet_conn), Snackbar.LENGTH_LONG);
+                                    snackbar.show();
+                                }
+
+                            }
+                        });
+                sweetAlertDialog.show();
             }
         });
 
@@ -287,7 +329,7 @@ public class MyEventFragment extends Fragment implements TimePickerDialog.OnTime
 
     public void showTime() {
 
-        Calendar now = Calendar.getInstance();
+        //Calendar now = Calendar.getInstance();
         TimePickerDialog dpd = TimePickerDialog.newInstance(
                 MyEventFragment.this,
                 event.getDateTime().getHours(),
@@ -383,8 +425,7 @@ public class MyEventFragment extends Fragment implements TimePickerDialog.OnTime
                     public void onClick(SweetAlertDialog sweetAlertDialog) {
                         simpleLocation.endUpdates();
                         sweetAlertDialog.dismiss();
-                        FragmentManager fm = getActivity().getSupportFragmentManager();
-                        fm.popBackStack();
+                        startProfileFragment();
                     }
                 });
         sweetAlertDialog.show();
@@ -416,7 +457,7 @@ public class MyEventFragment extends Fragment implements TimePickerDialog.OnTime
         }
     }
 
-    public void attemptCreate(){
+    public void attemptUpdate(){
 
         boolean cancel = false;
         View focusView = null;
@@ -497,6 +538,38 @@ public class MyEventFragment extends Fragment implements TimePickerDialog.OnTime
         DatabaseReference reference = database.getReference("Events");
         reference.child(event.getEventID()).setValue(event);
         showSuccessDialog();
+    }
+
+    public void deleteEvent(Event event){
+
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("Events");
+        Query query = ref.orderByChild("eventID").equalTo(event.getEventID());
+
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot snapshot: dataSnapshot.getChildren()) {
+                    snapshot.getRef().removeValue();
+                }
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.e("ERROR DELETE EVENT", "onCancelled", databaseError.toException());
+            }
+        });
+
+    }
+
+    public void startProfileFragment(){
+
+        Fragment fragment = new ProfileFragment();
+        FragmentManager fragmentManager = getFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right,
+                R.anim.slide_in_right, R.anim.slide_out_left);
+        fragmentTransaction.replace(R.id.main_container, fragment);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
     }
 
     public boolean isOnline() {
