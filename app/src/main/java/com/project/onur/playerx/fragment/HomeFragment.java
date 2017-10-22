@@ -327,7 +327,14 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
             @Override
             public void onItemClick(View v, int position) {
                 Event event = list.get(position);
-                startEventDetailFragment(event);
+
+                if(event.getUserID().equals(user.getUserID())){
+                    startMyEventFragment(event);
+                }
+                else{
+                    startEventDetailFragment(event);
+                }
+
             }
         });
         recycler_view.setHasFixedSize(true);
@@ -384,6 +391,22 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
 
     }
 
+    public void startMyEventFragment(Event event){
+
+        Fragment fragment = new MyEventFragment();
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("EVENT", event);
+        fragment.setArguments(bundle);
+        FragmentManager fragmentManager = getFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right,
+                R.anim.slide_in_right, R.anim.slide_out_left);
+        fragmentTransaction.replace(R.id.main_container, fragment);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
+
+
+    }
 
     public void checkLocationPermission(){
 
