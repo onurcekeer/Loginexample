@@ -36,11 +36,16 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.UserInfo;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.project.onur.playerx.Event;
 import com.project.onur.playerx.R;
 import com.project.onur.playerx.SQLiteUser;
 import com.project.onur.playerx.User;
@@ -50,6 +55,7 @@ import com.squareup.picasso.Picasso;
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.util.Date;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -322,6 +328,25 @@ public class SettingsFragment extends Fragment {
                 user.setRange(new_range);
                 user.setUsername(new_fullname);
 
+                final DatabaseReference myRef = FirebaseDatabase.getInstance().getReference("Events");
+                Query query = myRef.orderByChild("userID").equalTo(user.getUserID());
+                query.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+
+                            Event event = postSnapshot.getValue(Event.class);
+
+                            myRef.child(event.getEventID()).child("username").setValue(user.getUsername());
+                            myRef.child(event.getEventID()).child("profileURL").setValue(user.getProfilURL());
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
 
                 mDatabase.child("User").child(user.getUserID()).setValue(user);
                 SQLiteUser sqliteUser = new SQLiteUser(getContext());
