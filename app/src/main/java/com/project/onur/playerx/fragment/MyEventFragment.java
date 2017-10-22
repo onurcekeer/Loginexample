@@ -372,14 +372,6 @@ public class MyEventFragment extends Fragment implements TimePickerDialog.OnTime
                 add_marker.setImageResource(R.drawable.ic_done);
                 CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(myLocation,15);
                 mMap.animateCamera(cameraUpdate);
-            }
-        });
-
-        add_marker = dialog.findViewById(R.id.add_marker);
-        add_marker.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                addDraggableMarker();
                 mMap.setOnMarkerDragListener(new GoogleMap.OnMarkerDragListener() {
                     @Override
                     public void onMarkerDragStart(Marker marker) {
@@ -396,6 +388,15 @@ public class MyEventFragment extends Fragment implements TimePickerDialog.OnTime
                 });
             }
         });
+
+        add_marker = dialog.findViewById(R.id.add_marker);
+        add_marker.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                addDraggableMarker();
+            }
+        });
+
 
         FloatingActionButton dissmis = dialog.findViewById(R.id.dialog_dissmis);
         dissmis.setOnClickListener(new View.OnClickListener() {
