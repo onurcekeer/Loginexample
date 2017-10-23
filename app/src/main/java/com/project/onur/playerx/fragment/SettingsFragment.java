@@ -324,7 +324,7 @@ public class SettingsFragment extends Fragment {
 
         if(isOnline()){
 
-            if(user.getUsername().equals(new_fullname) || (user.getRange()!=new_range) || user.getProfilURL().equals(new_Url)){
+            if(!user.getUsername().equals(new_fullname) || (user.getRange()!=new_range) || user.getProfilURL().equals(new_Url)){
                 user.setRange(new_range);
                 user.setUsername(new_fullname);
 

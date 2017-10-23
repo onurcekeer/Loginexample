@@ -1,23 +1,18 @@
 package com.project.onur.playerx.fragment;
 
-import android.Manifest;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.provider.Settings;
-import android.speech.RecognizerIntent;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -30,14 +25,12 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.iid.FirebaseInstanceIdReceiver;
 import com.miguelcatalan.materialsearchview.MaterialSearchView;
 import com.project.onur.playerx.CustomItemClickListener;
 import com.project.onur.playerx.Event;
@@ -54,8 +47,6 @@ import java.util.List;
 import cn.pedant.SweetAlert.SweetAlertDialog;
 import im.delight.android.location.SimpleLocation;
 
-import static android.app.Activity.RESULT_OK;
-
 
 public class HomeFragment extends Fragment implements View.OnClickListener{
 
@@ -66,6 +57,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
     MaterialSearchView searchView;
     RecyclerView recycler_view;
     SimpleLocation simpleLocation;
+    ValueEventListener valueEventListener, valueEventListenerCategory;
+    DatabaseReference myRef;
 
     List<Event> event_list;
     Date nowTime;
@@ -116,6 +109,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
             }
         });
 
+
+        myRef = FirebaseDatabase.getInstance().getReference("Events");
 
         FloatingActionButton fab = v.findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -176,16 +171,11 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         nowTime = new Date();
         Calendar calendar = Calendar.getInstance();
         nowTime = calendar.getTime();
-        checkLocationPermission();
 
-    }
 
-    public void getEventData(){
 
-        event_list.clear();
 
-        DatabaseReference myRef = FirebaseDatabase.getInstance().getReference("Events");
-        myRef.addValueEventListener(new ValueEventListener() {
+        valueEventListenerCategory = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
@@ -207,7 +197,42 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
             public void onCancelled(DatabaseError databaseError) {
 
             }
-        });
+        };
+
+
+
+        valueEventListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+                    Date eventDate = postSnapshot.child("dateTime").getValue(Date.class);
+                    LatLon eventLocation = postSnapshot.child("location").getValue(LatLon.class);
+                    double distance = SimpleLocation.calculateDistance(simpleLocation.getLatitude(), simpleLocation.getLongitude(),eventLocation.getLatitude(),eventLocation.getLongitude());
+                    int int_distance = (int) distance/1000;
+
+                    if(eventDate.after(nowTime) && int_distance < user.getRange())
+                    {
+                        event_list.add(postSnapshot.getValue(Event.class));
+                        Log.e("EVENT",postSnapshot.toString());
+                    }
+                }
+                setAdapter(event_list);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        };
+
+        checkLocationPermission();
+    }
+
+    public void getEventData(){
+
+        event_list.clear();
+
+        myRef.addValueEventListener(valueEventListener);
 
     }
 
@@ -293,31 +318,10 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
 
         event_list.clear();
 
-        DatabaseReference myRef = FirebaseDatabase.getInstance().getReference("Events");
         Query query = myRef.orderByChild("category").equalTo(category);
-        query.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
-                    Date eventDate = postSnapshot.child("dateTime").getValue(Date.class);
-                    LatLon eventLocation = postSnapshot.child("location").getValue(LatLon.class);
-                    double distance = SimpleLocation.calculateDistance(simpleLocation.getLatitude(), simpleLocation.getLongitude(),eventLocation.getLatitude(),eventLocation.getLongitude());
-                    int int_distance = (int) distance/1000;
+        query.addValueEventListener(valueEventListenerCategory);
 
-                    if(eventDate.after(nowTime) && int_distance < user.getRange())
-                    {
-                        event_list.add(postSnapshot.getValue(Event.class));
-                        Log.e("EVENT",postSnapshot.toString());
-                    }
-                }
-                setAdapter(event_list);
-            }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
 
     }
 
@@ -340,6 +344,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         recycler_view.setHasFixedSize(true);
         recycler_view.setAdapter(recycler_adapter);
         recycler_view.setItemAnimator(new DefaultItemAnimator());
+        myRef.removeEventListener(valueEventListener);
+        myRef.removeEventListener(valueEventListenerCategory);
 
     }
 
