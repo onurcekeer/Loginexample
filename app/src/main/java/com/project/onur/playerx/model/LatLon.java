@@ -1,4 +1,4 @@
-package com.project.onur.playerx;
+package com.project.onur.playerx.model;
 
 import java.io.Serializable;
 

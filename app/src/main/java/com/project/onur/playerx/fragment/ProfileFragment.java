@@ -27,11 +27,11 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.project.onur.playerx.CustomItemClickListener;
-import com.project.onur.playerx.Event;
+import com.project.onur.playerx.model.Event;
 import com.project.onur.playerx.R;
 import com.project.onur.playerx.SQLiteUser;
 import com.project.onur.playerx.SimpleRecyclerAdapter;
-import com.project.onur.playerx.User;
+import com.project.onur.playerx.model.User;
 
 import com.squareup.picasso.Picasso;
 

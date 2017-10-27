@@ -26,7 +26,7 @@ import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.project.onur.playerx.Event;
+import com.project.onur.playerx.model.Event;
 import com.project.onur.playerx.R;
 import com.squareup.picasso.Picasso;
 

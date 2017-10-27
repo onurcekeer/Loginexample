@@ -1,6 +1,4 @@
-package com.project.onur.playerx;
-
-import com.google.android.gms.maps.model.LatLng;
+package com.project.onur.playerx.model;
 
 import java.io.Serializable;
 import java.util.Date;

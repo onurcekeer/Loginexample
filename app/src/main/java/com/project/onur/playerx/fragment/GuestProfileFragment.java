@@ -19,7 +19,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -27,12 +26,12 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.project.onur.playerx.CustomItemClickListener;
-import com.project.onur.playerx.Event;
-import com.project.onur.playerx.LatLon;
+import com.project.onur.playerx.model.Event;
+import com.project.onur.playerx.model.LatLon;
 import com.project.onur.playerx.R;
 import com.project.onur.playerx.SQLiteUser;
 import com.project.onur.playerx.SimpleRecyclerAdapter;
-import com.project.onur.playerx.User;
+import com.project.onur.playerx.model.User;
 
 import com.squareup.picasso.Picasso;
 

@@ -24,7 +24,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.project.onur.playerx.R;
 import com.project.onur.playerx.SQLiteUser;
-import com.project.onur.playerx.User;
+import com.project.onur.playerx.model.User;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 

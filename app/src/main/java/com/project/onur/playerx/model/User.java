@@ -1,4 +1,4 @@
-package com.project.onur.playerx;
+package com.project.onur.playerx.model;
 
 import android.location.Location;
 import android.net.Uri;

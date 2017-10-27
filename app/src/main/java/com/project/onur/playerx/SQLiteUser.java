@@ -7,6 +7,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import com.project.onur.playerx.model.User;
+
 
 /**
  * Created by onur on 5.8.2017 at 20:23.

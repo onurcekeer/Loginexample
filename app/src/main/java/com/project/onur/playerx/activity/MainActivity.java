@@ -15,7 +15,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.project.onur.playerx.SQLiteUser;
-import com.project.onur.playerx.User;
+import com.project.onur.playerx.model.User;
 import com.project.onur.playerx.fragment.HomeFragment;
 import com.project.onur.playerx.R;
 import com.project.onur.playerx.fragment.ProfileFragment;

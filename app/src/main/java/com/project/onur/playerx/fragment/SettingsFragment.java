@@ -45,17 +45,16 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
-import com.project.onur.playerx.Event;
+import com.project.onur.playerx.model.Event;
 import com.project.onur.playerx.R;
 import com.project.onur.playerx.SQLiteUser;
-import com.project.onur.playerx.User;
+import com.project.onur.playerx.model.User;
 import com.project.onur.playerx.activity.LoginActivity;
 import com.squareup.picasso.Picasso;
 
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
-import java.util.Date;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
