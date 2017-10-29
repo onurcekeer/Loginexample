@@ -13,6 +13,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,8 +27,15 @@ import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.project.onur.playerx.model.Event;
 import com.project.onur.playerx.R;
+import com.project.onur.playerx.model.User;
 import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
@@ -45,7 +53,7 @@ public class EventDetailFragment extends Fragment {
     Event event;
     GoogleMap map;
     SimpleLocation simpleLocation;
-
+    DatabaseReference reference;
 
     MapView mapView;
     View view;
@@ -53,7 +61,6 @@ public class EventDetailFragment extends Fragment {
     public TextView text_description;
     public TextView text_category;
     public TextView text_username;
-    public TextView text_distance;
     public ImageView categoryImage;
     public TextView text_dateTime;
     public CircleImageView image_profile;
@@ -66,16 +73,22 @@ public class EventDetailFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
+
         Bundle bundle = this.getArguments();
         if (bundle != null) {
             event = (Event) bundle.getSerializable("EVENT");
         }
+
+
+
+
 
         simpleLocation = new SimpleLocation(getContext());
         view = inflater.inflate(R.layout.fragment_event_detail, container, false);
@@ -153,7 +166,7 @@ public class EventDetailFragment extends Fragment {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //startChatFragment
+                startChatFragment(event);
             }
         });
 
@@ -198,6 +211,8 @@ public class EventDetailFragment extends Fragment {
 
     }
 
+
+
     public boolean isOnline() {
         ConnectivityManager cm = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo netInfo = cm.getActiveNetworkInfo();
@@ -218,4 +233,19 @@ public class EventDetailFragment extends Fragment {
         fragmentTransaction.commit();
     }
 
+    private void startChatFragment(Event event){
+
+        Fragment fragment = new ChatFragment();
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("EVENT", event);
+        fragment.setArguments(bundle);
+        FragmentManager fragmentManager = getFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right,
+                R.anim.slide_in_right, R.anim.slide_out_left);
+        fragmentTransaction.replace(R.id.main_container, fragment);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
+
+    }
 }

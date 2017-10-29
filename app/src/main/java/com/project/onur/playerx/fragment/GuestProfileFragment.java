@@ -19,6 +19,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -46,7 +47,7 @@ import im.delight.android.location.SimpleLocation;
 
 public class GuestProfileFragment extends Fragment{
 
-    User user;
+    User user,other_user;
     Event event;
     SQLiteUser sqLiteUser;
     RecyclerView recycler_view;
@@ -80,6 +81,7 @@ public class GuestProfileFragment extends Fragment{
         if (bundle != null) {
             event = (Event) bundle.getSerializable("EVENT");
         }
+
 
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_guest_profile, container, false);
@@ -121,7 +123,7 @@ public class GuestProfileFragment extends Fragment{
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startChatFragment();
+                startChatFragment(event);
             }
         });
 
@@ -206,17 +208,20 @@ public class GuestProfileFragment extends Fragment{
 
     }
 
-    private void startChatFragment(){
-        /*
-        Fragment fragment = new SettingsFragment();
+    private void startChatFragment(Event event){
+
+        Fragment fragment = new ChatFragment();
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("EVENT", event);
+        fragment.setArguments(bundle);
         FragmentManager fragmentManager = getFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_left,
-                R.anim.slide_out_right, R.anim.slide_in_right);
+        fragmentTransaction.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right,
+                R.anim.slide_in_right, R.anim.slide_out_left);
         fragmentTransaction.replace(R.id.main_container, fragment);
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
-        */
+
     }
 
 

@@ -86,7 +86,6 @@ public class CreateEventFragment extends Fragment implements TimePickerDialog.On
     TextView dateTextView, timeTextView, location_text;
     FloatingActionButton add_marker;
     Dialog dialog;
-    AlertDialog successDialog;
     TextInputLayout til_title,til_description;
     View view;
     Spinner spinner_category;
