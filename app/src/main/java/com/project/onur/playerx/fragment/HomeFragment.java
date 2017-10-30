@@ -37,7 +37,7 @@ import com.project.onur.playerx.model.Event;
 import com.project.onur.playerx.model.LatLon;
 import com.project.onur.playerx.R;
 import com.project.onur.playerx.SQLiteUser;
-import com.project.onur.playerx.SimpleRecyclerAdapter;
+import com.project.onur.playerx.adapter.SimpleRecyclerAdapter;
 import com.project.onur.playerx.model.User;
 import java.util.ArrayList;
 import java.util.Calendar;

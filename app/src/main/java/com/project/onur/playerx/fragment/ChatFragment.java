@@ -40,7 +40,7 @@ public class ChatFragment extends android.support.v4.app.Fragment{
 
     FirebaseUser mUser;
     DatabaseReference mDatabase;
-    User user;
+    User user, otherUser;
     SQLiteUser sqLiteUser;
     Event event;
 
@@ -66,14 +66,21 @@ public class ChatFragment extends android.support.v4.app.Fragment{
 
 
 
+
     }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
+/*
         Bundle bundle = this.getArguments();
         if (bundle != null) {
             event = (Event) bundle.getSerializable("EVENT");
+        }
+
+*/
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            otherUser = (User) bundle.getSerializable("USER");
         }
 
 
@@ -92,7 +99,7 @@ public class ChatFragment extends android.support.v4.app.Fragment{
         ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
         ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayShowHomeEnabled(true);
-        toolbar.setTitle(event.getUsername());
+        toolbar.setTitle(otherUser.getUsername());
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

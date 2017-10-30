@@ -19,7 +19,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -31,7 +30,7 @@ import com.project.onur.playerx.model.Event;
 import com.project.onur.playerx.model.LatLon;
 import com.project.onur.playerx.R;
 import com.project.onur.playerx.SQLiteUser;
-import com.project.onur.playerx.SimpleRecyclerAdapter;
+import com.project.onur.playerx.adapter.SimpleRecyclerAdapter;
 import com.project.onur.playerx.model.User;
 
 import com.squareup.picasso.Picasso;
@@ -47,7 +46,7 @@ import im.delight.android.location.SimpleLocation;
 
 public class GuestProfileFragment extends Fragment{
 
-    User user,other_user;
+    User user,otherUser;
     Event event;
     SQLiteUser sqLiteUser;
     RecyclerView recycler_view;
@@ -81,6 +80,26 @@ public class GuestProfileFragment extends Fragment{
         if (bundle != null) {
             event = (Event) bundle.getSerializable("EVENT");
         }
+
+
+        otherUser = new User();
+
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("User");
+        Query query = reference.orderByChild("userID").equalTo(event.getUserID());
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    otherUser = dataSnapshot.child(event.getUserID()).getValue(User.class);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
 
 
         // Inflate the layout for this fragment
@@ -123,7 +142,7 @@ public class GuestProfileFragment extends Fragment{
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startChatFragment(event);
+                startChatFragment(otherUser);
             }
         });
 
@@ -208,11 +227,11 @@ public class GuestProfileFragment extends Fragment{
 
     }
 
-    private void startChatFragment(Event event){
+    private void startChatFragment(User user){
 
         Fragment fragment = new ChatFragment();
         Bundle bundle = new Bundle();
-        bundle.putSerializable("EVENT", event);
+        bundle.putSerializable("USER", user);
         fragment.setArguments(bundle);
         FragmentManager fragmentManager = getFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();

@@ -30,7 +30,7 @@ import com.project.onur.playerx.CustomItemClickListener;
 import com.project.onur.playerx.model.Event;
 import com.project.onur.playerx.R;
 import com.project.onur.playerx.SQLiteUser;
-import com.project.onur.playerx.SimpleRecyclerAdapter;
+import com.project.onur.playerx.adapter.SimpleRecyclerAdapter;
 import com.project.onur.playerx.model.User;
 
 import com.squareup.picasso.Picasso;

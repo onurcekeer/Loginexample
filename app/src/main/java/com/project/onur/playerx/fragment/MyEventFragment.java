@@ -52,7 +52,7 @@ import com.project.onur.playerx.ItemData;
 import com.project.onur.playerx.model.LatLon;
 import com.project.onur.playerx.R;
 import com.project.onur.playerx.SQLiteUser;
-import com.project.onur.playerx.SpinnerAdapter;
+import com.project.onur.playerx.adapter.SpinnerAdapter;
 import com.project.onur.playerx.model.User;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;

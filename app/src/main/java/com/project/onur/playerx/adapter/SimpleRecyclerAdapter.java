@@ -1,4 +1,4 @@
-package com.project.onur.playerx;
+package com.project.onur.playerx.adapter;
 
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -8,6 +8,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.project.onur.playerx.CustomItemClickListener;
+import com.project.onur.playerx.R;
 import com.project.onur.playerx.model.Event;
 import com.squareup.picasso.Picasso;
 

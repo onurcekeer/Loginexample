@@ -54,6 +54,7 @@ public class EventDetailFragment extends Fragment {
     GoogleMap map;
     SimpleLocation simpleLocation;
     DatabaseReference reference;
+    User otherUser;
 
     MapView mapView;
     View view;
@@ -86,8 +87,23 @@ public class EventDetailFragment extends Fragment {
             event = (Event) bundle.getSerializable("EVENT");
         }
 
+        otherUser = new User();
 
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("User");
+        Query query = reference.orderByChild("userID").equalTo(event.getUserID());
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    otherUser = dataSnapshot.child(event.getUserID()).getValue(User.class);
+                }
+            }
 
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
 
 
         simpleLocation = new SimpleLocation(getContext());
@@ -166,7 +182,7 @@ public class EventDetailFragment extends Fragment {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startChatFragment(event);
+                startChatFragment(otherUser);
             }
         });
 
@@ -232,7 +248,7 @@ public class EventDetailFragment extends Fragment {
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }
-
+/*
     private void startChatFragment(Event event){
 
         Fragment fragment = new ChatFragment();
@@ -248,4 +264,24 @@ public class EventDetailFragment extends Fragment {
         fragmentTransaction.commit();
 
     }
+
+*/
+    private void startChatFragment(User user){
+
+        Fragment fragment = new ChatFragment();
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("USER", user);
+        fragment.setArguments(bundle);
+        FragmentManager fragmentManager = getFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right,
+                R.anim.slide_in_right, R.anim.slide_out_left);
+        fragmentTransaction.replace(R.id.main_container, fragment);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
+
+    }
+
+
+
 }
