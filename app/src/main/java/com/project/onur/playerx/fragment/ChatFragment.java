@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.EditText;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -95,6 +96,9 @@ public class ChatFragment extends android.support.v4.app.Fragment{
         edit_message = v.findViewById(R.id.edit_text_message);
         recyclerView = v.findViewById(R.id.recycler_view_chat);
 
+
+        getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE| WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+
         toolbar = v.findViewById(R.id.toolbar);
         ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
         ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -109,6 +113,9 @@ public class ChatFragment extends android.support.v4.app.Fragment{
         });
 
     }
+
+
+
 
 
 

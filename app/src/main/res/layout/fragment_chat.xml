@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
     tools:context="com.project.onur.playerx.fragment.ChatFragment">
 
     <include layout="@layout/toolbar" />
@@ -17,20 +18,45 @@
             android:id="@+id/recycler_view_chat"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_above="@+id/edit_text_message"
-            app:layoutManager="LinearLayoutManager" />
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            app:layoutManager="LinearLayoutManager"
+            tools:ignore="NotSibling" />
 
-        <EditText
-            android:id="@+id/edit_text_message"
+
+        <LinearLayout
+            android:id="@+id/chatControls"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:layout_margin="@dimen/margin_small"
-            android:background="@drawable/rounded_rect_bg"
-            android:imeOptions="actionSend"
-            android:inputType="text"
-            android:maxLines="1"
-            android:padding="@dimen/padding_small" />
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/edit_text_message"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.9"
+                android:background="@drawable/rounded_rect_bg"
+                android:imeOptions="actionSend"
+                android:inputType="text"
+                android:layout_gravity="center"
+                android:padding="@dimen/padding_small"
+                android:layout_margin="@dimen/margin_small"
+                android:maxLines="1" />
+
+
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/chatSendButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="@dimen/margin_small"
+                android:layout_weight="0.1"
+                app:fabSize="mini"
+                app:srcCompat="@drawable/ic_send_white_24dp" />
+
+        </LinearLayout>
 
 
     </RelativeLayout>

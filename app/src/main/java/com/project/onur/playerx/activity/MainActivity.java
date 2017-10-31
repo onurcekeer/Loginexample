@@ -13,6 +13,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.project.onur.playerx.SQLiteUser;
 import com.project.onur.playerx.model.User;
@@ -20,6 +21,9 @@ import com.project.onur.playerx.fragment.HomeFragment;
 import com.project.onur.playerx.R;
 import com.project.onur.playerx.fragment.ProfileFragment;
 import com.project.onur.playerx.fragment.MessagesFragment;
+
+import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEvent;
+import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEventListener;
 
 import im.delight.android.location.SimpleLocation;
 
@@ -60,8 +64,25 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void setupNavigationView() {
-        BottomNavigationView bottomNavigation = (BottomNavigationView)findViewById(R.id.bottom_navigation);
+        final BottomNavigationView bottomNavigation = findViewById(R.id.bottom_navigation);
         bottomNavigation.inflateMenu(R.menu.navigation);
+
+
+        KeyboardVisibilityEvent.setEventListener(
+                this,
+                new KeyboardVisibilityEventListener() {
+                    @Override
+                    public void onVisibilityChanged(boolean isOpen) {
+                        if(isOpen){
+                            bottomNavigation.setVisibility(View.GONE);
+                        }
+                        else {
+                            bottomNavigation.setVisibility(View.VISIBLE);
+                        }
+                    }
+                });
+
+
         if (bottomNavigation != null) {
 
             // Select first menu item by default and show Fragment accordingly.
