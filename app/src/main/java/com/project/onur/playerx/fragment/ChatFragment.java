@@ -5,6 +5,7 @@ import android.database.Cursor;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
@@ -15,9 +16,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -26,9 +29,13 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.project.onur.playerx.R;
 import com.project.onur.playerx.SQLiteUser;
+import com.project.onur.playerx.adapter.ChatRecyclerAdapter;
+import com.project.onur.playerx.model.Chat;
 import com.project.onur.playerx.model.Event;
 import com.project.onur.playerx.model.User;
 import com.squareup.picasso.Picasso;
+
+import java.util.ArrayList;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -43,12 +50,14 @@ public class ChatFragment extends android.support.v4.app.Fragment{
     DatabaseReference mDatabase;
     User user, otherUser;
     SQLiteUser sqLiteUser;
-    Event event;
+    String message;
+    ChatRecyclerAdapter mChatRecyclerAdapter;
 
     Toolbar toolbar;
     EditText edit_message;
     RecyclerView recyclerView;
     View view;
+    FloatingActionButton fab_send;
 
 
     public ChatFragment() {
@@ -95,6 +104,7 @@ public class ChatFragment extends android.support.v4.app.Fragment{
 
         edit_message = v.findViewById(R.id.edit_text_message);
         recyclerView = v.findViewById(R.id.recycler_view_chat);
+        fab_send = v.findViewById(R.id.chatSendButton);
 
 
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE| WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
@@ -111,11 +121,181 @@ public class ChatFragment extends android.support.v4.app.Fragment{
                 fm.popBackStack();
             }
         });
+        
+        fab_send.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                sendMessage();
+            }
+        });
+
+        getMessageFromFirebaseUser(user.getUserID(),otherUser.getUserID());
+
+    }
+
+    private void sendMessage() {
+
+        String message = edit_message.getText().toString();
+        String senderUid = user.getUserID();
+        String receiverUid = otherUser.getUserID();
+        long timestamp = System.currentTimeMillis();
+
+        final Chat chat = new Chat(senderUid,receiverUid,message,timestamp);
+
+
+
+        final String room_type_1 = chat.senderUid + "_" + chat.receiverUid;
+        final String room_type_2 = chat.receiverUid + "_" + chat.senderUid;
+        final String chat_rooms = "chat_rooms";
+
+        final DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
+
+        databaseReference.child(chat_rooms).getRef().addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.hasChild(room_type_1)) {
+                    Log.e("CHAT", "sendMessageToFirebaseUser: " + room_type_1 + " exists");
+                    databaseReference.child(chat_rooms).child(room_type_1).child(String.valueOf(chat.timestamp)).setValue(chat);
+                } else if (dataSnapshot.hasChild(room_type_2)) {
+                    Log.e("CHAT", "sendMessageToFirebaseUser: " + room_type_2 + " exists");
+                    databaseReference.child(chat_rooms).child(room_type_2).child(String.valueOf(chat.timestamp)).setValue(chat);
+                } else {
+                    Log.e("CHAT", "sendMessageToFirebaseUser: success");
+                    databaseReference.child(chat_rooms).child(room_type_1).child(String.valueOf(chat.timestamp)).setValue(chat);
+                    getMessageFromFirebaseUser(chat.senderUid, chat.receiverUid);
+                }
+                // send push notification to the receiver
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Toast.makeText(getContext(),"Mesaj Gönderilemedi",Toast.LENGTH_SHORT).show();
+            }
+        });
+
+
+
 
     }
 
 
 
+    public void getMessageFromFirebaseUser(String senderUid, String receiverUid) {
+        final String room_type_1 = senderUid + "_" + receiverUid;
+        final String room_type_2 = receiverUid + "_" + senderUid;
+        final String chat_rooms = "chat_rooms";
+
+        final DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
+
+        databaseReference.child(chat_rooms).getRef().addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.hasChild(room_type_1)) {
+                    Log.e("CHAT", "getMessageFromFirebaseUser: " + room_type_1 + " exists");
+                    FirebaseDatabase.getInstance()
+                            .getReference()
+                            .child(chat_rooms)
+                            .child(room_type_1).addChildEventListener(new ChildEventListener() {
+                        @Override
+                        public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                            Chat chat = dataSnapshot.getValue(Chat.class);
+                            onGetMessagesSuccess(chat);
+                        }
+
+                        @Override
+                        public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+                        }
+
+                        @Override
+                        public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+                        }
+
+                        @Override
+                        public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+                            Toast.makeText(getContext(),"Mesaj Alınamadı",Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                } else if (dataSnapshot.hasChild(room_type_2)) {
+                    Log.e("CHAT", "getMessageFromFirebaseUser: " + room_type_2 + " exists");
+                    FirebaseDatabase.getInstance()
+                            .getReference()
+                            .child(chat_rooms)
+                            .child(room_type_2).addChildEventListener(new ChildEventListener() {
+                        @Override
+                        public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                            Chat chat = dataSnapshot.getValue(Chat.class);
+                            onGetMessagesSuccess(chat);
+                        }
+
+                        @Override
+                        public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+                        }
+
+                        @Override
+                        public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+                        }
+
+                        @Override
+                        public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+                            Toast.makeText(getContext(),"Mesaj Alınamadı",Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                } else {
+                    Log.e("CHAT", "getMessageFromFirebaseUser: no such room available");
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Toast.makeText(getContext(),"Mesaj Alınamadı",Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+
+
+
+
+
+    public void onSendMessageSuccess() {
+        edit_message.setText("");
+        Toast.makeText(getActivity(), "Message sent", Toast.LENGTH_SHORT).show();
+    }
+
+
+    public void onSendMessageFailure() {
+        Toast.makeText(getActivity(), "Mesaj Gönderilemedi", Toast.LENGTH_SHORT).show();
+    }
+
+
+    public void onGetMessagesSuccess(Chat chat) {
+        if (mChatRecyclerAdapter == null) {
+            mChatRecyclerAdapter = new ChatRecyclerAdapter(new ArrayList<Chat>(),otherUser);
+            recyclerView.setAdapter(mChatRecyclerAdapter);
+        }
+        mChatRecyclerAdapter.add(chat);
+        recyclerView.smoothScrollToPosition(mChatRecyclerAdapter.getItemCount() - 1);
+    }
+
+
+    public void onGetMessagesFailure(String message) {
+        Toast.makeText(getActivity(), "Mesaj alınamadı", Toast.LENGTH_SHORT).show();
+    }
 
 
 

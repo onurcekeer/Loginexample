@@ -14,22 +14,25 @@
 
 
     <TextView
-        android:id="@+id/text_username"
+        android:id="@+id/text_view_chat_message"
         android:layout_centerInParent="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignWithParentIfMissing="true"
         android:padding="@dimen/padding_small"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="112dp"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:background="@drawable/chat_rounded_rect_bg"
-        android:text="Onur Çeker" />
+        android:text="Onur ÇekeasdlngkjnasdkngjklnsangasnmglkvnmsalkvgsmaşlkginlKNAGLNVLKA.MG.LKNlnilkinlknlnlnfdlkngr"
+        android:layout_marginLeft="@dimen/margin_huge"
+        android:layout_alignParentRight="true" />
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/profile_image"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_marginLeft="10dp"
-        android:layout_toRightOf="@+id/text_username"
+        android:layout_toRightOf="@+id/text_view_chat_message"
         android:src="@drawable/ic_cinema" />
 
 

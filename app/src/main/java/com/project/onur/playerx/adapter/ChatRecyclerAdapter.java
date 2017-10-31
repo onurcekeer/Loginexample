@@ -3,6 +3,7 @@ package com.project.onur.playerx.adapter;
 import android.database.Cursor;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -73,9 +74,11 @@ public class ChatRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     private void configureMyChatViewHolder(MyChatViewHolder myChatViewHolder, int position) {
         Chat chat = mChats.get(position);
 
+        Log.e("mesaj",chat.message);
         myChatViewHolder.txtChatMessage.setText(chat.message);
         Picasso.with(myChatViewHolder.circleImageView.getContext())
                 .load(user.getProfilURL())
+                .resize(40,40)
                 .centerCrop()
                 .placeholder(R.drawable.ic_default_user)
                 .error(R.drawable.ic_default_user)
@@ -88,6 +91,7 @@ public class ChatRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         otherChatViewHolder.txtChatMessage.setText(chat.message);
         Picasso.with(otherChatViewHolder.circleImageView.getContext())
                 .load(mOtherUser.getProfilURL())
+                .resize(40,40)
                 .centerCrop()
                 .placeholder(R.drawable.ic_default_user)
                 .error(R.drawable.ic_default_user)
@@ -113,7 +117,7 @@ public class ChatRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     }
 
     private static class MyChatViewHolder extends RecyclerView.ViewHolder {
-        private TextView txtChatMessage;
+        TextView txtChatMessage;
         CircleImageView circleImageView;
 
         public MyChatViewHolder(View itemView) {
@@ -125,7 +129,7 @@ public class ChatRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     }
 
     private static class OtherChatViewHolder extends RecyclerView.ViewHolder {
-        private TextView txtChatMessage;
+        TextView txtChatMessage;
         CircleImageView circleImageView;
 
 

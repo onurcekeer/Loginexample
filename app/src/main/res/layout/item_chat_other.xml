@@ -27,7 +27,7 @@
         android:background="@drawable/chat_rounded_rect_bg"
         android:padding="@dimen/padding_small"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        tools:text="Hello mat"
+        tools:text="Hello masdhfksaglkmalsdfmglkalflakdjgnadlgdalknhkjsndhmbsödkndsjohşkfdşl p khopkpodk ikdpohkodkkhpksidht"
         android:layout_marginRight="@dimen/margin_huge" />
 
 </LinearLayout>
