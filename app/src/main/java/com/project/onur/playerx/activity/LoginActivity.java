@@ -18,8 +18,10 @@ import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.inputmethod.EditorInfo;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
@@ -59,7 +61,7 @@ import java.util.Arrays;
 import java.util.Locale;
 
 
-public class LoginActivity extends AppCompatActivity{
+public class LoginActivity extends AppCompatActivity implements TextView.OnEditorActionListener {
 
     private static final String KEY_USER = "KEY_USER";
     private static final String TAG = "LOGİN";
@@ -100,6 +102,8 @@ public class LoginActivity extends AppCompatActivity{
 
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
         mPasswordView = (EditText) findViewById(R.id.password);
+
+        mPasswordView.setOnEditorActionListener(this);
 
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -177,6 +181,15 @@ public class LoginActivity extends AppCompatActivity{
 
     }
 
+
+    @Override
+    public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
+        if (i == EditorInfo.IME_ACTION_DONE) {
+            attemptLogin();
+            return true;
+        }
+        return false;
+    }
 
     private void handleFacebookAccessToken(AccessToken token) {
         Log.d(TAG, "handleFacebookAccessToken:" + token);

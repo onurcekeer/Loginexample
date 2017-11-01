@@ -12,11 +12,14 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -44,7 +47,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
  * Created by onur on 17.9.2017 at 14:39.
  */
 
-public class ChatFragment extends android.support.v4.app.Fragment{
+public class ChatFragment extends android.support.v4.app.Fragment implements TextView.OnEditorActionListener {
 
 
     FirebaseUser mUser;
@@ -100,6 +103,8 @@ public class ChatFragment extends android.support.v4.app.Fragment{
         recyclerView = v.findViewById(R.id.recycler_view_chat);
         fab_send = v.findViewById(R.id.chatSendButton);
 
+        edit_message.setOnEditorActionListener(this);
+
 
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE| WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
 
@@ -129,6 +134,20 @@ public class ChatFragment extends android.support.v4.app.Fragment{
         getMessageFromFirebaseUser(user.getUserID(),otherUser.getUserID());
 
     }
+
+
+    @Override
+    public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
+        if (i == EditorInfo.IME_ACTION_SEND) {
+            if(!TextUtils.isEmpty(edit_message.getText().toString())){
+                sendMessage();
+            }
+            return true;
+        }
+        return false;
+    }
+
+
 
     private void sendMessage() {
 
@@ -282,7 +301,11 @@ public class ChatFragment extends android.support.v4.app.Fragment{
 
 
     public void onGetMessagesFailure() {
-        Toast.makeText(getActivity(), "Mesaj alınamadı", Toast.LENGTH_SHORT).show();
+        Context context = getContext();
+        if(context != null){
+            Toast.makeText(getContext(), "Mesaj alınamadı", Toast.LENGTH_SHORT).show();
+        }
+
     }
 
 
