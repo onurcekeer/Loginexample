@@ -21,8 +21,8 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
-            app:layoutManager="LinearLayoutManager"
-            tools:ignore="NotSibling" />
+            android:layout_above="@+id/chatControls"
+            app:layoutManager="LinearLayoutManager" />
 
 
         <LinearLayout

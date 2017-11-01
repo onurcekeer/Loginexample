@@ -10,6 +10,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -81,18 +82,11 @@ public class ChatFragment extends android.support.v4.app.Fragment{
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-/*
-        Bundle bundle = this.getArguments();
-        if (bundle != null) {
-            event = (Event) bundle.getSerializable("EVENT");
-        }
 
-*/
         Bundle bundle = this.getArguments();
         if (bundle != null) {
             otherUser = (User) bundle.getSerializable("USER");
         }
-
 
         // Inflate the layout for this fragment
         view =  inflater.inflate(R.layout.fragment_chat, container, false);
@@ -125,7 +119,10 @@ public class ChatFragment extends android.support.v4.app.Fragment{
         fab_send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                sendMessage();
+                if(!TextUtils.isEmpty(edit_message.getText().toString())){
+                    sendMessage();
+                }
+
             }
         });
 
@@ -143,7 +140,6 @@ public class ChatFragment extends android.support.v4.app.Fragment{
         final Chat chat = new Chat(senderUid,receiverUid,message,timestamp);
 
 
-
         final String room_type_1 = chat.senderUid + "_" + chat.receiverUid;
         final String room_type_2 = chat.receiverUid + "_" + chat.senderUid;
         final String chat_rooms = "chat_rooms";
@@ -156,29 +152,29 @@ public class ChatFragment extends android.support.v4.app.Fragment{
                 if (dataSnapshot.hasChild(room_type_1)) {
                     Log.e("CHAT", "sendMessageToFirebaseUser: " + room_type_1 + " exists");
                     databaseReference.child(chat_rooms).child(room_type_1).child(String.valueOf(chat.timestamp)).setValue(chat);
+
                 } else if (dataSnapshot.hasChild(room_type_2)) {
                     Log.e("CHAT", "sendMessageToFirebaseUser: " + room_type_2 + " exists");
                     databaseReference.child(chat_rooms).child(room_type_2).child(String.valueOf(chat.timestamp)).setValue(chat);
+
                 } else {
                     Log.e("CHAT", "sendMessageToFirebaseUser: success");
                     databaseReference.child(chat_rooms).child(room_type_1).child(String.valueOf(chat.timestamp)).setValue(chat);
                     getMessageFromFirebaseUser(chat.senderUid, chat.receiverUid);
                 }
                 // send push notification to the receiver
+                onSendMessageSuccess();
 
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                Toast.makeText(getContext(),"Mesaj Gönderilemedi",Toast.LENGTH_SHORT).show();
+                onSendMessageFailure();
             }
         });
 
 
-
-
     }
-
 
 
     public void getMessageFromFirebaseUser(String senderUid, String receiverUid) {
@@ -205,24 +201,22 @@ public class ChatFragment extends android.support.v4.app.Fragment{
 
                         @Override
                         public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
                         }
 
                         @Override
                         public void onChildRemoved(DataSnapshot dataSnapshot) {
-
                         }
 
                         @Override
                         public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
                         }
 
                         @Override
                         public void onCancelled(DatabaseError databaseError) {
-                            Toast.makeText(getContext(),"Mesaj Alınamadı",Toast.LENGTH_SHORT).show();
+                            onGetMessagesFailure();
                         }
                     });
+
                 } else if (dataSnapshot.hasChild(room_type_2)) {
                     Log.e("CHAT", "getMessageFromFirebaseUser: " + room_type_2 + " exists");
                     FirebaseDatabase.getInstance()
@@ -237,22 +231,19 @@ public class ChatFragment extends android.support.v4.app.Fragment{
 
                         @Override
                         public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
                         }
 
                         @Override
                         public void onChildRemoved(DataSnapshot dataSnapshot) {
-
                         }
 
                         @Override
                         public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
                         }
 
                         @Override
                         public void onCancelled(DatabaseError databaseError) {
-                            Toast.makeText(getContext(),"Mesaj Alınamadı",Toast.LENGTH_SHORT).show();
+                            onGetMessagesFailure();
                         }
                     });
                 } else {
@@ -262,7 +253,7 @@ public class ChatFragment extends android.support.v4.app.Fragment{
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                Toast.makeText(getContext(),"Mesaj Alınamadı",Toast.LENGTH_SHORT).show();
+                onGetMessagesFailure();
             }
         });
     }
@@ -270,11 +261,8 @@ public class ChatFragment extends android.support.v4.app.Fragment{
 
 
 
-
-
     public void onSendMessageSuccess() {
         edit_message.setText("");
-        Toast.makeText(getActivity(), "Message sent", Toast.LENGTH_SHORT).show();
     }
 
 
@@ -293,10 +281,9 @@ public class ChatFragment extends android.support.v4.app.Fragment{
     }
 
 
-    public void onGetMessagesFailure(String message) {
+    public void onGetMessagesFailure() {
         Toast.makeText(getActivity(), "Mesaj alınamadı", Toast.LENGTH_SHORT).show();
     }
-
 
 
     public boolean isOnline() {
