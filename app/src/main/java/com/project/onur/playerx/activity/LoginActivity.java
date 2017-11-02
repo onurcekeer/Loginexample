@@ -56,7 +56,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.project.onur.playerx.R;
 import com.project.onur.playerx.SQLiteUser;
 import com.project.onur.playerx.model.User;
-
+import com.project.onur.playerx.SharedPrefUtil;
 import java.util.Arrays;
 import java.util.Locale;
 
@@ -496,6 +496,7 @@ public class LoginActivity extends AppCompatActivity implements TextView.OnEdito
         _user.setUsername(_mUser.getDisplayName());
         _user.setProfilURL(_mUser.getPhotoUrl().toString());
         _user.setRange(DEFAULT_RANGE);
+        _user.setFcmToken(new SharedPrefUtil(getApplicationContext()).getString("fcmToken"));
 
         return _user;
     }

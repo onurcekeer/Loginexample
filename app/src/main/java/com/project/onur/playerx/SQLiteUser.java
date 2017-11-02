@@ -27,6 +27,7 @@ public class SQLiteUser extends SQLiteOpenHelper {
     private static final String USERNAME = "USERNAME";
     private static final String PROFILURL = "PROFILEURL";
     private static final String RANGE = "RANGE";
+    private static final String FCMTOKEN = "FCMTOKEN";
 
 
     public SQLiteUser(Context context) {
@@ -43,7 +44,8 @@ public class SQLiteUser extends SQLiteOpenHelper {
                 +PASSWORD+" TEXT, "
                 +USERNAME+" TEXT,"
                 +PROFILURL+" TEXT,"
-                +RANGE+" INTEGER)");
+                +RANGE+" INTEGER,"
+                +FCMTOKEN+" TEXT)");
 
         Log.i(TAG,"Table created");
 
@@ -70,6 +72,7 @@ public class SQLiteUser extends SQLiteOpenHelper {
         values.put(USERNAME,user.getUsername());
         values.put(PROFILURL,user.getProfilURL());
         values.put(RANGE,user.getRange());
+        values.put(FCMTOKEN,user.getFcmToken());
 
         db.insert(TABLE_NAME,null,values);
         Log.i(TAG,"User added");
@@ -86,6 +89,7 @@ public class SQLiteUser extends SQLiteOpenHelper {
         user.setUsername(cursor.getString(cursor.getColumnIndex(USERNAME)));
         user.setProfilURL(cursor.getString(cursor.getColumnIndex(PROFILURL)));
         user.setRange(cursor.getInt(cursor.getColumnIndex(RANGE)));
+        user.setFcmToken(cursor.getString(cursor.getColumnIndex(FCMTOKEN)));
 
         return user;
     }
@@ -101,7 +105,7 @@ public class SQLiteUser extends SQLiteOpenHelper {
     public Cursor query(){
 
         SQLiteDatabase db = this.getReadableDatabase();
-        String[] COLUMNS = {USERID,EMAIL,PASSWORD,USERNAME,PROFILURL,RANGE};
+        String[] COLUMNS = {USERID,EMAIL,PASSWORD,USERNAME,PROFILURL,RANGE,FCMTOKEN};
         Cursor cursor = db.query(TABLE_NAME,COLUMNS,null,null,null,null,null,null);
 
 
@@ -110,7 +114,6 @@ public class SQLiteUser extends SQLiteOpenHelper {
 
     public void setEmail(String userId,String email){
         SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues cv = new ContentValues();
         db.execSQL("UPDATE "+TABLE_NAME+" SET "+EMAIL+"='"+email+"' WHERE "+USERID+"='"+userId+"'");
         Log.e("EMAİL","veritabanındaki email bilgisi değişti");
         db.close();
@@ -118,12 +121,17 @@ public class SQLiteUser extends SQLiteOpenHelper {
 
     public void setPassword(String userId,String password){
         SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues cv = new ContentValues();
         db.execSQL("UPDATE "+TABLE_NAME+" SET "+PASSWORD+"='"+password+"' WHERE "+USERID+"='"+userId+"'");
         Log.e("PASSWORD","veritabanındaki şifre bilgisi değişti");
         db.close();
     }
 
+    public void setFcmtoken(String userId,String fcmToken){
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL("UPDATE "+TABLE_NAME+" SET "+FCMTOKEN+"='"+fcmToken+"' WHERE "+USERID+"='"+userId+"'");
+        Log.e("FCMTOKEN","veritabanındaki fcmToken bilgisi değişti");
+        db.close();
+    }
 
 
 

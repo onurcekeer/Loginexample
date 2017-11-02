@@ -33,6 +33,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.project.onur.playerx.R;
 import com.project.onur.playerx.SQLiteUser;
 import com.project.onur.playerx.model.User;
+import com.project.onur.playerx.SharedPrefUtil;
 
 import java.util.Locale;
 
@@ -178,10 +179,11 @@ public class SignUpActivity extends AppCompatActivity {
                 String _userId = mUser.getUid();
                 String _profilUrl = DEFAULT_USER_PROFİLE;
                 int _range = DEFAULT_RANGE;
+                String _fcmToken = new SharedPrefUtil(getApplicationContext()).getString("fcmToken");
 
                 FirebaseDatabase database = FirebaseDatabase.getInstance();
                 DatabaseReference reference = database.getReference("User");
-                user = new User(_userId,email,fullname,_profilUrl,_range,password);
+                user = new User(_userId,email,fullname,_profilUrl,_range,password,_fcmToken);
                 reference.child(_userId).setValue(user);
 
                 SQLiteUser sqLiteUser = new SQLiteUser(getApplicationContext());

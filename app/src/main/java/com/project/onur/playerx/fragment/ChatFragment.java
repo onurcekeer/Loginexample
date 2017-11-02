@@ -31,6 +31,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.project.onur.playerx.MainApp;
 import com.project.onur.playerx.R;
 import com.project.onur.playerx.SQLiteUser;
 import com.project.onur.playerx.adapter.ChatRecyclerAdapter;
@@ -315,6 +316,17 @@ public class ChatFragment extends android.support.v4.app.Fragment implements Tex
         return netInfo != null && netInfo.isConnectedOrConnecting();
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        MainApp.setChatActivityOpen(true);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        MainApp.setChatActivityOpen(false);
+    }
 
 
 }

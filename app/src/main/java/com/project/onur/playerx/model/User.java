@@ -16,15 +16,18 @@ public class User implements Serializable {
     private String Username;
     private String ProfilURL;
     private String Password;
+    private String FcmToken;
     private int Range;
 
-    public User(String userID, String email, String username, String profilURL, int range, String password) {
+    public User(String userID, String email, String username, String profilURL, int range, String password, String fcmToken) {
         UserID = userID;
         Email = email;
+
         Username = username;
         ProfilURL = profilURL;
         Range = range;
         Password = password;
+        FcmToken = fcmToken;
     }
 
     public User(){
@@ -63,7 +66,6 @@ public class User implements Serializable {
         Username = username;
     }
 
-
     public String getProfilURL() {
         return ProfilURL;
     }
@@ -79,4 +81,13 @@ public class User implements Serializable {
     public void setRange(int range) {
         Range = range;
     }
+
+    public String getFcmToken() {
+        return FcmToken;
+    }
+
+    public void setFcmToken(String fcmToken) {
+        FcmToken = fcmToken;
+    }
+
 }
