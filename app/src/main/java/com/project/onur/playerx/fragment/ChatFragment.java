@@ -35,6 +35,7 @@ import com.project.onur.playerx.MainApp;
 import com.project.onur.playerx.R;
 import com.project.onur.playerx.SQLiteUser;
 import com.project.onur.playerx.adapter.ChatRecyclerAdapter;
+import com.project.onur.playerx.fcm.FcmNotificationBuilder;
 import com.project.onur.playerx.model.Chat;
 import com.project.onur.playerx.model.Event;
 import com.project.onur.playerx.model.User;
@@ -183,6 +184,12 @@ public class ChatFragment extends android.support.v4.app.Fragment implements Tex
                     getMessageFromFirebaseUser(chat.senderUid, chat.receiverUid);
                 }
                 // send push notification to the receiver
+                sendPushNotificationToReceiver(user.getUsername(),
+                        chat.message,
+                        chat.senderUid,
+                        user.getFcmToken(),
+                        otherUser.getFcmToken());
+
                 onSendMessageSuccess();
 
             }
@@ -279,6 +286,20 @@ public class ChatFragment extends android.support.v4.app.Fragment implements Tex
     }
 
 
+    private void sendPushNotificationToReceiver(String username,
+                                                String message,
+                                                String uid,
+                                                String firebaseToken,
+                                                String receiverFirebaseToken) {
+        FcmNotificationBuilder.initialize()
+                .title(username)
+                .message(message)
+                .username(username)
+                .uid(uid)
+                .firebaseToken(firebaseToken)
+                .receiverFirebaseToken(receiverFirebaseToken)
+                .send();
+    }
 
 
     public void onSendMessageSuccess() {
