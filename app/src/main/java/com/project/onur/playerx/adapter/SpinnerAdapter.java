@@ -9,7 +9,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.project.onur.playerx.ItemData;
+import com.project.onur.playerx.model.ItemData;
 import com.project.onur.playerx.R;
 
 import java.util.ArrayList;

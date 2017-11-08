@@ -1,4 +1,4 @@
-package com.project.onur.playerx;
+package com.project.onur.playerx.model;
 
 /**
  * Created by onur on 22.9.2017 at 00:56.

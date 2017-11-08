@@ -43,7 +43,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.project.onur.playerx.CharacterCountErrorWatcher;
 import com.project.onur.playerx.model.Event;
-import com.project.onur.playerx.ItemData;
+import com.project.onur.playerx.model.ItemData;
 import com.project.onur.playerx.model.LatLon;
 import com.project.onur.playerx.R;
 import com.project.onur.playerx.SQLiteUser;
