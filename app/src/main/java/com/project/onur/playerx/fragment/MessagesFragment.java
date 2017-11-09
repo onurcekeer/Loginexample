@@ -96,8 +96,9 @@ public class MessagesFragment extends Fragment {
 
     public void getUsersData(){
 
+        userObjectList.clear();
 
-        mReferance.addListenerForSingleValueEvent(new ValueEventListener() {
+        mReferance.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 

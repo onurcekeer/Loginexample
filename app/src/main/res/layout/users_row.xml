@@ -1,20 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="6dp">
 
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="6dp">
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/profile_image"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_margin="5dp"
-        android:src="@drawable/ic_cinema" />
+        android:src="@drawable/ic_cinema"
+        android:layout_gravity="center_vertical"/>
 
     <TextView
         android:id="@+id/text_username"
@@ -23,7 +21,8 @@
         android:layout_height="wrap_content"
         android:textStyle="bold"
         android:layout_toRightOf="@+id/profile_image"
+        android:layout_gravity="center_vertical"
         android:text="Onur Çeker" />
-    </RelativeLayout>
 
-</android.support.constraint.ConstraintLayout>
+
+</LinearLayout>
