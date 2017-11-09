@@ -29,7 +29,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
+import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
 import com.project.onur.playerx.MainApp;
 import com.project.onur.playerx.R;
@@ -37,13 +37,12 @@ import com.project.onur.playerx.SQLiteUser;
 import com.project.onur.playerx.adapter.ChatRecyclerAdapter;
 import com.project.onur.playerx.fcm.FcmNotificationBuilder;
 import com.project.onur.playerx.model.Chat;
-import com.project.onur.playerx.model.Event;
 import com.project.onur.playerx.model.User;
-import com.squareup.picasso.Picasso;
+import com.project.onur.playerx.model.GetChat;
 
 import java.util.ArrayList;
-
-import de.hdodenhof.circleimageview.CircleImageView;
+import java.util.Map;
+import java.util.UUID;
 
 /**
  * Created by onur on 17.9.2017 at 14:39.
@@ -156,7 +155,10 @@ public class ChatFragment extends android.support.v4.app.Fragment implements Tex
         String message = edit_message.getText().toString();
         String senderUid = user.getUserID();
         String receiverUid = otherUser.getUserID();
-        long timestamp = System.currentTimeMillis();
+        Map<String, String> timestamp = ServerValue.TIMESTAMP;
+
+        UUID UUid = UUID.randomUUID();
+        final String uniqeUUID = UUid.toString();
 
         final Chat chat = new Chat(senderUid,receiverUid,message,timestamp);
 
@@ -167,20 +169,21 @@ public class ChatFragment extends android.support.v4.app.Fragment implements Tex
 
         final DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
 
+
         databaseReference.child(chat_rooms).getRef().addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.hasChild(room_type_1)) {
                     Log.e("CHAT", "sendMessageToFirebaseUser: " + room_type_1 + " exists");
-                    databaseReference.child(chat_rooms).child(room_type_1).child(String.valueOf(chat.timestamp)).setValue(chat);
+                    databaseReference.child(chat_rooms).child(room_type_1).child(uniqeUUID).setValue(chat);
 
                 } else if (dataSnapshot.hasChild(room_type_2)) {
                     Log.e("CHAT", "sendMessageToFirebaseUser: " + room_type_2 + " exists");
-                    databaseReference.child(chat_rooms).child(room_type_2).child(String.valueOf(chat.timestamp)).setValue(chat);
+                    databaseReference.child(chat_rooms).child(room_type_2).child(uniqeUUID).setValue(chat);
 
                 } else {
                     Log.e("CHAT", "sendMessageToFirebaseUser: success");
-                    databaseReference.child(chat_rooms).child(room_type_1).child(String.valueOf(chat.timestamp)).setValue(chat);
+                    databaseReference.child(chat_rooms).child(room_type_1).child(uniqeUUID).setValue(chat);
                     getMessageFromFirebaseUser(chat.senderUid, chat.receiverUid);
                 }
                 // send push notification to the receiver
@@ -204,6 +207,7 @@ public class ChatFragment extends android.support.v4.app.Fragment implements Tex
     }
 
 
+
     public void getMessageFromFirebaseUser(String senderUid, String receiverUid) {
         final String room_type_1 = senderUid + "_" + receiverUid;
         final String room_type_2 = receiverUid + "_" + senderUid;
@@ -219,10 +223,10 @@ public class ChatFragment extends android.support.v4.app.Fragment implements Tex
                     FirebaseDatabase.getInstance()
                             .getReference()
                             .child(chat_rooms)
-                            .child(room_type_1).addChildEventListener(new ChildEventListener() {
+                            .child(room_type_1).orderByChild("timestamp").addChildEventListener(new ChildEventListener() {
                         @Override
                         public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                            Chat chat = dataSnapshot.getValue(Chat.class);
+                            GetChat chat = dataSnapshot.getValue(GetChat.class);
                             onGetMessagesSuccess(chat);
                         }
 
@@ -249,10 +253,10 @@ public class ChatFragment extends android.support.v4.app.Fragment implements Tex
                     FirebaseDatabase.getInstance()
                             .getReference()
                             .child(chat_rooms)
-                            .child(room_type_2).addChildEventListener(new ChildEventListener() {
+                            .child(room_type_2).orderByChild("timestamp").addChildEventListener(new ChildEventListener() {
                         @Override
                         public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                            Chat chat = dataSnapshot.getValue(Chat.class);
+                            GetChat chat = dataSnapshot.getValue(GetChat.class);
                             onGetMessagesSuccess(chat);
                         }
 
@@ -312,9 +316,9 @@ public class ChatFragment extends android.support.v4.app.Fragment implements Tex
     }
 
 
-    public void onGetMessagesSuccess(Chat chat) {
+    public void onGetMessagesSuccess(GetChat chat) {
         if (mChatRecyclerAdapter == null) {
-            mChatRecyclerAdapter = new ChatRecyclerAdapter(new ArrayList<Chat>(),otherUser);
+            mChatRecyclerAdapter = new ChatRecyclerAdapter(new ArrayList<GetChat>(),otherUser);
             recyclerView.setAdapter(mChatRecyclerAdapter);
         }
         mChatRecyclerAdapter.add(chat);

@@ -13,6 +13,7 @@ import com.project.onur.playerx.R;
 import com.project.onur.playerx.SQLiteUser;
 import com.project.onur.playerx.model.Chat;
 import com.google.firebase.auth.FirebaseAuth;
+import com.project.onur.playerx.model.GetChat;
 import com.project.onur.playerx.model.User;
 import com.squareup.picasso.Picasso;
 
@@ -25,16 +26,16 @@ public class ChatRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     private static final int VIEW_TYPE_ME = 1;
     private static final int VIEW_TYPE_OTHER = 2;
 
-    private List<Chat> mChats;
+    private List<GetChat> mChats;
     public User user, mOtherUser;
     private SQLiteUser sqLiteUser;
 
-    public ChatRecyclerAdapter(List<Chat> chats, User otherUser) {
+    public ChatRecyclerAdapter(List<GetChat> chats, User otherUser) {
         mChats = chats;
         mOtherUser = otherUser;
     }
 
-    public void add(Chat chat) {
+    public void add(GetChat chat) {
         mChats.add(chat);
         notifyItemInserted(mChats.size() - 1);
     }
@@ -72,7 +73,7 @@ public class ChatRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     }
 
     private void configureMyChatViewHolder(MyChatViewHolder myChatViewHolder, int position) {
-        Chat chat = mChats.get(position);
+        GetChat chat = mChats.get(position);
 
         Log.e("mesaj",chat.message);
         myChatViewHolder.txtChatMessage.setText(chat.message);
@@ -86,7 +87,7 @@ public class ChatRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     }
 
     private void configureOtherChatViewHolder(OtherChatViewHolder otherChatViewHolder, int position) {
-        Chat chat = mChats.get(position);
+        GetChat chat = mChats.get(position);
 
         otherChatViewHolder.txtChatMessage.setText(chat.message);
         Picasso.with(otherChatViewHolder.circleImageView.getContext())

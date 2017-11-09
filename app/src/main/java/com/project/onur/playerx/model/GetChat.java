@@ -1,23 +1,21 @@
 package com.project.onur.playerx.model;
 
-import java.util.Map;
-
 /**
  * Created by onur on 28.10.2017 at 01:30.
  */
 
-public class Chat {
+public class GetChat {
 
     public String senderUid;
     public String receiverUid;
     public String message;
-    public Map<String, String> timestamp;
+    public long timestamp;
 
-    public Chat() {
+    public GetChat() {
 
     }
 
-    public Chat(String senderUid, String receiverUid, String message, Map<String, String> timestamp) {
+    public GetChat(String senderUid, String receiverUid, String message, long timestamp) {
 
         this.senderUid = senderUid;
         this.receiverUid = receiverUid;
@@ -50,11 +48,11 @@ public class Chat {
         this.message = message;
     }
 
-    public Map<String, String> getTimestamp() {
+    public long getTimestamp() {
         return timestamp;
     }
 
-    public void setTimestamp(Map<String, String> timestamp) {
+    public void setTimestamp(long timestamp) {
         this.timestamp = timestamp;
     }
 }

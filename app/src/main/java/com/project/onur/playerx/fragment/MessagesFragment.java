@@ -15,24 +15,19 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.project.onur.playerx.CustomItemClickListener;
 import com.project.onur.playerx.R;
 import com.project.onur.playerx.SQLiteUser;
-import com.project.onur.playerx.adapter.SimpleRecyclerAdapter;
 import com.project.onur.playerx.adapter.UsersAdapter;
-import com.project.onur.playerx.model.Chat;
-import com.project.onur.playerx.model.Event;
+import com.project.onur.playerx.model.GetChat;
 import com.project.onur.playerx.model.User;
 
 import java.util.ArrayList;
-import java.util.List;
 
 
 public class MessagesFragment extends Fragment {
@@ -107,7 +102,7 @@ public class MessagesFragment extends Fragment {
                     Log.e("rooms",name);
 
                     for(DataSnapshot dsChild : ds.getChildren()){
-                        Chat chat = dsChild.getValue(Chat.class);
+                        GetChat chat = dsChild.getValue(GetChat.class);
                         if(chat.getSenderUid().equals(user.getUserID())  || chat.getReceiverUid().equals(user.getUserID()) ){
                             if(chat.getSenderUid().equals(user.getUserID())){
                                 if(!userList.contains(chat.receiverUid))
