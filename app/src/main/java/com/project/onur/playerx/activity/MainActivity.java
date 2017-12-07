@@ -15,7 +15,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.FirebaseDatabase;
 import com.project.onur.playerx.SQLiteUser;
+import com.project.onur.playerx.SharedPrefUtil;
 import com.project.onur.playerx.model.User;
 import com.project.onur.playerx.fragment.HomeFragment;
 import com.project.onur.playerx.R;
@@ -50,18 +53,35 @@ public class MainActivity extends AppCompatActivity {
         Intent i = getIntent();
         user = (User)i.getSerializableExtra("userObject");
 
-        if(user==null){
+        if(user.getUserID()==null){
             Cursor cursor = sqLiteUser.query();
             user = sqLiteUser.getUserFromSQLite(cursor);
             Log.e("user",user.toString());
         }
 
 
+        replaceFcmToken();
         setupNavigationView();
     }
 
 
 
+    public void replaceFcmToken(){
+        String currentFcmToken = new SharedPrefUtil(getApplicationContext()).getString("fcmToken");
+
+        if(!user.getFcmToken().equals(currentFcmToken)){
+
+            user.setFcmToken(currentFcmToken);
+            sqLiteUser.setFcmtoken(user.getUserID(),currentFcmToken);
+            FirebaseDatabase.getInstance()
+                    .getReference("User")
+                    .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                    .child("fcmToken")
+                    .setValue(currentFcmToken);
+
+        }
+
+    }
 
     private void setupNavigationView() {
         final BottomNavigationView bottomNavigation = findViewById(R.id.bottom_navigation);

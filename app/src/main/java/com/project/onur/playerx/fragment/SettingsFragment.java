@@ -238,9 +238,18 @@ public class SettingsFragment extends Fragment {
     }
 
     private void logoutUser() {
+
+        Intent intent = new Intent(getActivity(),LoginActivity.class);
+        user.setFcmToken("nothing");
+        sqLiteUser.setFcmtoken(user.getUserID(),"nothing");
+        FirebaseDatabase.getInstance()
+                .getReference("User")
+                .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                .child("fcmToken")
+                .setValue("nothing");
+
         mAuth.signOut();
         LoginManager.getInstance().logOut();
-        Intent intent = new Intent(getActivity(),LoginActivity.class);
         startActivity(intent);
     }
 
