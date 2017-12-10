@@ -338,7 +338,7 @@ public class SettingsFragment extends Fragment {
 
                 final DatabaseReference myRef = FirebaseDatabase.getInstance().getReference("Events");
                 Query query = myRef.orderByChild("userID").equalTo(user.getUserID());
-                query.addValueEventListener(new ValueEventListener() {
+                query.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
