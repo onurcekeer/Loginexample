@@ -101,7 +101,8 @@ public class ProfileFragment extends Fragment{
                 .into(profilImage);
 
 
-        mCollapsingtoolbar.setExpandedTitleColor(getResources().getColor(R.color.colorAccent));
+        mCollapsingtoolbar.setExpandedTitleColor(getResources().getColor(R.color.colorPrimaryDark));
+        //mCollapsingtoolbar.setExpandedTitleTextAppearance(R.style.TextAppearance_AppCompat_Medium);
         Toolbar toolbar = (Toolbar) v.findViewById(R.id.toolbar);
         ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
 
