@@ -67,6 +67,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
     User user;
     SQLiteUser sqLiteUser;
     private final int REQUEST_CODE = 1;
+    public int category;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -80,6 +81,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         Cursor cursor = sqLiteUser.query();
         user = sqLiteUser.getUserFromSQLite(cursor);
         Log.e("user",user.toString());
+        category = 11;
 
 
     }
@@ -98,6 +100,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
     private void perform(View v) {
 
         swipeRefreshLayout = v.findViewById(R.id.srl_main);
+        swipeRefreshLayout.setColorSchemeResources(R.color.colorAccent);
         scroolView_layout = v.findViewById(R.id.scrollView_layout);
         selectedItem_layout = v.findViewById(R.id.selecteditem);
         text_category = v.findViewById(R.id.categoryName);
@@ -232,8 +235,13 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                getEventData();
-                swipeRefreshLayout.setRefreshing(false);
+                swipeRefreshLayout.setEnabled(false);
+                if(category!=11){
+                    setCategoryFilter(category);
+                }
+                else {
+                    getEventData();
+                }
             }
         });
 
@@ -244,10 +252,10 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
 
     public void getEventData(){
 
-        event_list.clear();
-
-        myRef.addListenerForSingleValueEvent(valueEventListener);
+        category = 11;
         swipeRefreshLayout.setRefreshing(true);
+        event_list.clear();
+        myRef.addListenerForSingleValueEvent(valueEventListener);
 
     }
 
@@ -278,32 +286,38 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
 
             case R.id.lineer_sport:
                 text_category.setText(R.string.sport_text);
+                category = 0;
                 setCategoryFilter(0);
                 break;
 
             case R.id.lineer_table_game:
                 text_category.setText(R.string.table_games_text);
                 setCategoryFilter(1);
+                category = 1;
                 break;
 
             case R.id.lineer_concert:
                 text_category.setText(R.string.concert_text);
                 setCategoryFilter(2);
+                category = 2;
                 break;
 
             case R.id.lineer_pc_game:
                 text_category.setText(R.string.pc_games_text);
                 setCategoryFilter(3);
+                category = 3;
                 break;
 
             case R.id.lineer_cinema:
                 text_category.setText(R.string.cinema_text);
                 setCategoryFilter(4);
+                category = 4;
                 break;
 
             case R.id.lineer_other:
                 text_category.setText(R.string.other_text);
                 setCategoryFilter(5);
+                category = 5;
                 break;
             default:
                 break;
@@ -335,6 +349,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
 
         Query query = myRef.orderByChild("category").equalTo(category);
         query.addValueEventListener(valueEventListenerCategory);
+        swipeRefreshLayout.setRefreshing(true);
 
 
 
@@ -362,6 +377,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         myRef.removeEventListener(valueEventListener);
         myRef.removeEventListener(valueEventListenerCategory);
         swipeRefreshLayout.setRefreshing(false);
+        swipeRefreshLayout.setEnabled(true);
 
     }
 
