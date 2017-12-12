@@ -61,6 +61,7 @@ public class ProfileFragment extends Fragment{
         // Required empty public constructor
     }
 
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -132,10 +133,11 @@ public class ProfileFragment extends Fragment{
     public void getEventData(){
 
         event_list.clear();
+        recycler_view.setAdapter(null);
 
         DatabaseReference myRef = FirebaseDatabase.getInstance().getReference("Events");
         Query query = myRef.orderByChild("userID").equalTo(user.getUserID());
-        query.addValueEventListener(new ValueEventListener() {
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {

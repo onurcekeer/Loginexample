@@ -8,6 +8,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -56,6 +57,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
     ImageView clear_category;
     MaterialSearchView searchView;
     RecyclerView recycler_view;
+    SwipeRefreshLayout swipeRefreshLayout;
     SimpleLocation simpleLocation;
     ValueEventListener valueEventListener, valueEventListenerCategory;
     DatabaseReference myRef;
@@ -95,6 +97,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
 
     private void perform(View v) {
 
+        swipeRefreshLayout = v.findViewById(R.id.srl_main);
         scroolView_layout = v.findViewById(R.id.scrollView_layout);
         selectedItem_layout = v.findViewById(R.id.selecteditem);
         text_category = v.findViewById(R.id.categoryName);
@@ -225,6 +228,17 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
             }
         };
 
+
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                getEventData();
+                swipeRefreshLayout.setRefreshing(false);
+            }
+        });
+
+
+
         checkLocationPermission();
     }
 
@@ -232,7 +246,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
 
         event_list.clear();
 
-        myRef.addValueEventListener(valueEventListener);
+        myRef.addListenerForSingleValueEvent(valueEventListener);
+        swipeRefreshLayout.setRefreshing(true);
 
     }
 
@@ -346,6 +361,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         recycler_view.setItemAnimator(new DefaultItemAnimator());
         myRef.removeEventListener(valueEventListener);
         myRef.removeEventListener(valueEventListenerCategory);
+        swipeRefreshLayout.setRefreshing(false);
 
     }
 
