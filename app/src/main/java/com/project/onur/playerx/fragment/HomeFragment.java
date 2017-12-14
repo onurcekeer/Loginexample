@@ -57,6 +57,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
     ImageView clear_category;
     MaterialSearchView searchView;
     RecyclerView recycler_view;
+    TextView emptyView;
     SwipeRefreshLayout swipeRefreshLayout;
     SimpleLocation simpleLocation;
     ValueEventListener valueEventListener, valueEventListenerCategory;
@@ -99,6 +100,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
 
     private void perform(View v) {
 
+        emptyView = v.findViewById(R.id.empty_view);
         swipeRefreshLayout = v.findViewById(R.id.srl_main);
         swipeRefreshLayout.setColorSchemeResources(R.color.colorAccent);
         scroolView_layout = v.findViewById(R.id.scrollView_layout);
@@ -357,23 +359,34 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
 
     public void setAdapter(final List<Event> list){
 
-        SimpleRecyclerAdapter recycler_adapter = new SimpleRecyclerAdapter(list, new CustomItemClickListener() {
-            @Override
-            public void onItemClick(View v, int position) {
-                Event event = list.get(position);
+        if (list.isEmpty()) {
+            recycler_view.setVisibility(View.GONE);
+            emptyView.setVisibility(View.VISIBLE);
+        }
+        else {
 
-                if(event.getUserID().equals(user.getUserID())){
-                    startMyEventFragment(event);
-                }
-                else{
-                    startEventDetailFragment(event);
-                }
+            SimpleRecyclerAdapter recycler_adapter = new SimpleRecyclerAdapter(list, new CustomItemClickListener() {
+                @Override
+                public void onItemClick(View v, int position) {
+                    Event event = list.get(position);
 
-            }
-        });
-        recycler_view.setHasFixedSize(true);
-        recycler_view.setAdapter(recycler_adapter);
-        recycler_view.setItemAnimator(new DefaultItemAnimator());
+                    if(event.getUserID().equals(user.getUserID())){
+                        startMyEventFragment(event);
+                    }
+                    else{
+                        startEventDetailFragment(event);
+                    }
+
+                }
+            });
+            recycler_view.setHasFixedSize(true);
+            recycler_view.setAdapter(recycler_adapter);
+            recycler_view.setItemAnimator(new DefaultItemAnimator());
+            recycler_view.setVisibility(View.VISIBLE);
+            emptyView.setVisibility(View.GONE);
+        }
+
+
         myRef.removeEventListener(valueEventListener);
         myRef.removeEventListener(valueEventListenerCategory);
         swipeRefreshLayout.setRefreshing(false);

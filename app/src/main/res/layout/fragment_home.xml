@@ -232,12 +232,29 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/recycler_view"
-                android:scrollbars="vertical"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/recycler_view"
+                    android:scrollbars="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"/>
+
+                <TextView
+                    android:id="@+id/empty_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:textSize="@dimen/margin_avg"
+                    android:visibility="gone"
+                    android:text="Maselef yakınlarında hiç etkinlik yok." />
+
+            </LinearLayout>
+
+
 
         </android.support.v4.widget.SwipeRefreshLayout>
 
