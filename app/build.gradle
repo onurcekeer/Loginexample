@@ -51,6 +51,7 @@ dependencies {
     compile 'net.yslibrary.keyboardvisibilityevent:keyboardvisibilityevent:2.1.0'
     compile 'com.squareup.okhttp3:okhttp:3.9.0'
     compile 'org.greenrobot:eventbus:3.0.0'
+    compile 'com.mikhaellopez:circularimageview:3.0.2'
     testCompile 'junit:junit:4.12'
 }
 apply plugin: 'com.google.gms.google-services'
