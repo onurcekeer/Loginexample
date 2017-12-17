@@ -248,9 +248,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="center"
-                    android:textSize="@dimen/margin_avg"
+                    android:textSize="16sp"
                     android:visibility="gone"
-                    android:text="Maselef yakınlarında hiç etkinlik yok." />
+                    android:text="@string/no_event" />
 
             </LinearLayout>
 

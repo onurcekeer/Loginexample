@@ -13,7 +13,7 @@
         android:layout_height="match_parent"
         android:id="@+id/content_linear"
         android:paddingTop="10dp"
-        android:gravity="bottom">
+        android:orientation="vertical">
 
 
         <android.support.v7.widget.RecyclerView
@@ -21,6 +21,37 @@
             android:scrollbars="vertical"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
+
+        <TextView
+            android:id="@+id/empty_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:textSize="16sp"
+            android:layout_marginTop="50dp"
+            android:paddingLeft="30dp"
+            android:paddingRight="30dp"
+            android:visibility="gone"
+            android:text="@string/no_event_posted" />
+
+        <Button
+            android:id="@+id/create_event_button"
+            style="?android:textAppearanceSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="5dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:gravity="center"
+            android:layout_gravity="center_horizontal"
+            android:background="@drawable/sign_button_style"
+            android:text="@string/create_event"
+            android:textColor="@color/colorPrimary"
+            android:textStyle="bold"
+            android:visibility="gone"/>
 
     </LinearLayout>
 

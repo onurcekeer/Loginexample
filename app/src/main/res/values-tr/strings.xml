@@ -72,7 +72,7 @@
     <string name="event_end_time">Etkinlik bitiş zamanı:</string>
     <string name="very_close">çok yakın</string>
     <string name="successful">Başarılı</string>
-    <string name="allow_location_title">Location access</string>
+    <string name="allow_location_title">Konum Erişimi</string>
     <string name="allow_location">PlayerX\'in bu cihazın konumuna erişmesine izin ver</string>
     <string name="edit_event">Etkinliği Düzenle</string>
     <string name="update_event">Etkinliği Güncelle</string>
@@ -80,5 +80,7 @@
     <string name="delete_event">Etkinliği Sil</string>
     <string name="delete_event_question">Bu etkinliği silmek istiyor musunuz?</string>
     <string name="event_deleted">Etkinlik silindi</string>
+    <string name="no_event">Maalesef yakınlarında hiç etkinlik yok.</string>
+    <string name="no_event_posted">Şu anda yayınlanan bir etkinliğin yok. Haydi bir etkinlik oluştur!</string>
 
 </resources>

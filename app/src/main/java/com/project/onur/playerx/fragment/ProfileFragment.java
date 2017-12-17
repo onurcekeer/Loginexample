@@ -18,6 +18,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -52,6 +54,8 @@ public class ProfileFragment extends Fragment{
 
     RecyclerView recycler_view;
     SimpleLocation simpleLocation;
+    TextView emptyView;
+    Button create_event;
 
     List<Event> event_list;
     Date nowTime;
@@ -115,13 +119,23 @@ public class ProfileFragment extends Fragment{
             }
         });
 
+
         event_list = new ArrayList<>();
 
+        create_event = v.findViewById(R.id.create_event_button);
         recycler_view = v.findViewById(R.id.recycler_view);
+        emptyView = v.findViewById(R.id.empty_view);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         layoutManager.scrollToPosition(0);
         recycler_view.setLayoutManager(layoutManager);
+
+        create_event.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startCreateEventFragment();
+            }
+        });
 
         nowTime = new Date();
         Calendar calendar = Calendar.getInstance();
@@ -162,19 +176,39 @@ public class ProfileFragment extends Fragment{
 
     public void setAdapter(final List<Event> list){
 
-        SimpleRecyclerAdapter recycler_adapter = new SimpleRecyclerAdapter(list, new CustomItemClickListener() {
-            @Override
-            public void onItemClick(View v, int position) {
-                Event event = list.get(position);
-                startMyEventFragment(event);
-            }
-        });
-        recycler_view.setHasFixedSize(true);
-        recycler_view.setAdapter(recycler_adapter);
-        recycler_view.setItemAnimator(new DefaultItemAnimator());
+        if (list.isEmpty()) {
+            recycler_view.setVisibility(View.GONE);
+            emptyView.setVisibility(View.VISIBLE);
+            create_event.setVisibility(View.VISIBLE);
+        }
+        else{
+            SimpleRecyclerAdapter recycler_adapter = new SimpleRecyclerAdapter(list, new CustomItemClickListener() {
+                @Override
+                public void onItemClick(View v, int position) {
+                    Event event = list.get(position);
+                    startMyEventFragment(event);
+                }
+            });
+            recycler_view.setHasFixedSize(true);
+            recycler_view.setAdapter(recycler_adapter);
+            recycler_view.setItemAnimator(new DefaultItemAnimator());
+            recycler_view.setVisibility(View.VISIBLE);
+            emptyView.setVisibility(View.GONE);
+            create_event.setVisibility(View.GONE);
+        }
 
     }
 
+    private void startCreateEventFragment(){
+        Fragment fragment = new CreateEventFragment();
+        FragmentManager fragmentManager = getFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right,
+                R.anim.slide_in_right, R.anim.slide_out_left);
+        fragmentTransaction.replace(R.id.main_container, fragment);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
+    }
 
     private void startSettingsFragment(){
         Fragment fragment = new SettingsFragment();
