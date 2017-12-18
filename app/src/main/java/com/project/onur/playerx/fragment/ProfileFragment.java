@@ -99,14 +99,15 @@ public class ProfileFragment extends Fragment{
 
         Picasso.with(v.getContext())
                 .load(user.getProfilURL())
-                .resize(90, 90)
+                .resize(100, 100)
                 .centerCrop()
                 .placeholder(R.drawable.ic_default_user)
                 .error(R.drawable.ic_default_user)
                 .into(profilImage);
 
 
-        mCollapsingtoolbar.setExpandedTitleColor(getResources().getColor(R.color.colorPrimaryDark));
+        //mCollapsingtoolbar.setExpandedTitleColor(getResources().getColor(R.color.colorPrimaryDark));
+        mCollapsingtoolbar.setExpandedTitleMarginBottom(50);
         //mCollapsingtoolbar.setExpandedTitleTextAppearance(R.style.TextAppearance_AppCompat_Medium);
         Toolbar toolbar = (Toolbar) v.findViewById(R.id.toolbar);
         ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);

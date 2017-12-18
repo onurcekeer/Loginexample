@@ -16,9 +16,6 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -32,7 +29,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
-import com.miguelcatalan.materialsearchview.MaterialSearchView;
 import com.project.onur.playerx.CustomItemClickListener;
 import com.project.onur.playerx.model.Event;
 import com.project.onur.playerx.model.LatLon;
@@ -55,7 +51,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
     LinearLayout selectedItem_layout;
     TextView text_category ;
     ImageView clear_category;
-    MaterialSearchView searchView;
     RecyclerView recycler_view;
     TextView emptyView;
     SwipeRefreshLayout swipeRefreshLayout;
@@ -133,26 +128,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         Toolbar toolbar =  v.findViewById(R.id.toolbar);
         ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
         toolbar.setTitle(getString(R.string.title_home));
-
-        searchView =  v.findViewById(R.id.search_view);
-        searchView.setVoiceSearch(true); //or false
-        searchView.setOnQueryTextListener(new MaterialSearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                //Do some magic
-                scroolView_layout.setVisibility(View.GONE);
-                selectedItem_layout.setVisibility(View.VISIBLE);
-                text_category.setText(query);
-                //searchOnFirebase(query);
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                //Do some magic
-                return false;
-            }
-        });
 
 
         View sport = v.findViewById(R.id.lineer_sport);
@@ -269,7 +244,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
             String provider = Settings.Secure.getString(getContext().getContentResolver(), Settings.Secure.LOCATION_PROVIDERS_ALLOWED);
             if(provider!=null){
                 Log.v("GPS", " Location providers: "+provider);
-                getEventData();
+                //getEventData();
 
             }else{
                 Toast.makeText(getContext(),"Konum aktif değil",Toast.LENGTH_LONG).show();
@@ -324,14 +299,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
             default:
                 break;
         }
-    }
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.search_menu, menu);
-        super.onCreateOptionsMenu(menu,inflater);
-        MenuItem item = menu.findItem(R.id.action_search);
-        searchView.setMenuItem(item);
     }
 
     private void startCreateEventFragment(){
@@ -392,37 +359,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         swipeRefreshLayout.setRefreshing(false);
         swipeRefreshLayout.setEnabled(true);
 
-    }
-
-    public void searchOnFirebase(String text){
-
-        event_list.clear();
-
-        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Events");
-        Query query = databaseReference.getParent()
-                .startAt("[a-zA-Z0-9]*")
-                .endAt(text);
-        query.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
-                    Date eventDate = postSnapshot.child("dateTime").getValue(Date.class);
-
-                    if(eventDate.after(nowTime))
-                    {
-                        event_list.add(postSnapshot.getValue(Event.class));
-                        Log.e("EVENT",postSnapshot.toString());
-                    }
-                }
-
-                setAdapter(event_list);
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
     }
 
     public void startEventDetailFragment(Event event){

@@ -33,7 +33,6 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
-        ...
         <activity android:name="com.facebook.FacebookActivity"
             android:configChanges=
                 "keyboard|keyboardHidden|screenLayout|screenSize|orientation"
@@ -70,13 +69,6 @@
             android:label="@string/title_activity_main">
 
         </activity>
-
-        <receiver android:name="com.project.onur.playerx.ConnectionChangeReceiver"
-            android:label="NetworkConnection">
-            <intent-filter>
-                <action android:name="android.net.conn.CONNECTIVITY_CHANGE"/>
-            </intent-filter>
-        </receiver>
 
         <service android:name="com.project.onur.playerx.fcm.MyFirebaseMessagingService">
             <intent-filter>
