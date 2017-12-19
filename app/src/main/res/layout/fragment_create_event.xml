@@ -117,7 +117,7 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    app:srcCompat= "@drawable/ic_date_range"/>
+                    app:srcCompat= "@drawable/ic_calendar"/>
 
                 <TextView
                     android:layout_marginLeft="3dp"
@@ -125,19 +125,21 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
+                    android:textSize="16sp"
                     android:text="@string/date" />
 
                 <ImageView
                     android:layout_marginLeft="30dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    app:srcCompat= "@drawable/ic_access_time"/>
+                    app:srcCompat= "@drawable/ic_clock"/>
 
                 <TextView
                     android:id="@+id/time_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="3dp"
+                    android:textSize="16sp"
                     android:layout_gravity="center_vertical"
                     android:text="@string/time" />
 
