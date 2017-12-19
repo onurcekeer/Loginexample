@@ -23,7 +23,6 @@
         android:layout_marginStart="112dp"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:background="@drawable/chat_rounded_rect_bg"
-        android:text="Onur ÇekeasdlngkjnasdkngjklnsangasnmglkvnmsalkvgsmaşlkginlKNAGLNVLKA.MG.LKNlnilkinlknlnlnfdlkngr"
         android:layout_marginLeft="@dimen/margin_huge"
         android:layout_alignParentRight="true" />
 

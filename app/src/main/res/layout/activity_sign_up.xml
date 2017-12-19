@@ -99,7 +99,7 @@
             android:layout_marginTop="20dp"
             android:background="@drawable/sign_button_style"
             android:text="@string/register"
-            android:textColor="@color/colorPrimary"
+            android:textColor="@color/colorPrimaryDark"
             android:textStyle="bold" />
 
 

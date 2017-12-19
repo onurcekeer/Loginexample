@@ -117,7 +117,7 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    app:srcCompat= "@drawable/ic_date_range"/>
+                    app:srcCompat= "@drawable/ic_calendar"/>
 
                 <TextView
                     android:layout_marginLeft="3dp"
@@ -131,7 +131,7 @@
                     android:layout_marginLeft="30dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    app:srcCompat= "@drawable/ic_access_time"/>
+                    app:srcCompat= "@drawable/ic_clock"/>
 
                 <TextView
                     android:id="@+id/time_text"
@@ -154,7 +154,7 @@
                 android:layout_marginBottom="5dp"
                 android:background="@drawable/sign_button_style"
                 android:text="@string/update_event"
-                android:textColor="@color/colorPrimary"
+                android:textColor="@color/colorPrimaryDark"
                 android:textStyle="bold" />
 
             <LinearLayout
