@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">PlayerX</string>
+    <string name="app_name">Player X</string>
 
     <!-- Strings related to login -->
     <string name="prompt_email">Email</string>
