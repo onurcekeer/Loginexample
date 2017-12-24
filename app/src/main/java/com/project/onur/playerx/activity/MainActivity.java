@@ -1,8 +1,12 @@
 package com.project.onur.playerx.activity;
 
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.location.LocationManager;
+import android.location.LocationProvider;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -14,6 +18,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
@@ -29,8 +34,14 @@ import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEvent;
 import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEventListener;
 
 import im.delight.android.location.SimpleLocation;
+import permissions.dispatcher.NeedsPermission;
+import permissions.dispatcher.OnNeverAskAgain;
+import permissions.dispatcher.OnPermissionDenied;
+import permissions.dispatcher.OnShowRationale;
+import permissions.dispatcher.PermissionRequest;
+import permissions.dispatcher.RuntimePermissions;
 
-
+@RuntimePermissions
 public class MainActivity extends AppCompatActivity {
 
 
@@ -38,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
     double latitude,longitude;
     String userLocation;
     SQLiteUser sqLiteUser;
+    String LocationPermission;
 
     User user;
 
@@ -45,10 +57,14 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        mLocation = new SimpleLocation(this);
-        userLocation = getCurrentLocation();
+        MainActivityPermissionsDispatcher.checkLocationPermissionWithPermissionCheck(this);
 
+        LocationPermission = (Manifest.permission.ACCESS_FINE_LOCATION);
         sqLiteUser = new SQLiteUser(getApplicationContext());
+
+        if(getApplicationContext().checkCallingOrSelfPermission(LocationPermission) == PackageManager.PERMISSION_GRANTED){
+            getCurrentLocation();
+        }
 
         Intent i = getIntent();
         user = (User)i.getSerializableExtra("userObject");
@@ -59,16 +75,61 @@ public class MainActivity extends AppCompatActivity {
             Log.e("user",user.toString());
         }
 
-
         replaceFcmToken();
         setupNavigationView();
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if(getApplicationContext().checkCallingOrSelfPermission(LocationPermission) == PackageManager.PERMISSION_GRANTED){
+            getCurrentLocation();
+        }
+        MainActivityPermissionsDispatcher.onRequestPermissionsResult(this, requestCode, grantResults);
+
+    }
+
+    @NeedsPermission(Manifest.permission.ACCESS_FINE_LOCATION)
+    public void checkLocationPermission(){
+
+    }
+
+    public void getCurrentLocation(){
+        String location;
+        mLocation = new SimpleLocation(this);
+        latitude = mLocation.getLatitude();
+        longitude = mLocation.getLongitude();
+        location = latitude+","+longitude;
+        mLocation.beginUpdates();
+        userLocation = location;
+    }
+
+    @OnShowRationale(Manifest.permission.ACCESS_FINE_LOCATION)
+    void showRationaleForLocation(final PermissionRequest request) {
+        request.proceed();
+    }
+
+    @OnPermissionDenied(Manifest.permission.ACCESS_FINE_LOCATION)
+    void showDeniedForLocation() {
+        Toast.makeText(this, "izin reddedildi", Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(Intent.ACTION_MAIN);
+        intent.addCategory(Intent.CATEGORY_HOME);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+    }
+
+    @OnNeverAskAgain(Manifest.permission.ACCESS_FINE_LOCATION)
+    void showNeverAskForLocation() {
+        Toast.makeText(this, "Konum izni bi daha sorma olarak işaretli. Ayarlardan Konuma izin verebilirsiniz.", Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(Intent.ACTION_MAIN);
+        intent.addCategory(Intent.CATEGORY_HOME);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+    }
 
 
     public void replaceFcmToken(){
         String currentFcmToken = new SharedPrefUtil(getApplicationContext()).getString("fcmToken");
-
         if(!user.getFcmToken().equals(currentFcmToken)){
 
             user.setFcmToken(currentFcmToken);
@@ -121,9 +182,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-
-
-
     protected void selectFragment(MenuItem item) {
 
         item.setChecked(true);
@@ -141,7 +199,6 @@ public class MainActivity extends AppCompatActivity {
             }
     }
 
-
     protected void pushFragment(Fragment fragment) {
         if (fragment == null)
             return;
@@ -157,31 +214,32 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private String getCurrentLocation(){
-        String location;
-        latitude = mLocation.getLatitude();
-        longitude = mLocation.getLongitude();
-        location = latitude+","+longitude;
-        return location;
-    }
-
-
     @Override
     protected void onStart() {
         super.onStart();
-        mLocation.beginUpdates();
     }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        MainActivityPermissionsDispatcher.checkLocationPermissionWithPermissionCheck(this);
+    }
+
 
     @Override
     protected void onStop() {
         super.onStop();
-        mLocation.endUpdates();
+        if(getApplicationContext().checkCallingOrSelfPermission(LocationPermission) == PackageManager.PERMISSION_GRANTED && mLocation!=null){
+            mLocation.endUpdates();
+        }
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        mLocation.endUpdates();
+        if(getApplicationContext().checkCallingOrSelfPermission(LocationPermission) == PackageManager.PERMISSION_GRANTED && mLocation!=null){
+            mLocation.endUpdates();
+        }
     }
 
     @Override

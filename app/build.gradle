@@ -27,6 +27,13 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
 
+    compile "com.github.hotchemi:permissionsdispatcher:3.1.0"
+    annotationProcessor "com.github.hotchemi:permissionsdispatcher-processor:3.1.0"
+    compile "org.androidannotations:androidannotations-api:3.0.1"
+    annotationProcessor "org.androidannotations:androidannotations:3.0.1"
+    annotationProcessor "com.github.AleksanderMielczarek:AndroidAnnotationsPermissionsDispatcherPlugin:2.1.0"
+
+
     compile('com.github.hotchemi:permissionsdispatcher:3.1.0') {
         // if you don't use android.app.Fragment you can exclude support for them
         exclude module: "support-v13"

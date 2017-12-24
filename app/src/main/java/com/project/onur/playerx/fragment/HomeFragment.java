@@ -1,10 +1,16 @@
 package com.project.onur.playerx.fragment;
 
+import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -36,6 +42,7 @@ import com.project.onur.playerx.R;
 import com.project.onur.playerx.SQLiteUser;
 import com.project.onur.playerx.adapter.SimpleRecyclerAdapter;
 import com.project.onur.playerx.model.User;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -45,11 +52,11 @@ import cn.pedant.SweetAlert.SweetAlertDialog;
 import im.delight.android.location.SimpleLocation;
 
 
-public class HomeFragment extends Fragment implements View.OnClickListener{
+public class HomeFragment extends Fragment implements View.OnClickListener {
 
     LinearLayout scroolView_layout;
     LinearLayout selectedItem_layout;
-    TextView text_category ;
+    TextView text_category;
     ImageView clear_category;
     RecyclerView recycler_view;
     TextView emptyView;
@@ -57,7 +64,9 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
     SimpleLocation simpleLocation;
     ValueEventListener valueEventListener, valueEventListenerCategory;
     DatabaseReference myRef;
-
+    Location location;
+    double latitude, longitude;
+    LocationManager locationManager;
     List<Event> event_list;
     Date nowTime;
     User user;
@@ -73,10 +82,11 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+        locationManager = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);
         sqLiteUser = new SQLiteUser(getActivity().getApplicationContext());
         Cursor cursor = sqLiteUser.query();
         user = sqLiteUser.getUserFromSQLite(cursor);
-        Log.e("user",user.toString());
+        Log.e("user", user.toString());
         category = 11;
 
 
@@ -86,7 +96,27 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
+        String LocationPermission = (Manifest.permission.ACCESS_FINE_LOCATION);
+
         simpleLocation = new SimpleLocation(getContext());
+        if (simpleLocation.getLatitude() == 0.0) {
+            if (getContext().checkCallingOrSelfPermission(LocationPermission) == PackageManager.PERMISSION_GRANTED) {
+                if (locationManager != null) {
+                    location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                    if(location!=null){
+                        latitude = location.getLatitude();
+                        longitude = location.getLongitude();
+                    }
+
+                }
+
+            }
+        }
+        else {
+            latitude = simpleLocation.getLatitude();
+            longitude = simpleLocation.getLongitude();
+
+        }
 
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         perform(view);
@@ -164,7 +194,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
                 for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
                     Date eventDate = postSnapshot.child("dateTime").getValue(Date.class);
                     LatLon eventLocation = postSnapshot.child("location").getValue(LatLon.class);
-                    double distance = SimpleLocation.calculateDistance(simpleLocation.getLatitude(), simpleLocation.getLongitude(),eventLocation.getLatitude(),eventLocation.getLongitude());
+                    double distance = SimpleLocation.calculateDistance(latitude, longitude,eventLocation.getLatitude(),eventLocation.getLongitude());
                     int int_distance = (int) distance/1000;
 
                     if(eventDate.after(nowTime) && int_distance < user.getRange())
@@ -190,7 +220,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
                 for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
                     Date eventDate = postSnapshot.child("dateTime").getValue(Date.class);
                     LatLon eventLocation = postSnapshot.child("location").getValue(LatLon.class);
-                    double distance = SimpleLocation.calculateDistance(simpleLocation.getLatitude(), simpleLocation.getLongitude(),eventLocation.getLatitude(),eventLocation.getLongitude());
+                    double distance = SimpleLocation.calculateDistance(latitude, longitude,eventLocation.getLatitude(),eventLocation.getLongitude());
                     int int_distance = (int) distance/1000;
 
                     if(eventDate.after(nowTime) && int_distance < user.getRange())
@@ -224,7 +254,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
 
 
 
-        checkLocationPermission();
+        checkLocationEnabled();
     }
 
     public void getEventData(){
@@ -319,9 +349,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         Query query = myRef.orderByChild("category").equalTo(category);
         query.addValueEventListener(valueEventListenerCategory);
         swipeRefreshLayout.setRefreshing(true);
-
-
-
     }
 
     public void setAdapter(final List<Event> list){
@@ -395,7 +422,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
 
     }
 
-    public void checkLocationPermission(){
+    public void checkLocationEnabled(){
 
         if (!simpleLocation.hasLocationEnabled()) {
             new SweetAlertDialog(getContext(), SweetAlertDialog.NORMAL_TYPE)

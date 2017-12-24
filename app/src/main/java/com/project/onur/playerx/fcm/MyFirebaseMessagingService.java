@@ -14,6 +14,8 @@ import com.project.onur.playerx.R;
 import com.project.onur.playerx.PushNotificationEvent;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
+import com.project.onur.playerx.activity.ChatActivity;
+import com.project.onur.playerx.activity.MainActivity;
 import com.project.onur.playerx.fragment.ChatFragment;
 
 import org.greenrobot.eventbus.EventBus;
@@ -69,10 +71,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                                   String receiver,
                                   String receiverUid,
                                   String firebaseToken) {
-        Intent intent = new Intent(this, ChatFragment.class);
-        intent.putExtra("receiver", receiver);
+        Intent intent = new Intent(this, ChatActivity.class);
         intent.putExtra("receiver_uid", receiverUid);
-        intent.putExtra("firebaseToken", firebaseToken);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent,
                 PendingIntent.FLAG_ONE_SHOT);

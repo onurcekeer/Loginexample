@@ -40,6 +40,8 @@ import com.project.onur.playerx.model.Chat;
 import com.project.onur.playerx.model.User;
 import com.project.onur.playerx.model.GetChat;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.UUID;
@@ -78,11 +80,10 @@ public class ChatFragment extends android.support.v4.app.Fragment implements Tex
         mDatabase = FirebaseDatabase.getInstance().getReference();
         Cursor cursor = sqLiteUser.query();
         user = sqLiteUser.getUserFromSQLite(cursor);
-
-
-
-
     }
+
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
