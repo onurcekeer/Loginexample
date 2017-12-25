@@ -17,6 +17,8 @@ import com.google.firebase.messaging.RemoteMessage;
 import com.project.onur.playerx.activity.ChatActivity;
 import com.project.onur.playerx.activity.MainActivity;
 import com.project.onur.playerx.fragment.ChatFragment;
+import com.project.onur.playerx.model.User;
+import com.google.gson.Gson;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -40,25 +42,20 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         if (remoteMessage.getData().size() > 0) {
             Log.d(TAG, "Message data payload: " + remoteMessage.getData());
 
-            String title = remoteMessage.getData().get("title");
+
             String message = remoteMessage.getData().get("text");
-            String username = remoteMessage.getData().get("username");
-            String uid = remoteMessage.getData().get("uid");
-            String fcmToken = remoteMessage.getData().get("fcm_token");
+            String userString = remoteMessage.getData().get("user");
+            Gson gson = new Gson();
+            User user = gson.fromJson(userString,User.class);
+            Log.e("gson",String.valueOf(user));
 
             // Don't show notification if chat activity is open.
             if (!MainApp.isChatActivityOpen()) {
-                sendNotification(title,
-                        message,
-                        username,
-                        uid,
-                        fcmToken);
+                sendNotification(user,
+                        message);
             } else {
-                EventBus.getDefault().post(new PushNotificationEvent(title,
-                        message,
-                        username,
-                        uid,
-                        fcmToken));
+                EventBus.getDefault().post(new PushNotificationEvent(user,
+                        message));
             }
         }
     }
@@ -66,21 +63,19 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     /**
      * Create and show a simple notification containing the received FCM message.
      */
-    private void sendNotification(String title,
-                                  String message,
-                                  String receiver,
-                                  String receiverUid,
-                                  String firebaseToken) {
+    private void sendNotification(User user,
+                                  String message) {
         Intent intent = new Intent(this, ChatActivity.class);
-        intent.putExtra("receiver_uid", receiverUid);
+        intent.putExtra("user", user);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent,
                 PendingIntent.FLAG_ONE_SHOT);
 
         Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
                 .setSmallIcon(R.drawable.com_facebook_button_send_icon_white)
-                .setContentTitle(title)
+                .setContentTitle(user.getUsername())
                 .setContentText(message)
                 .setAutoCancel(true)
                 .setSound(defaultSoundUri)

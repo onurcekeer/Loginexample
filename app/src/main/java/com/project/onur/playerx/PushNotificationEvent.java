@@ -1,62 +1,35 @@
 package com.project.onur.playerx;
 
+import com.project.onur.playerx.model.User;
+
 /**
  * Created by delaroy on 4/13/17.
  */
 public class PushNotificationEvent {
-    private String title;
-    private String message;
-    private String username;
-    private String uid;
-    private String fcmToken;
+    private User mUser;
+    private String mMessage;
+
     public PushNotificationEvent() {
     }
 
-    public PushNotificationEvent(String title, String message, String username, String uid, String fcmToken) {
-        this.title = title;
-        this.message = message;
-        this.username = username;
-        this.uid = uid;
-        this.fcmToken = fcmToken;
+    public PushNotificationEvent(User user, String message) {
+        this.mUser = user;
+        this.mMessage = message;
     }
 
-    public String getTitle() {
-        return title;
+    public User getmUser() {
+        return mUser;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setmUser(User mUser) {
+        this.mUser = mUser;
     }
 
-    public String getMessage() {
-        return message;
+    public String getmMessage() {
+        return mMessage;
     }
 
-    public void setMessage(String message) {
-        this.message = message;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getUid() {
-        return uid;
-    }
-
-    public void setUid(String uid) {
-        this.uid = uid;
-    }
-
-    public String getFcmToken() {
-        return fcmToken;
-    }
-
-    public void setFcmToken(String fcmToken) {
-        this.fcmToken = fcmToken;
+    public void setmMessage(String mMessage) {
+        this.mMessage = mMessage;
     }
 }

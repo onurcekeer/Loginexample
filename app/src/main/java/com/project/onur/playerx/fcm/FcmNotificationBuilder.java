@@ -2,6 +2,9 @@ package com.project.onur.playerx.fcm;
 
 import android.util.Log;
 
+import com.google.gson.Gson;
+import com.project.onur.playerx.model.User;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -27,19 +30,13 @@ public class FcmNotificationBuilder {
     private static final String FCM_URL = "https://fcm.googleapis.com/fcm/send";
     // json related keys
     private static final String KEY_TO = "to";
-    private static final String KEY_NOTIFICATION = "notification";
-    private static final String KEY_TITLE = "title";
     private static final String KEY_TEXT = "text";
     private static final String KEY_DATA = "data";
-    private static final String KEY_USERNAME = "username";
-    private static final String KEY_UID = "uid";
-    private static final String KEY_FCM_TOKEN = "fcm_token";
+    private static final String KEY_USER = "user";
 
     private String mTitle;
     private String mMessage;
-    private String mUsername;
-    private String mUid;
-    private String mFirebaseToken;
+    private User mUser;
     private String mReceiverFirebaseToken;
 
     private FcmNotificationBuilder() {
@@ -50,30 +47,17 @@ public class FcmNotificationBuilder {
         return new FcmNotificationBuilder();
     }
 
-    public FcmNotificationBuilder title(String title) {
-        mTitle = title;
-        return this;
-    }
 
     public FcmNotificationBuilder message(String message) {
         mMessage = message;
         return this;
     }
 
-    public FcmNotificationBuilder username(String username) {
-        mUsername = username;
+    public FcmNotificationBuilder user(User user) {
+        mUser = user;
         return this;
     }
 
-    public FcmNotificationBuilder uid(String uid) {
-        mUid = uid;
-        return this;
-    }
-
-    public FcmNotificationBuilder firebaseToken(String firebaseToken) {
-        mFirebaseToken = firebaseToken;
-        return this;
-    }
 
     public FcmNotificationBuilder receiverFirebaseToken(String receiverFirebaseToken) {
         mReceiverFirebaseToken = receiverFirebaseToken;
@@ -113,12 +97,13 @@ public class FcmNotificationBuilder {
         JSONObject jsonObjectBody = new JSONObject();
         jsonObjectBody.put(KEY_TO, mReceiverFirebaseToken);
 
+        Gson gson = new Gson();
+        String userjson = gson.toJson(mUser);
+
+
         JSONObject jsonObjectData = new JSONObject();
-        jsonObjectData.put(KEY_TITLE, mTitle);
         jsonObjectData.put(KEY_TEXT, mMessage);
-        jsonObjectData.put(KEY_USERNAME, mUsername);
-        jsonObjectData.put(KEY_UID, mUid);
-        jsonObjectData.put(KEY_FCM_TOKEN, mFirebaseToken);
+        jsonObjectData.put(KEY_USER, userjson);
         jsonObjectBody.put(KEY_DATA, jsonObjectData);
 
         return jsonObjectBody;

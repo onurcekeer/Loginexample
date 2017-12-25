@@ -188,10 +188,8 @@ public class ChatFragment extends android.support.v4.app.Fragment implements Tex
                     getMessageFromFirebaseUser(chat.senderUid, chat.receiverUid);
                 }
                 // send push notification to the receiver
-                sendPushNotificationToReceiver(user.getUsername(),
+                sendPushNotificationToReceiver(user,
                         chat.message,
-                        chat.senderUid,
-                        user.getFcmToken(),
                         otherUser.getFcmToken());
 
                 onSendMessageSuccess();
@@ -291,18 +289,13 @@ public class ChatFragment extends android.support.v4.app.Fragment implements Tex
     }
 
 
-    private void sendPushNotificationToReceiver(String username,
+    private void sendPushNotificationToReceiver(User user,
                                                 String message,
-                                                String uid,
-                                                String firebaseToken,
-                                                String receiverFirebaseToken) {
+                                                String receiverFcmToken) {
         FcmNotificationBuilder.initialize()
-                .title(username)
                 .message(message)
-                .username(username)
-                .uid(uid)
-                .firebaseToken(firebaseToken)
-                .receiverFirebaseToken(receiverFirebaseToken)
+                .user(user)
+                .receiverFirebaseToken(receiverFcmToken)
                 .send();
     }
 
