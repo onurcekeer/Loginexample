@@ -111,7 +111,7 @@ public class MainActivity extends AppCompatActivity {
 
     @OnPermissionDenied(Manifest.permission.ACCESS_FINE_LOCATION)
     void showDeniedForLocation() {
-        Toast.makeText(this, "izin reddedildi", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, getString(R.string.location_perm_denied), Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(Intent.ACTION_MAIN);
         intent.addCategory(Intent.CATEGORY_HOME);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -120,7 +120,7 @@ public class MainActivity extends AppCompatActivity {
 
     @OnNeverAskAgain(Manifest.permission.ACCESS_FINE_LOCATION)
     void showNeverAskForLocation() {
-        Toast.makeText(this, "Konum izni bi daha sorma olarak işaretli. Ayarlardan Konuma izin verebilirsiniz.", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, getString(R.string.allow_location_perm), Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(Intent.ACTION_MAIN);
         intent.addCategory(Intent.CATEGORY_HOME);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

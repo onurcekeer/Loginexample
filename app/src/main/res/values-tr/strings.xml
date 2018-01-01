@@ -84,5 +84,7 @@
     <string name="no_event_posted">Şu anda yayınlanan bir etkinliğin yok. Haydi bir etkinlik oluştur!</string>
     <string name="about">Hakkında</string>
     <string name="licences">Lisanslar</string>
+    <string name="location_perm_denied">Konum izni reddedildi</string>
+    <string name="allow_location_perm">Konum erişimi, Tekrar Sorma olarak işaretlenmiştir. Ayarlara gidin ve konum izinlerine izin verin</string>
 
 </resources>

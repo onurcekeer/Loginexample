@@ -213,17 +213,14 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     private boolean isFullnameValid(String fullname) {
-        //TODO: Replace this with your own logic
         return fullname.length() > 5;
     }
 
     private boolean isEmailValid(String email) {
-        //TODO: Replace this with your own logic
         return email.contains("@");
     }
 
     private boolean isPasswordValid(String password) {
-        //TODO: Replace this with your own logic
         return password.length() > 5;
     }
 

@@ -120,7 +120,6 @@ public class EventDetailFragment extends Fragment {
             public void onMapReady(GoogleMap googleMap) {
                 map = googleMap;
                 if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                    // TODO: Consider calling
                 }
                 LatLng point = new LatLng(event.getLocation().getLatitude(),event.getLocation().getLongitude());
                 map.addMarker(new MarkerOptions().position(point));

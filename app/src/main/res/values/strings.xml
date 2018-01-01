@@ -123,5 +123,8 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\n
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\n
 SOFTWARE.</string>
 
+    <string name="location_perm_denied">Location permission denied</string>
+    <string name="allow_location_perm">The location access is marked as do not ask again. Go to settings and allow location permissions</string>
+
 
 </resources>

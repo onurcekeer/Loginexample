@@ -125,7 +125,7 @@ public class GuestProfileFragment extends Fragment{
                 .into(profilImage);
 
 
-        mCollapsingtoolbar.setExpandedTitleColor(getResources().getColor(R.color.colorAccent));
+//        mCollapsingtoolbar.setExpandedTitleColor(getResources().getColor(R.color.colorAccent));
         Toolbar toolbar = v.findViewById(R.id.toolbar);
         ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
         ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
