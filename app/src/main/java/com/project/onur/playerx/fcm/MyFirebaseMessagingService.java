@@ -74,7 +74,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
         Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
-                .setSmallIcon(R.drawable.com_facebook_button_send_icon_white)
+                .setSmallIcon(R.drawable.ic_notification)
                 .setContentTitle(user.getUsername())
                 .setContentText(message)
                 .setAutoCancel(true)

@@ -82,5 +82,7 @@
     <string name="event_deleted">Etkinlik silindi</string>
     <string name="no_event">Maalesef yakınlarında hiç etkinlik yok.</string>
     <string name="no_event_posted">Şu anda yayınlanan bir etkinliğin yok. Haydi bir etkinlik oluştur!</string>
+    <string name="about">Hakkında</string>
+    <string name="licences">Lisanslar</string>
 
 </resources>

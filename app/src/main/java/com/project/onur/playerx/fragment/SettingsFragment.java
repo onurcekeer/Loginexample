@@ -22,6 +22,8 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,6 +47,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.project.onur.playerx.activity.LicenseActivity;
 import com.project.onur.playerx.model.Event;
 import com.project.onur.playerx.R;
 import com.project.onur.playerx.SQLiteUser;
@@ -57,7 +60,6 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 
 import de.hdodenhof.circleimageview.CircleImageView;
-
 public class SettingsFragment extends Fragment {
 
 
@@ -84,7 +86,7 @@ public class SettingsFragment extends Fragment {
     TextView text_change_password;
     Button button_save_changes;
     Button button_logout;
-    View view;
+    View view, aboutPage;
 
 
     public SettingsFragment() {
@@ -94,7 +96,7 @@ public class SettingsFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        setHasOptionsMenu(true);
         sqLiteUser = new SQLiteUser(getActivity().getApplicationContext());
         mAuth = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance().getReference();
@@ -160,8 +162,6 @@ public class SettingsFragment extends Fragment {
                 startChangePasswordFragment();
             }
         });
-
-
 
 
         for (UserInfo user: FirebaseAuth.getInstance().getCurrentUser().getProviderData()) {
@@ -281,7 +281,7 @@ public class SettingsFragment extends Fragment {
                 }
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
-                //Toast.makeText(SettingsFragment.this, "Something went wrong", Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(), R.string.something_went_wrong, Toast.LENGTH_LONG).show();
             }
 
         }
@@ -374,6 +374,12 @@ public class SettingsFragment extends Fragment {
 
     }
 
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        getActivity().getMenuInflater().inflate(R.menu.options_menu,menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
 
 
     public boolean isOnline() {
@@ -396,6 +402,22 @@ public class SettingsFragment extends Fragment {
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+
+            case R.id.licences:
+                Intent i = new Intent(getContext(), LicenseActivity.class);
+                startActivity(i);
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
 
     public void startProfileFragment(){
 

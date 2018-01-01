@@ -27,6 +27,8 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
 
+
+
     compile "com.github.hotchemi:permissionsdispatcher:3.1.0"
     annotationProcessor "com.github.hotchemi:permissionsdispatcher-processor:3.1.0"
     compile "org.androidannotations:androidannotations-api:3.0.1"
@@ -64,6 +66,8 @@ dependencies {
     compile 'org.greenrobot:eventbus:3.0.0'
     compile 'com.mikhaellopez:circularimageview:3.0.2'
     compile 'com.google.code.gson:gson:2.8.2'
+    compile 'com.github.jrvansuita:MaterialAbout:0.1.9'
+    compile 'net.yslibrary.licenseadapter:licenseadapter:1.4.0'
     testCompile 'junit:junit:4.12'
 }
 apply plugin: 'com.google.gms.google-services'
