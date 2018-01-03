@@ -1,6 +1,14 @@
 apply plugin: 'com.android.application'
 
 android {
+    signingConfigs {
+        config {
+            keyAlias 'playerxKey'
+            keyPassword 'Onur286:)'
+            storeFile file('C:/Users/onur/Desktop/playerx/playerx_keystore.jks')
+            storePassword 'Onur286:)'
+        }
+    }
     compileSdkVersion 26
     buildToolsVersion '26.0.2'
     defaultConfig {
@@ -11,36 +19,33 @@ android {
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
+        signingConfig signingConfigs.config
     }
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.config
         }
+    }
+    productFlavors {
     }
 }
 
 dependencies {
-
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile fileTree(include: ['*.jar'], dir: 'libs')
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-
-
-
-    compile "com.github.hotchemi:permissionsdispatcher:3.1.0"
-    annotationProcessor "com.github.hotchemi:permissionsdispatcher-processor:3.1.0"
-    compile "org.androidannotations:androidannotations-api:3.0.1"
+    compile 'com.github.hotchemi:permissionsdispatcher:3.0.1'
+    annotationProcessor "com.github.hotchemi:permissionsdispatcher-processor:3.0.1"
+    compile 'org.androidannotations:androidannotations-api:3.0.1'
     annotationProcessor "org.androidannotations:androidannotations:3.0.1"
     annotationProcessor "com.github.AleksanderMielczarek:AndroidAnnotationsPermissionsDispatcherPlugin:2.1.0"
-
-
-    compile('com.github.hotchemi:permissionsdispatcher:3.1.0') {
+    compile('com.github.hotchemi:permissionsdispatcher:3.0.1') {
         // if you don't use android.app.Fragment you can exclude support for them
         exclude module: "support-v13"
     }
-    annotationProcessor "com.github.hotchemi:permissionsdispatcher-processor:3.1.0"
 
     compile 'com.android.support:appcompat-v7:27.0.0'
     compile 'com.android.support:design:27.0.0'

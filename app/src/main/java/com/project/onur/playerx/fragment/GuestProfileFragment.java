@@ -118,14 +118,11 @@ public class GuestProfileFragment extends Fragment{
 
         Picasso.with(v.getContext())
                 .load(event.getProfileURL())
-                .resize(90, 90)
+                .resize(100,100)
                 .centerCrop()
                 .placeholder(R.drawable.ic_default_user)
                 .error(R.drawable.ic_default_user)
                 .into(profilImage);
-
-
-//        mCollapsingtoolbar.setExpandedTitleColor(getResources().getColor(R.color.colorAccent));
         Toolbar toolbar = v.findViewById(R.id.toolbar);
         ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
         ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
